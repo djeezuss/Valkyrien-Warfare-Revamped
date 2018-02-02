@@ -25,7 +25,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import valkyrienwarfare.addon.combat.ValkyrienWarfareCombat;
 import valkyrienwarfare.api.VWRotationMath;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.fixes.IInventoryPlayerFix;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
 
@@ -50,14 +50,14 @@ public class EntityCannonBasic extends EntityMountingWeaponBase {
 
     public void fireCannon(EntityPlayer player, ItemStack stack, EnumHand hand) {
         Vec3d velocityNormal = getVectorForRotation(rotationPitch, rotationYaw);
-        Vector velocityVector = new Vector(velocityNormal);
+        VectorVW velocityVector = new VectorVW(velocityNormal);
 
         PhysicsWrapperEntity wrapper = getParentShip();
 
         velocityVector.multiply(3D);
         EntityCannonBall projectile = new EntityCannonBall(world, velocityVector, this);
 
-        Vector projectileSpawnPos = new Vector(0, .5, 0);
+        VectorVW projectileSpawnPos = new VectorVW(0, .5, 0);
 
         if (wrapper != null) {
             VWRotationMath.applyTransform(wrapper.wrapping.coordTransform.lToWRotation, projectileSpawnPos);

@@ -30,7 +30,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import valkyrienwarfare.ValkyrienWarfareMod;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
 
 import javax.annotation.Nullable;
@@ -58,7 +58,7 @@ public abstract class MixinPlayerList {
             worldIn = except.world;
         }
         PhysicsWrapperEntity wrapper = ValkyrienWarfareMod.physicsManager.getObjectManagingPos(worldIn, pos);
-        Vector packetPosition = new Vector(x, y, z);
+        VectorVW packetPosition = new VectorVW(x, y, z);
         if (wrapper != null && wrapper.wrapping.coordTransform != null) {
             wrapper.wrapping.coordTransform.fromLocalToGlobal(packetPosition);
 

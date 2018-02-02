@@ -22,7 +22,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
 
 public class PlayerShipRefrenceHandler implements IMessageHandler<PlayerShipRefrenceMessage, IMessage> {
@@ -42,9 +42,9 @@ public class PlayerShipRefrenceHandler implements IMessageHandler<PlayerShipRefr
 					float[] lToWTransform = wrapper.wrapping.coordTransform.lToWTransform;
 					float[] lToWRotation = wrapper.wrapping.coordTransform.lToWRotation;
 
-					Vector newPlayerPos = new Vector(message.playerPosInLocal);
-					Vector newPlayerVelocity = new Vector(message.velocityInLocal);
-					Vector newPlayerLook = new Vector(message.playerLookVectorInLocal);
+					VectorVW newPlayerPos = new VectorVW(message.playerPosInLocal);
+					VectorVW newPlayerVelocity = new VectorVW(message.velocityInLocal);
+					VectorVW newPlayerLook = new VectorVW(message.playerLookVectorInLocal);
 
 					newPlayerPos.transform(lToWTransform);
 					newPlayerVelocity.transform(lToWRotation);

@@ -25,7 +25,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import valkyrienwarfare.api.IBlockForceProvider;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.physicsmanagement.PhysicsObject;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
 
@@ -39,7 +39,7 @@ public abstract class BlockEtherCompressor extends Block implements ITileEntityP
     }
 
     @Override
-    public Vector getBlockForceInShipSpace(World world, BlockPos pos, IBlockState state, Entity shipEntity, double secondsToApply) {
+    public VectorVW getBlockForceInShipSpace(World world, BlockPos pos, IBlockState state, Entity shipEntity, double secondsToApply) {
         PhysicsWrapperEntity wrapper = (PhysicsWrapperEntity) shipEntity;
         PhysicsObject obj = wrapper.wrapping;
         IBlockState controllerState = obj.VKChunkCache.getBlockState(pos);

@@ -30,7 +30,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import valkyrienwarfare.ValkyrienWarfareMod;
 import valkyrienwarfare.addon.combat.entity.EntityMountingWeaponBase;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.capability.IAirshipCounterCapability;
 import valkyrienwarfare.collision.Polygon;
 import valkyrienwarfare.interaction.ShipNameUUIDData;
@@ -112,10 +112,10 @@ public class PhysicsWrapperEntity extends Entity implements IEntityAdditionalSpa
 
     @Override
     public void updatePassenger(Entity passenger) {
-        Vector inLocal = wrapping.getLocalPositionForEntity(passenger);
+        VectorVW inLocal = wrapping.getLocalPositionForEntity(passenger);
 
         if (inLocal != null) {
-            Vector newEntityPosition = new Vector(inLocal);
+            VectorVW newEntityPosition = new VectorVW(inLocal);
             float f = passenger.width / 2.0F;
             float f1 = passenger.height;
             AxisAlignedBB inLocalAABB = new AxisAlignedBB(newEntityPosition.X - (double) f, newEntityPosition.Y, newEntityPosition.Z - (double) f, newEntityPosition.X + (double) f, newEntityPosition.Y + (double) f1, newEntityPosition.Z + (double) f);
@@ -130,9 +130,9 @@ public class PhysicsWrapperEntity extends Entity implements IEntityAdditionalSpa
 
                 for (Entity e : passenger.riddenByEntities) {
                     if (wrapping.isEntityFixed(e)) {
-                        Vector inLocalAgain = wrapping.getLocalPositionForEntity(e);
+                        VectorVW inLocalAgain = wrapping.getLocalPositionForEntity(e);
                         if (inLocalAgain != null) {
-                            Vector newEntityPositionAgain = new Vector(inLocalAgain);
+                            VectorVW newEntityPositionAgain = new VectorVW(inLocalAgain);
                             wrapping.coordTransform.fromLocalToGlobal(newEntityPositionAgain);
 
                             e.setPosition(newEntityPositionAgain.X, newEntityPositionAgain.Y, newEntityPositionAgain.Z);

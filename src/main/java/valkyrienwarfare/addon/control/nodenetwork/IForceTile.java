@@ -16,7 +16,7 @@
 
 package valkyrienwarfare.addon.control.nodenetwork;
 
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 
 public interface IForceTile {
 
@@ -25,21 +25,21 @@ public interface IForceTile {
      *
      * @return
      */
-    public Vector getForceOutputNormal();
+    public VectorVW getForceOutputNormal();
 
     /**
      * Returns the current unoriented force output vector of this engine
      *
      * @return
      */
-    public Vector getForceOutputUnoriented(double secondsToApply);
+    public VectorVW getForceOutputUnoriented(double secondsToApply);
 
     /**
      * Returns the current oriented force output vector of this engine
      *
      * @return
      */
-    public Vector getForceOutputOriented(double secondsToApply);
+    public VectorVW getForceOutputOriented(double secondsToApply);
 
     /**
      * Returns the maximum magnitude of force this engine can provide
@@ -67,26 +67,26 @@ public interface IForceTile {
      *
      * @return
      */
-    public Vector getPositionInLocalSpaceWithOrientation();
+    public VectorVW getPositionInLocalSpaceWithOrientation();
 
     /**
      * Returns the velocity vector this engine is moving to relative to the world
      *
      * @return
      */
-    public Vector getVelocityAtEngineCenter();
+    public VectorVW getVelocityAtEngineCenter();
 
     /**
      * Returns the velocity vector of this engine moving relative to the world, except only the linear component from the total velocity
      *
      * @return
      */
-    public Vector getLinearVelocityAtEngineCenter();
+    public VectorVW getLinearVelocityAtEngineCenter();
 
     /**
      * Returns the velocity vector of this engine moving relative to the world, except only the angular component from the total velocity
      *
      * @return
      */
-    public Vector getAngularVelocityAtEngineCenter();
+    public VectorVW getAngularVelocityAtEngineCenter();
 }

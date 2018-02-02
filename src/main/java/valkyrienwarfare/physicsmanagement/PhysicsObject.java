@@ -64,11 +64,11 @@ import valkyrienwarfare.addon.control.nodenetwork.INodeProvider;
 import valkyrienwarfare.addon.control.nodenetwork.Node;
 import valkyrienwarfare.api.EnumChangeOwnerResult;
 import valkyrienwarfare.api.VWRotationMath;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.api.block.ethercompressor.TileEntityEtherCompressor;
 import valkyrienwarfare.chunkmanagement.ChunkSet;
 import valkyrienwarfare.network.PhysWrapperPositionMessage;
-import valkyrienwarfare.physics.BasicPhysicsManager;
+import valkyrienwarfare.physics.FastPhysicsManager;
 import valkyrienwarfare.physics.BlockForce;
 import valkyrienwarfare.physics.IPhysicsManager;
 import valkyrienwarfare.physics.PhysicsQueuedForce;
@@ -89,7 +89,7 @@ public class PhysicsObject {
     // It is from this position that the x,y,z coords in local are 0; and that the posX,
     // posY and posZ align with in the global coords
     public BlockPos refrenceBlockPos;
-    public Vector centerCoord, lastTickCenterCoord;
+    public VectorVW centerCoord, lastTickCenterCoord;
     public CoordTransformObject coordTransform;
     public PhysObjectRenderManager renderer;
     public IPhysicsManager physicsProcessor;
@@ -118,7 +118,7 @@ public class PhysicsObject {
     // Some badly written mods use these Maps to determine who to send packets to, so we need to manually fill them with nearby players
     public PlayerChunkMapEntry[][] claimedChunksEntries;
 
-    public HashMap<Integer, Vector> entityLocalPositions = new HashMap<Integer, Vector>();
+    public HashMap<Integer, VectorVW> entityLocalPositions = new HashMap<Integer, VectorVW>();
 
     public ArrayList<String> allowedUsers = new ArrayList<String>();
     //This is used to delay mountEntity() operations by 1 tick
@@ -290,7 +290,7 @@ public class PhysicsObject {
         int minChunkZ = claimedChunks[0][0].z;
 
         refrenceBlockPos = getRegionCenter();
-        centerCoord = new Vector(refrenceBlockPos.getX(), refrenceBlockPos.getY(), refrenceBlockPos.getZ());
+        centerCoord = new VectorVW(refrenceBlockPos.getX(), refrenceBlockPos.getY(), refrenceBlockPos.getZ());
 
         createPhysicsCalculations();
         BlockPos centerDifference = refrenceBlockPos.subtract(centerInWorld);
@@ -320,7 +320,7 @@ public class PhysicsObject {
      */
     private void createPhysicsCalculations() {
         if (physicsProcessor == null) {
-        	physicsProcessor = new BasicPhysicsManager(this);
+        	physicsProcessor = new FastPhysicsManager(this);
         	/*
         	if (shipType == ShipType.Oribtal || shipType == ShipType.Semi_Unlocked_Orbital) {
                 physicsProcessor = new PhysicsCalculationsOrbital(this);
@@ -383,7 +383,7 @@ public class PhysicsObject {
         int minChunkZ = claimedChunks[0][0].z;
 
         refrenceBlockPos = getRegionCenter();
-        centerCoord = new Vector(refrenceBlockPos.getX(), refrenceBlockPos.getY(), refrenceBlockPos.getZ());
+        centerCoord = new VectorVW(refrenceBlockPos.getX(), refrenceBlockPos.getY(), refrenceBlockPos.getZ());
 
         createPhysicsCalculations();
 
@@ -719,7 +719,7 @@ public class PhysicsObject {
 //				toUse = coordTransform.stack.getDataForTick(lastMessageTick);
             }
 
-            Vector CMDif = toUse.centerOfRotation.getSubtraction(centerCoord);
+            VectorVW CMDif = toUse.centerOfRotation.getSubtraction(centerCoord);
             VWRotationMath.applyTransform(coordTransform.lToWRotation, CMDif);
 
             wrapper.lastTickPosX -= CMDif.X;
@@ -843,7 +843,7 @@ public class PhysicsObject {
      * @param toFix
      * @param posInLocal
      */
-    public void fixEntity(Entity toFix, Vector posInLocal) {
+    public void fixEntity(Entity toFix, VectorVW posInLocal) {
         EntityFixMessage entityFixingMessage = new EntityFixMessage(wrapper, toFix, true, posInLocal);
         for (EntityPlayerMP watcher : watchingPlayers) {
             ValkyrienWarfareControl.controlNetwork.sendTo(entityFixingMessage, watcher);
@@ -865,7 +865,7 @@ public class PhysicsObject {
         entityLocalPositions.remove(toUnfix.getPersistentID().hashCode());
     }
 
-    public void fixEntityUUID(int uuidHash, Vector localPos) {
+    public void fixEntityUUID(int uuidHash, VectorVW localPos) {
         entityLocalPositions.put(uuidHash, localPos);
     }
 
@@ -877,7 +877,7 @@ public class PhysicsObject {
         return entityLocalPositions.containsKey(toCheck.getPersistentID().hashCode());
     }
 
-    public Vector getLocalPositionForEntity(Entity getPositionFor) {
+    public VectorVW getLocalPositionForEntity(Entity getPositionFor) {
         int uuidHash = getPositionFor.getPersistentID().hashCode();
         return entityLocalPositions.get(uuidHash);
     }
@@ -975,7 +975,7 @@ public class PhysicsObject {
         wrapper.lastTickPosY = wrapper.posY;
         wrapper.lastTickPosZ = wrapper.posZ;
 
-        centerCoord = new Vector(modifiedBuffer);
+        centerCoord = new VectorVW(modifiedBuffer);
         for (boolean[] array : ownedChunks.chunkOccupiedInLocal) {
             for (int i = 0; i < array.length; i++) {
                 array[i] = modifiedBuffer.readBoolean();

@@ -31,7 +31,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import valkyrienwarfare.ValkyrienWarfareMod;
 import valkyrienwarfare.api.VWRotationMath;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.physics.BlockMass;
 import valkyrienwarfare.physics.PhysicsQueuedForce;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
@@ -63,7 +63,7 @@ public abstract class MixinExplosion {
 
     @Inject(method = "doExplosionA", at = @At("RETURN"))
     public void postExplosionA(CallbackInfo callbackInfo) {
-        Vector center = new Vector(this.x, this.y, this.z);
+        VectorVW center = new VectorVW(this.x, this.y, this.z);
         World worldIn = this.world;
         float radius = this.size;
 
@@ -71,7 +71,7 @@ public abstract class MixinExplosion {
         List<PhysicsWrapperEntity> shipsNear = ValkyrienWarfareMod.physicsManager.getManagerForWorld(this.world).getNearbyPhysObjects(toCheck);
         // TODO: Make this compatible and shit!
         for (PhysicsWrapperEntity ship : shipsNear) {
-            Vector inLocal = new Vector(center);
+            VectorVW inLocal = new VectorVW(center);
             VWRotationMath.applyTransform(ship.wrapping.coordTransform.wToLTransform, inLocal);
             // inLocal.roundToWhole();
             Explosion expl = new Explosion(ship.world, null, inLocal.X, inLocal.Y, inLocal.Z, radius, false, false);
@@ -107,12 +107,12 @@ public abstract class MixinExplosion {
                         }
                         block.onBlockExploded(ship.world, pos, expl);
                         if (!worldIn.isRemote) {
-                            Vector posVector = new Vector(pos.getX() + .5, pos.getY() + .5, pos.getZ() + .5);
+                            VectorVW posVector = new VectorVW(pos.getX() + .5, pos.getY() + .5, pos.getZ() + .5);
                             ship.wrapping.coordTransform.fromLocalToGlobal(posVector);
 
                             double mass = BlockMass.basicMass.getMassFromState(state, pos, ship.world);
                             double explosionForce = Math.sqrt(this.size) * 1000D * mass;
-                            Vector forceVector = new Vector(pos.getX() + .5 - expl.x, pos.getY() + .5 - expl.y, pos.getZ() + .5 - expl.z);
+                            VectorVW forceVector = new VectorVW(pos.getX() + .5 - expl.x, pos.getY() + .5 - expl.y, pos.getZ() + .5 - expl.z);
                             double vectorDist = forceVector.length();
 
                             forceVector.normalize();

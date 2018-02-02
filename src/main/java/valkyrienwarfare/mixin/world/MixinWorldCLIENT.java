@@ -32,7 +32,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import valkyrienwarfare.ValkyrienWarfareMod;
 import valkyrienwarfare.api.VWRotationMath;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
 
 import java.util.List;
@@ -116,14 +116,14 @@ public abstract class MixinWorldCLIENT {
     public BlockPos getPrecipitationHeight(BlockPos input) {
         BlockPos pos = this.getChunkFromBlockCoords(input).getPrecipitationHeight(input);
         if (ValkyrienWarfareMod.accurateRain) {
-            Vector traceStart = new Vector(pos.getX() + .5D, Minecraft.getMinecraft().player.posY + 50D, pos.getZ() + .5D);
-            Vector traceEnd = new Vector(pos.getX() + .5D, pos.getY() + .5D, pos.getZ() + .5D);
+            VectorVW traceStart = new VectorVW(pos.getX() + .5D, Minecraft.getMinecraft().player.posY + 50D, pos.getZ() + .5D);
+            VectorVW traceEnd = new VectorVW(pos.getX() + .5D, pos.getY() + .5D, pos.getZ() + .5D);
             RayTraceResult result = rayTraceBlocks(traceStart.toVec3d(), traceEnd.toVec3d(), true, true, false);
 
             if (result != null && result.typeOfHit != RayTraceResult.Type.MISS && result.getBlockPos() != null) {
                 PhysicsWrapperEntity wrapper = ValkyrienWarfareMod.physicsManager.getObjectManagingPos(World.class.cast(this), result.getBlockPos());
                 if (wrapper != null) {
-                    Vector blockPosVector = new Vector(result.getBlockPos().getX() + .5D, result.getBlockPos().getY() + .5D, result.getBlockPos().getZ() + .5D);
+                    VectorVW blockPosVector = new VectorVW(result.getBlockPos().getX() + .5D, result.getBlockPos().getY() + .5D, result.getBlockPos().getZ() + .5D);
                     wrapper.wrapping.coordTransform.fromLocalToGlobal(blockPosVector);
                     BlockPos toReturn = new BlockPos(pos.getX(), blockPosVector.Y + .5D, pos.getZ());
                     return toReturn;

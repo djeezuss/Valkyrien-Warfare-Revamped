@@ -28,7 +28,7 @@ import net.minecraft.world.storage.MapStorage;
 import net.minecraft.world.storage.WorldSavedData;
 import valkyrienwarfare.NBTUtils;
 import valkyrienwarfare.api.VWRotationMath;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
 
 public class ShipUUIDToPosData extends WorldSavedData {
@@ -123,16 +123,16 @@ public class ShipUUIDToPosData extends WorldSavedData {
 	}
 
 	public class ShipPositionData {
-		public Vector shipPosition;
+		public VectorVW shipPosition;
 		public float[] lToWTransform;
 
 		public ShipPositionData(PhysicsWrapperEntity wrapper) {
-			shipPosition = new Vector(wrapper.posX, wrapper.posY, wrapper.posZ);
+			shipPosition = new VectorVW(wrapper.posX, wrapper.posY, wrapper.posZ);
 			lToWTransform = wrapper.wrapping.coordTransform.lToWTransform.clone();
 		}
 
 		public ShipPositionData(ByteBuffer buffer) {
-			shipPosition = new Vector(buffer.getFloat(), buffer.getFloat(), buffer.getFloat());
+			shipPosition = new VectorVW(buffer.getFloat(), buffer.getFloat(), buffer.getFloat());
 
 			lToWTransform = new float[16];
 			for (int i = 0; i < 16; i++) {

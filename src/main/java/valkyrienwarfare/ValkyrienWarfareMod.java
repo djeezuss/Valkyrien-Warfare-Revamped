@@ -49,7 +49,7 @@ import valkyrienwarfare.addon.control.ValkyrienWarfareControl;
 import valkyrienwarfare.addon.world.ValkyrienWarfareWorld;
 import valkyrienwarfare.api.DataTag;
 import valkyrienwarfare.api.ValkyrienWarfareHooks;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.api.addons.Module;
 import valkyrienwarfare.api.addons.VWAddon;
 import valkyrienwarfare.block.BlockPhysicsInfuser;
@@ -100,7 +100,7 @@ public class ValkyrienWarfareMod {
     public static boolean doSplitting = false;
     public static boolean doShipCollision = false;
     public static boolean shipsSpawnParticles = false;
-    public static Vector gravity = new Vector(0, -9.8D, 0);
+    public static VectorVW gravity = new VectorVW(0, -9.8D, 0);
     public static int physIter = 10;
     public static double physSpeed = .05D;
     public static Block physicsInfuser;
@@ -434,7 +434,7 @@ public class ValkyrienWarfareMod {
         ValkyrienWarfareMod.maxShipSize = tag.getInteger("maxShipSize", 15000);
         ValkyrienWarfareMod.physIter = tag.getInteger("physicsIterations", 8);
         ValkyrienWarfareMod.physSpeed = tag.getDouble("physicsSpeed", 0.05);
-        ValkyrienWarfareMod.gravity = new Vector(tag.getDouble("gravityVecX", 0.0), tag.getDouble("gravityVecY", -9.8), tag.getDouble("gravityVecZ", 0.0));
+        ValkyrienWarfareMod.gravity = new VectorVW(tag.getDouble("gravityVecX", 0.0), tag.getDouble("gravityVecY", -9.8), tag.getDouble("gravityVecZ", 0.0));
         PhysicsSettings.doEtheriumLifting = tag.getBoolean("doEtheriumLifting", true);
 
         //save the tag in case new fields are added, this way they are saved right away

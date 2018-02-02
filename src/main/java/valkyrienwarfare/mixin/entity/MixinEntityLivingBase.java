@@ -31,7 +31,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import valkyrienwarfare.ValkyrienWarfareMod;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.collision.EntityPolygon;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
 
@@ -72,7 +72,7 @@ public abstract class MixinEntityLivingBase extends Entity {
         }
         List<PhysicsWrapperEntity> nearbyPhys = ValkyrienWarfareMod.physicsManager.getManagerForWorld(this.world).getNearbyPhysObjects(this.getEntityBoundingBox());
         for (PhysicsWrapperEntity physWrapper : nearbyPhys) {
-            Vector playerPos = new Vector(EntityLivingBase.class.cast(this));
+            VectorVW playerPos = new VectorVW(EntityLivingBase.class.cast(this));
             physWrapper.wrapping.coordTransform.fromGlobalToLocal(playerPos);
             int i = MathHelper.floor(playerPos.X);
             int j = MathHelper.floor(playerPos.Y);

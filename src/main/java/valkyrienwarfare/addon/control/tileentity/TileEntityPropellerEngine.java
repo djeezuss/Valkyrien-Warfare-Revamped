@@ -17,11 +17,11 @@
 package valkyrienwarfare.addon.control.tileentity;
 
 import valkyrienwarfare.addon.control.nodenetwork.BasicForceNodeTileEntity;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 
 public class TileEntityPropellerEngine extends BasicForceNodeTileEntity {
 
-    public TileEntityPropellerEngine(Vector normalVeclocityUnoriented, boolean isForceOutputOriented, double maxThrust) {
+    public TileEntityPropellerEngine(VectorVW normalVeclocityUnoriented, boolean isForceOutputOriented, double maxThrust) {
         super(normalVeclocityUnoriented, isForceOutputOriented, maxThrust);
     }
 

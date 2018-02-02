@@ -20,7 +20,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
 
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ public class EntityRelativePositionMessage implements IMessage {
     public Integer wrapperEntityId;
     public int listSize;
     public List<Integer> entitiesToSendIDs = new ArrayList<Integer>();
-    public List<Vector> entitiesRelativePosition = new ArrayList<Vector>();
+    public List<VectorVW> entitiesRelativePosition = new ArrayList<VectorVW>();
 
     public EntityRelativePositionMessage(PhysicsWrapperEntity wrapperEntity, List<Entity> entitiesToSendRelativePosition) {
         wrapperEntityId = wrapperEntity.getEntityId();
@@ -42,7 +42,7 @@ public class EntityRelativePositionMessage implements IMessage {
 
         for (int i = 0; i < entitiesToSendRelativePosition.size(); i++) {
             Entity entity = entitiesToSendRelativePosition.get(i);
-            Vector entityPosition = new Vector(entity);
+            VectorVW entityPosition = new VectorVW(entity);
             entityPosition.transform(wToLTransformationMatrix);
             entitiesToSendIDs.add(entity.getEntityId());
             entitiesRelativePosition.add(entityPosition);
@@ -61,7 +61,7 @@ public class EntityRelativePositionMessage implements IMessage {
 
         for (int i = 0; i < listSize; i++) {
             int entityID = packetBuf.readInt();
-            Vector entityLocalPosition = new Vector(packetBuf);
+            VectorVW entityLocalPosition = new VectorVW(packetBuf);
 
             entitiesToSendIDs.add(entityID);
             entitiesRelativePosition.add(entityLocalPosition);
@@ -77,7 +77,7 @@ public class EntityRelativePositionMessage implements IMessage {
 
         for (int i = 0; i < listSize; i++) {
             int entityID = entitiesToSendIDs.get(i);
-            Vector toWrite = entitiesRelativePosition.get(i);
+            VectorVW toWrite = entitiesRelativePosition.get(i);
 
             packetBuf.writeInt(entityID);
             toWrite.writeToByteBuf(packetBuf);

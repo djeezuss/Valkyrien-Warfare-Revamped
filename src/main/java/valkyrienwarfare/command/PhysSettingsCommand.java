@@ -32,7 +32,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import valkyrienwarfare.PhysicsSettings;
 import valkyrienwarfare.ValkyrienWarfareMod;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 
 public class PhysSettingsCommand extends CommandBase {
 
@@ -105,7 +105,7 @@ public class PhysSettingsCommand extends CommandBase {
 						"gravityVector=" + ValkyrienWarfareMod.gravity.toRoundedString() + " (Default: <0,-9.8,0>)"));
 				return;
 			} else if (args.length == 4) {
-				Vector newVector = new Vector(0, -9.8, 0);
+				VectorVW newVector = new VectorVW(0, -9.8, 0);
 				try {
 					if (args[1] != null && args[2] != null && args[3] != null) {
 						newVector.X = Float.parseFloat(args[1]);

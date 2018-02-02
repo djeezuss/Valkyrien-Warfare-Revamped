@@ -16,7 +16,7 @@
 
 package valkyrienwarfare.physicsmanagement;
 
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.network.PhysWrapperPositionMessage;
 
 /**
@@ -79,7 +79,7 @@ class ShipTransformData {
 
     public double posX, posY, posZ;
     public double pitch, yaw, roll;
-    public Vector centerOfRotation;
+    public VectorVW centerOfRotation;
 
     public ShipTransformData(PhysWrapperPositionMessage wrapperMessage) {
         posX = wrapperMessage.posX;

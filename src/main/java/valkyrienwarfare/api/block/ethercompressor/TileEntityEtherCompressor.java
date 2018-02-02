@@ -22,13 +22,13 @@ import net.minecraft.util.math.BlockPos;
 import valkyrienwarfare.ValkyrienWarfareMod;
 import valkyrienwarfare.addon.control.nodenetwork.BasicForceNodeTileEntity;
 import valkyrienwarfare.addon.control.tileentity.TileEntityHoverController;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.physicsmanagement.PhysicsObject;
 
 public abstract class TileEntityEtherCompressor extends BasicForceNodeTileEntity {
 
-    public Vector linearThrust = new Vector();
-    public Vector angularThrust = new Vector();
+    public VectorVW linearThrust = new VectorVW();
+    public VectorVW angularThrust = new VectorVW();
     //TODO: This is all temporary
     private BlockPos controllerPos;
 
@@ -36,7 +36,7 @@ public abstract class TileEntityEtherCompressor extends BasicForceNodeTileEntity
         validate();
     }
 
-    public TileEntityEtherCompressor(Vector normalForceVector, double power) {
+    public TileEntityEtherCompressor(VectorVW normalForceVector, double power) {
         super(normalForceVector, false, power);
         validate();
     }
@@ -77,9 +77,9 @@ public abstract class TileEntityEtherCompressor extends BasicForceNodeTileEntity
 
     //TODO: Remove this as soon as you can!
     @Override
-    public Vector getForceOutputUnoriented(double secondsToApply) {
+    public VectorVW getForceOutputUnoriented(double secondsToApply) {
         if (controllerPos == null) {
-            Vector output = super.getForceOutputUnoriented(secondsToApply);
+            VectorVW output = super.getForceOutputUnoriented(secondsToApply);
 //        	System.out.println(this.getMaxThrust());
             return output;
         }
@@ -93,7 +93,7 @@ public abstract class TileEntityEtherCompressor extends BasicForceNodeTileEntity
 
                 PhysicsObject physObj = ValkyrienWarfareMod.physicsManager.getObjectManagingPos(world, pos).wrapping;
 
-                Vector notToReturn = controller.getForceForEngine(this, world, getPos(), world.getBlockState(pos), physObj, secondsToApply);
+                VectorVW notToReturn = controller.getForceForEngine(this, world, getPos(), world.getBlockState(pos), physObj, secondsToApply);
 
                 this.currentThrust = notToReturn.length() / secondsToApply;
 

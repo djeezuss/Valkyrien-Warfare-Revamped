@@ -22,7 +22,7 @@ import net.minecraft.world.World;
 import valkyrienwarfare.NBTUtils;
 import valkyrienwarfare.ValkyrienWarfareMod;
 import valkyrienwarfare.api.VWRotationMath;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.physics.IPhysicsManager;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
 
@@ -30,8 +30,8 @@ public abstract class BasicForceNodeTileEntity extends BasicNodeTileEntity imple
 
     protected double maxThrust = 5000D;
     protected double currentThrust = 0D;
-    private Vector forceOutputVector = new Vector();
-    private Vector normalVelocityUnoriented;
+    private VectorVW forceOutputVector = new VectorVW();
+    private VectorVW normalVelocityUnoriented;
     private int ticksSinceLastControlSignal = 0;
     //Tells if the tile is in Ship Space, if it isn't then it doesn't try to find a parent Ship object
     private boolean hasAlreadyCheckedForParent = false;
@@ -42,7 +42,7 @@ public abstract class BasicForceNodeTileEntity extends BasicNodeTileEntity imple
     public BasicForceNodeTileEntity() {
     }
 
-    public BasicForceNodeTileEntity(Vector normalVeclocityUnoriented, boolean isForceOutputOriented, double maxThrust) {
+    public BasicForceNodeTileEntity(VectorVW normalVeclocityUnoriented, boolean isForceOutputOriented, double maxThrust) {
         this.normalVelocityUnoriented = normalVeclocityUnoriented;
         this.maxThrust = maxThrust;
     }
@@ -57,19 +57,19 @@ public abstract class BasicForceNodeTileEntity extends BasicNodeTileEntity imple
     }
 
     @Override
-    public Vector getForceOutputNormal() {
+    public VectorVW getForceOutputNormal() {
         // TODO Auto-generated method stub
         return normalVelocityUnoriented;
     }
 
     @Override
-    public Vector getForceOutputUnoriented(double secondsToApply) {
+    public VectorVW getForceOutputUnoriented(double secondsToApply) {
         return normalVelocityUnoriented.getProduct(currentThrust * secondsToApply);
     }
 
     @Override
-    public Vector getForceOutputOriented(double secondsToApply) {
-        Vector outputForce = getForceOutputUnoriented(secondsToApply);
+    public VectorVW getForceOutputOriented(double secondsToApply) {
+        VectorVW outputForce = getForceOutputUnoriented(secondsToApply);
         if (isForceOutputOriented()) {
             if (updateParentShip()) {
                 VWRotationMath.applyTransform(tileNode.getPhysicsObject().coordTransform.lToWRotation, outputForce);
@@ -94,19 +94,19 @@ public abstract class BasicForceNodeTileEntity extends BasicNodeTileEntity imple
     }
 
     @Override
-    public Vector getPositionInLocalSpaceWithOrientation() {
+    public VectorVW getPositionInLocalSpaceWithOrientation() {
         if (updateParentShip()) {
             return null;
         }
         PhysicsWrapperEntity parentShip = tileNode.getPhysicsObject().wrapper;
-        Vector engineCenter = new Vector(getPos().getX() + .5D, getPos().getY() + .5D, getPos().getZ() + .5D);
+        VectorVW engineCenter = new VectorVW(getPos().getX() + .5D, getPos().getY() + .5D, getPos().getZ() + .5D);
         VWRotationMath.applyTransform(parentShip.wrapping.coordTransform.lToWTransform, engineCenter);
         engineCenter.subtract(parentShip.posX, parentShip.posY, parentShip.posZ);
         return engineCenter;
     }
 
     @Override
-    public Vector getVelocityAtEngineCenter() {
+    public VectorVW getVelocityAtEngineCenter() {
         if (updateParentShip()) {
             return null;
         }
@@ -115,7 +115,7 @@ public abstract class BasicForceNodeTileEntity extends BasicNodeTileEntity imple
     }
 
     @Override
-    public Vector getLinearVelocityAtEngineCenter() {
+    public VectorVW getLinearVelocityAtEngineCenter() {
         if (updateParentShip()) {
             return null;
         }
@@ -124,7 +124,7 @@ public abstract class BasicForceNodeTileEntity extends BasicNodeTileEntity imple
     }
 
     @Override
-    public Vector getAngularVelocityAtEngineCenter() {
+    public VectorVW getAngularVelocityAtEngineCenter() {
         if (updateParentShip()) {
             return null;
         }

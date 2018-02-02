@@ -16,14 +16,14 @@
 
 package valkyrienwarfare.physcollision;
 
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.collision.PhysCollisionObject;
 import valkyrienwarfare.collision.PhysPolygonCollider;
 
 public class PolygonCollisionPointFinder {
 
     //TODO: This algorithm isn't correct, fix it later on!
-    public static Vector[] getPointsOfCollisionForPolygons(PhysPolygonCollider collider, PhysCollisionObject somethingElse, Vector velocity) {
+    public static VectorVW[] getPointsOfCollisionForPolygons(PhysPolygonCollider collider, PhysCollisionObject somethingElse, VectorVW velocity) {
 
 //		Vector axis = new Vector(toCollideWith.axis);
 
@@ -34,13 +34,13 @@ public class PolygonCollisionPointFinder {
         for (int cont = 0; cont < collider.collisions.length; cont++) {
             PhysCollisionObject toCollideWith = collider.collisions[cont];
 
-            Vector axis = somethingElse.axis;
+            VectorVW axis = somethingElse.axis;
             double reverseVelocityAlongAxis = -velocity.dot(axis);
             double minDot = 9999999999999D;
             int minIndex = 0;
 
             for (int i = 0; i < 8; i++) {
-                Vector vertice = toCollideWith.movable.vertices[i];
+                VectorVW vertice = toCollideWith.movable.vertices[i];
                 double dot = vertice.dot(axis) * reverseVelocityAlongAxis;
                 if (dot < minDot) {
                     minDot = dot;
@@ -48,7 +48,7 @@ public class PolygonCollisionPointFinder {
                 }
             }
 
-            Vector contactPoint = toCollideWith.movable.vertices[minIndex];
+            VectorVW contactPoint = toCollideWith.movable.vertices[minIndex];
 
             double secondsAgo = 69;
 
@@ -68,9 +68,9 @@ public class PolygonCollisionPointFinder {
 
 //		System.out.println(contactPoint);
 
-        Vector contactPoint = collider.collisions[minCollisionIndex].movable.vertices[minCollisionIndexIndex];//contactPoint.getAddition(axis.getProduct(reverseVelocityAlongAxis * secondsAgo));
+        VectorVW contactPoint = collider.collisions[minCollisionIndex].movable.vertices[minCollisionIndexIndex];//contactPoint.getAddition(axis.getProduct(reverseVelocityAlongAxis * secondsAgo));
 
-        return new Vector[]{
+        return new VectorVW[]{
                 contactPoint
 //				toCollideWith.firstContactPoint,
 //				toCollideWith.getSecondContactPoint()

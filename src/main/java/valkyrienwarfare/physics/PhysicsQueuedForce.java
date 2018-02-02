@@ -16,16 +16,16 @@
 
 package valkyrienwarfare.physics;
 
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 
 public class PhysicsQueuedForce {
 
-    public Vector force;
-    public Vector inBodyPos;
+    public VectorVW force;
+    public VectorVW inBodyPos;
     public boolean isLocal;
     public int ticksToApply;
 
-    public PhysicsQueuedForce(Vector force, Vector inBodyPosNoRotation, boolean isLocal, int ticksToApply) {
+    public PhysicsQueuedForce(VectorVW force, VectorVW inBodyPosNoRotation, boolean isLocal, int ticksToApply) {
         this.force = force;
         this.inBodyPos = inBodyPosNoRotation;
         this.isLocal = isLocal;

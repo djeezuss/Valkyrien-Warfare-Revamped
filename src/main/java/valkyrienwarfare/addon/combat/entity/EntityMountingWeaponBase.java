@@ -30,7 +30,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import valkyrienwarfare.api.VWRotationMath;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
 
 import javax.annotation.Nullable;
@@ -62,8 +62,8 @@ public abstract class EntityMountingWeaponBase extends Entity implements IEntity
 
             PhysicsWrapperEntity wrapper = getParentShip();
             if (wrapper != null) {
-                Vector posInLocal = new Vector(this);
-                Vector passengerOffset = getRiderPositionOffset();
+                VectorVW posInLocal = new VectorVW(this);
+                VectorVW passengerOffset = getRiderPositionOffset();
 
 //				double[] rotationMatricesCompensation = RotationMatrices.getRotationMatrix(0, 45D, 0);
 
@@ -211,7 +211,7 @@ public abstract class EntityMountingWeaponBase extends Entity implements IEntity
         if (this.isPassenger(passenger)) {
             if (getParentShip() == null) {
                 //We're in the real world
-                Vector passengerOffset = getRiderPositionOffset();
+                VectorVW passengerOffset = getRiderPositionOffset();
                 passengerOffset.add(posX, posY, posZ);
 //				passenger.posX = passengerOffset.X;
 //				passenger.posY = passengerOffset.Y;
@@ -224,8 +224,8 @@ public abstract class EntityMountingWeaponBase extends Entity implements IEntity
         }
     }
 
-    public Vector getRiderPositionOffset() {
-        Vector riderOffset = new Vector(.55D, 0, 0);
+    public VectorVW getRiderPositionOffset() {
+        VectorVW riderOffset = new VectorVW(.55D, 0, 0);
 
         float[] rotMatrix = VWRotationMath.getFloatIdentity();
         rotMatrix = VWRotationMath.rotateOnly(rotMatrix, 0, getBaseAngleOffset(), 0);

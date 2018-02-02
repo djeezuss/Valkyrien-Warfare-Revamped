@@ -17,15 +17,15 @@
 package valkyrienwarfare.collision;
 
 import net.minecraft.util.math.AxisAlignedBB;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.physicsmanagement.PhysicsObject;
 
 public class ShipPolygon extends Polygon {
 
-    public Vector[] normals;
+    public VectorVW[] normals;
     public PhysicsObject shipFrom;
 
-    public ShipPolygon(AxisAlignedBB bb, float[] lToWTransform, Vector[] norms, PhysicsObject shipFor) {
+    public ShipPolygon(AxisAlignedBB bb, float[] lToWTransform, VectorVW[] norms, PhysicsObject shipFor) {
         super(bb, lToWTransform);
         normals = norms;
         shipFrom = shipFor;

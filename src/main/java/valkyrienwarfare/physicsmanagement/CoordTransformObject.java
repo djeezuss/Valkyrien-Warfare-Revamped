@@ -23,7 +23,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.border.WorldBorder;
 import valkyrienwarfare.ValkyrienWarfareMod;
 import valkyrienwarfare.api.VWRotationMath;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.interaction.IDraggable;
 import valkyrienwarfare.network.EntityRelativePositionMessage;
 import valkyrienwarfare.network.PhysWrapperPositionMessage;
@@ -54,7 +54,7 @@ public class CoordTransformObject {
     public float[] prevLToWRotation;
     public float[] prevWToLRotation;
 
-    public Vector[] normals = Vector.generateAxisAlignedNorms();
+    public VectorVW[] normals = VectorVW.generateAxisAlignedNorms();
 
     public ShipTransformationStack stack = new ShipTransformationStack();
 
@@ -160,12 +160,12 @@ public class CoordTransformObject {
     }
 
     public void updateParentNormals() {
-        normals = new Vector[15];
+        normals = new VectorVW[15];
         // Used to generate Normals for the Axis Aligned World
-        Vector[] alignedNorms = Vector.generateAxisAlignedNorms();
-        Vector[] rotatedNorms = generateRotationNormals();
+        VectorVW[] alignedNorms = VectorVW.generateAxisAlignedNorms();
+        VectorVW[] rotatedNorms = generateRotationNormals();
         for (int i = 0; i < 6; i++) {
-            Vector currentNorm = null;
+            VectorVW currentNorm = null;
             if (i < 3) {
                 currentNorm = alignedNorms[i];
             } else {
@@ -176,34 +176,34 @@ public class CoordTransformObject {
         int cont = 6;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                Vector norm = normals[i].crossAndUnit(normals[j + 3]);
+                VectorVW norm = normals[i].crossAndUnit(normals[j + 3]);
                 normals[cont] = norm;
                 cont++;
             }
         }
         for (int i = 0; i < normals.length; i++) {
             if (normals[i].isZero()) {
-                normals[i] = new Vector(0.0D, 1.0D, 0.0D);
+                normals[i] = new VectorVW(0.0D, 1.0D, 0.0D);
             }
         }
-        normals[0] = new Vector(1.0D, 0.0D, 0.0D);
-        normals[1] = new Vector(0.0D, 1.0D, 0.0D);
-        normals[2] = new Vector(0.0D, 0.0D, 1.0D);
+        normals[0] = new VectorVW(1.0D, 0.0D, 0.0D);
+        normals[1] = new VectorVW(0.0D, 1.0D, 0.0D);
+        normals[2] = new VectorVW(0.0D, 0.0D, 1.0D);
     }
 
-    public Vector[] generateRotationNormals() {
-        Vector[] norms = Vector.generateAxisAlignedNorms();
+    public VectorVW[] generateRotationNormals() {
+        VectorVW[] norms = VectorVW.generateAxisAlignedNorms();
         for (int i = 0; i < 3; i++) {
             VWRotationMath.applyTransform(lToWRotation, norms[i]);
         }
         return norms;
     }
 
-    public Vector[] getSeperatingAxisWithShip(PhysicsObject other) {
+    public VectorVW[] getSeperatingAxisWithShip(PhysicsObject other) {
         // Note: This Vector array still contains potential 0 vectors, those are removed later
-        Vector[] normals = new Vector[15];
-        Vector[] otherNorms = other.coordTransform.normals;
-        Vector[] rotatedNorms = normals;
+        VectorVW[] normals = new VectorVW[15];
+        VectorVW[] otherNorms = other.coordTransform.normals;
+        VectorVW[] rotatedNorms = normals;
         for (int i = 0; i < 6; i++) {
             if (i < 3) {
                 normals[i] = otherNorms[i];
@@ -214,7 +214,7 @@ public class CoordTransformObject {
         int cont = 6;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                Vector norm = normals[i].crossAndUnit(normals[j + 3]);
+                VectorVW norm = normals[i].crossAndUnit(normals[j + 3]);
                 if (!norm.isZero()) {
                     normals[cont] = norm;
                 } else {
@@ -230,7 +230,7 @@ public class CoordTransformObject {
     public void updateParentAABB() {
         double mnX = 0, mnY = 0, mnZ = 0, mxX = 0, mxY = 0, mxZ = 0;
 
-        Vector currentLocation = new Vector();
+        VectorVW currentLocation = new VectorVW();
 
         mnX = mxX = parent.wrapper.posX;
         mnY = mxY = parent.wrapper.posY;
@@ -270,11 +270,11 @@ public class CoordTransformObject {
         parent.collisionBB = enclosingBB;
     }
 
-    public void fromGlobalToLocal(Vector inGlobal) {
+    public void fromGlobalToLocal(VectorVW inGlobal) {
         VWRotationMath.applyTransform(wToLTransform, inGlobal);
     }
 
-    public void fromLocalToGlobal(Vector inLocal) {
+    public void fromLocalToGlobal(VectorVW inLocal) {
         VWRotationMath.applyTransform(lToWTransform, inLocal);
     }
 

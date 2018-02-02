@@ -20,15 +20,15 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import valkyrienwarfare.api.VWRotationMath;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
 
 public class PlayerShipRefrenceMessage implements IMessage {
 
-    public Vector playerPosInLocal;
+    public VectorVW playerPosInLocal;
     //    public Vector playeLastPosInLocal;
-    public Vector velocityInLocal;
-    public Vector playerLookVectorInLocal;
+    public VectorVW velocityInLocal;
+    public VectorVW playerLookVectorInLocal;
 
     public int shipInID;
 
@@ -36,9 +36,9 @@ public class PlayerShipRefrenceMessage implements IMessage {
     }
 
     public PlayerShipRefrenceMessage(EntityPlayer playerToSend, PhysicsWrapperEntity shipOn) {
-        playerPosInLocal = new Vector(playerToSend.posX, playerToSend.posY, playerToSend.posZ);
-        velocityInLocal = new Vector(playerToSend.motionX, playerToSend.motionY, playerToSend.motionZ);
-        playerLookVectorInLocal = new Vector(playerToSend.getLook(1.0F));
+        playerPosInLocal = new VectorVW(playerToSend.posX, playerToSend.posY, playerToSend.posZ);
+        velocityInLocal = new VectorVW(playerToSend.motionX, playerToSend.motionY, playerToSend.motionZ);
+        playerLookVectorInLocal = new VectorVW(playerToSend.getLook(1.0F));
 
         VWRotationMath.applyTransform(shipOn.wrapping.coordTransform.wToLTransform, playerPosInLocal);
         VWRotationMath.doRotationOnly(shipOn.wrapping.coordTransform.wToLRotation, velocityInLocal);
@@ -49,9 +49,9 @@ public class PlayerShipRefrenceMessage implements IMessage {
 
     @Override
     public void fromBytes(ByteBuf buf) {
-        playerPosInLocal = new Vector(buf);
-        velocityInLocal = new Vector(buf);
-        playerLookVectorInLocal = new Vector(buf);
+        playerPosInLocal = new VectorVW(buf);
+        velocityInLocal = new VectorVW(buf);
+        playerLookVectorInLocal = new VectorVW(buf);
         shipInID = buf.readInt();
     }
 

@@ -23,7 +23,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import valkyrienwarfare.ValkyrienWarfareMod;
 import valkyrienwarfare.api.VWRotationMath;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 
 /**
  * A lot of useful math functions belong here
@@ -34,12 +34,12 @@ public class BigBastardMath {
 
 	public static final int maxArrayListFusePasses = 5;
 
-	public static double getPitchFromVec3d(Vector vec) {
+	public static double getPitchFromVec3d(VectorVW vec) {
 		double pitchFromRotVec = -Math.asin(vec.Y) / 0.017453292F;
 		return pitchFromRotVec;
 	}
 
-	public static double getYawFromVec3d(Vector vec, double rotPitch) {
+	public static double getYawFromVec3d(VectorVW vec, double rotPitch) {
 		double f2 = -Math.cos(-rotPitch * 0.017453292F);
 		double yawFromRotVec = Math.atan2(vec.X / f2, vec.Z / f2);
 		yawFromRotVec += Math.PI;
@@ -96,23 +96,23 @@ public class BigBastardMath {
 		return Math.max(Math.min(maximum, input), minimum);
 	}
 
-	public static Vector getBodyPosWithOrientation(BlockPos pos, Vector centerOfMass, float[] rotationTransform) {
-		final Vector inBody = new Vector(pos.getX() + .5D - centerOfMass.X, pos.getY() + .5D - centerOfMass.Y,
+	public static VectorVW getBodyPosWithOrientation(BlockPos pos, VectorVW centerOfMass, float[] rotationTransform) {
+		final VectorVW inBody = new VectorVW(pos.getX() + .5D - centerOfMass.X, pos.getY() + .5D - centerOfMass.Y,
 				pos.getZ() + .5D - centerOfMass.Z);
 		VWRotationMath.doRotationOnly(rotationTransform, inBody);
 		return inBody;
 	}
 
-	public static void getBodyPosWithOrientation(BlockPos pos, Vector centerOfMass, float[] rotationTransform,
-			Vector inBody) {
+	public static void getBodyPosWithOrientation(BlockPos pos, VectorVW centerOfMass, float[] rotationTransform,
+			VectorVW inBody) {
 		inBody.X = (float) (pos.getX() + .5D - centerOfMass.X);
 		inBody.Y = (float) (pos.getY() + .5D - centerOfMass.Y);
 		inBody.Z = (float) (pos.getZ() + .5D - centerOfMass.Z);
 		VWRotationMath.doRotationOnly(rotationTransform, inBody);
 	}
 
-	public static void getBodyPosWithOrientation(Vector pos, Vector centerOfMass, float[] rotationTransform,
-			Vector inBody) {
+	public static void getBodyPosWithOrientation(VectorVW pos, VectorVW centerOfMass, float[] rotationTransform,
+			VectorVW inBody) {
 		inBody.X = pos.X - centerOfMass.X;
 		inBody.Y = pos.Y - centerOfMass.Y;
 		inBody.Z = pos.Z - centerOfMass.Z;
@@ -127,7 +127,7 @@ public class BigBastardMath {
 	 *            direction Vector
 	 * @return true/false
 	 */
-	public static boolean canStandOnNormal(Vector normal) {
+	public static boolean canStandOnNormal(VectorVW normal) {
 		// if(normal.Y<0){
 		// return false;
 		// }

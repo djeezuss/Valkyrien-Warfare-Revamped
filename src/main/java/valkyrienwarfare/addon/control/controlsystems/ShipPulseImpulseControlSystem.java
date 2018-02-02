@@ -24,7 +24,7 @@ import valkyrienwarfare.addon.control.nodenetwork.Node;
 import valkyrienwarfare.addon.control.tileentity.ThrustModulatorTileEntity;
 import valkyrienwarfare.addon.control.tileentity.TileEntityNormalEtherCompressor;
 import valkyrienwarfare.api.VWRotationMath;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.api.block.ethercompressor.TileEntityEtherCompressor;
 import valkyrienwarfare.math.BigBastardMath;
 import valkyrienwarfare.physics.IPhysicsManager;
@@ -41,7 +41,7 @@ public class ShipPulseImpulseControlSystem {
     private double bobmagnitude = 3D;
     private double totalSecondsRunning = 0D;
     //    public double stabilityBias = .45D;
-    private Vector normalVector = new Vector(0, 1, 0);
+    private VectorVW normalVector = new VectorVW(0, 1, 0);
 
     public ShipPulseImpulseControlSystem(ThrustModulatorTileEntity parentTile) {
         this.parentTile = parentTile;
@@ -61,17 +61,17 @@ public class ShipPulseImpulseControlSystem {
         float[] invRotationAndTranslationMatrix = calculations.getParent().coordTransform.wToLTransform;
         float[] invMOIMatrix = calculations.getInvFramedMOI();
 
-        Vector posInWorld = new Vector(calculations.getParent().wrapper.posX, calculations.getParent().wrapper.posY, calculations.getParent().wrapper.posZ);
-        Vector angularVelocity = new Vector(calculations.getAngularVelocity());
-        Vector linearMomentum = new Vector(calculations.getLinearMomentum());
-        Vector linearVelocity = new Vector(linearMomentum, (float) calculations.getInvMass());
+        VectorVW posInWorld = new VectorVW(calculations.getParent().wrapper.posX, calculations.getParent().wrapper.posY, calculations.getParent().wrapper.posZ);
+        VectorVW angularVelocity = new VectorVW(calculations.getAngularVelocity());
+        VectorVW linearMomentum = new VectorVW(calculations.getLinearMomentum());
+        VectorVW linearVelocity = new VectorVW(linearMomentum, (float) calculations.getInvMass());
 
         BlockPos shipRefrencePos = calculations.getParent().refrenceBlockPos;
 
         double maxYDelta = parentTile.maximumYVelocity;
         double idealHeight = parentTile.idealYHeight + getBobForTime();
 
-        Vector linearMomentumError = getIdealMomentumErrorForSystem(calculations, posInWorld, maxYDelta, idealHeight);
+        VectorVW linearMomentumError = getIdealMomentumErrorForSystem(calculations, posInWorld, maxYDelta, idealHeight);
 
         double engineThrustToChange = linearMomentumError.Y;
 
@@ -84,12 +84,12 @@ public class ShipPulseImpulseControlSystem {
         double linearThama = 4.5D;
         double angularThama = 1343.5D;
 
-        Vector theNormal = new Vector(0, 1, 0);
+        VectorVW theNormal = new VectorVW(0, 1, 0);
 
-        Vector idealNormal = new Vector(theNormal);
-        Vector currentNormal = new Vector(theNormal, calculations.getParent().coordTransform.lToWRotation);
+        VectorVW idealNormal = new VectorVW(theNormal);
+        VectorVW currentNormal = new VectorVW(theNormal, calculations.getParent().coordTransform.lToWRotation);
 
-        Vector currentNormalError = currentNormal.getSubtraction(idealNormal);
+        VectorVW currentNormalError = currentNormal.getSubtraction(idealNormal);
 
         linearVelocityBias = calculations.getPhysTickSpeed();
 
@@ -97,7 +97,7 @@ public class ShipPulseImpulseControlSystem {
             if (node.parentTile instanceof TileEntityEtherCompressor && !((TileEntityEtherCompressor) node.parentTile).updateParentShip()) {
                 TileEntityEtherCompressor forceTile = (TileEntityEtherCompressor) node.parentTile;
 
-                Vector angularVelocityAtNormalPosition = angularVelocity.cross(currentNormalError);
+                VectorVW angularVelocityAtNormalPosition = angularVelocity.cross(currentNormalError);
 
                 forceTile.updateTicksSinceLastRecievedSignal();
 
@@ -107,10 +107,10 @@ public class ShipPulseImpulseControlSystem {
                 double currentEngineErrorAngularY = getEngineDistFromIdealAngular(forceTile.getPos(), rotationAndTranslationMatrix, angularVelocity, calculations.getCenterOfMass(), calculations.getPhysTickSpeed());
 
 
-                Vector potentialMaxForce = new Vector(0, forceTile.getMaxThrust(), 0);
+                VectorVW potentialMaxForce = new VectorVW(0, forceTile.getMaxThrust(), 0);
                 potentialMaxForce.multiply(calculations.getInvMass());
                 potentialMaxForce.multiply(calculations.getPhysTickSpeed());
-                Vector potentialMaxThrust = forceTile.getPositionInLocalSpaceWithOrientation().cross(potentialMaxForce);
+                VectorVW potentialMaxThrust = forceTile.getPositionInLocalSpaceWithOrientation().cross(potentialMaxForce);
                 VWRotationMath.applyTransform3by3(invMOIMatrix, potentialMaxThrust);
                 potentialMaxThrust.multiply(calculations.getPhysTickSpeed());
 
@@ -143,9 +143,9 @@ public class ShipPulseImpulseControlSystem {
                     forceTile.setThrust(0);
                 }
 
-                Vector forceOutputWithRespectToTime = forceTile.getForceOutputOriented(calculations.getPhysTickSpeed());
+                VectorVW forceOutputWithRespectToTime = forceTile.getForceOutputOriented(calculations.getPhysTickSpeed());
                 linearMomentum.add(forceOutputWithRespectToTime);
-                Vector torque = forceTile.getPositionInLocalSpaceWithOrientation().cross(forceOutputWithRespectToTime);
+                VectorVW torque = forceTile.getPositionInLocalSpaceWithOrientation().cross(forceOutputWithRespectToTime);
                 VWRotationMath.applyTransform3by3(invMOIMatrix, torque);
                 angularVelocity.add(torque);
             }
@@ -193,21 +193,21 @@ public class ShipPulseImpulseControlSystem {
         return sinVal * bobmagnitude;
     }
 
-    public Vector getIdealMomentumErrorForSystem(IPhysicsManager calculations, Vector posInWorld, double maxYDelta, double idealHeight) {
+    public VectorVW getIdealMomentumErrorForSystem(IPhysicsManager calculations, VectorVW posInWorld, double maxYDelta, double idealHeight) {
         double yErrorDistance = idealHeight - posInWorld.Y;
         double idealYLinearMomentumMagnitude = BigBastardMath.limitToRange(yErrorDistance, -maxYDelta, maxYDelta);
-        Vector idealLinearMomentum = new Vector(0, 1, 0);
+        VectorVW idealLinearMomentum = new VectorVW(0, 1, 0);
         idealLinearMomentum.multiply(idealYLinearMomentumMagnitude * calculations.getMass());
 
-        Vector linearMomentumError = calculations.getLinearMomentum().getSubtraction(idealLinearMomentum);
+        VectorVW linearMomentumError = calculations.getLinearMomentum().getSubtraction(idealLinearMomentum);
 
         return linearMomentumError;
     }
 
-    public Vector getForceForEngine(TileEntityEtherCompressor engine, BlockPos enginePos, double invMass, Vector linearMomentum, Vector angularVelocity, float[] rotationAndTranslationMatrix, Vector shipPos, Vector centerOfMass, double secondsToApply, double idealHeight) {
+    public VectorVW getForceForEngine(TileEntityEtherCompressor engine, BlockPos enginePos, double invMass, VectorVW linearMomentum, VectorVW angularVelocity, float[] rotationAndTranslationMatrix, VectorVW shipPos, VectorVW centerOfMass, double secondsToApply, double idealHeight) {
         double stabilityVal = .145D;
 
-        Vector shipVel = new Vector(linearMomentum);
+        VectorVW shipVel = new VectorVW(linearMomentum);
 
         shipVel.multiply(invMass);
 
@@ -223,22 +223,22 @@ public class ShipPulseImpulseControlSystem {
         engine.angularThrust.Y = (float) Math.min(engine.angularThrust.Y, engine.getMaxThrust() * stabilityVal);
         engine.linearThrust.Y = (float) Math.min(engine.linearThrust.Y, engine.getMaxThrust() * (1D - stabilityVal));
 
-        Vector aggregateForce = engine.linearThrust.getAddition(engine.angularThrust);
+        VectorVW aggregateForce = engine.linearThrust.getAddition(engine.angularThrust);
         aggregateForce.multiply(secondsToApply);
 
         return aggregateForce;
     }
 
-    public double getEngineDistFromIdealAngular(BlockPos enginePos, float[] lToWRotation, Vector angularVelocity, Vector centerOfMass, double secondsToApply) {
+    public double getEngineDistFromIdealAngular(BlockPos enginePos, float[] lToWRotation, VectorVW angularVelocity, VectorVW centerOfMass, double secondsToApply) {
         BlockPos pos = parentTile.getPos();
 
-        Vector controllerPos = new Vector(pos.getX() + .5D, pos.getY() + .5D, pos.getZ() + .5D);
-        Vector enginePosVec = new Vector(enginePos.getX() + .5D, enginePos.getY() + .5D, enginePos.getZ() + .5D);
+        VectorVW controllerPos = new VectorVW(pos.getX() + .5D, pos.getY() + .5D, pos.getZ() + .5D);
+        VectorVW enginePosVec = new VectorVW(enginePos.getX() + .5D, enginePos.getY() + .5D, enginePos.getZ() + .5D);
 
         controllerPos.subtract(centerOfMass);
         enginePosVec.subtract(centerOfMass);
 
-        Vector unOrientedPosDif = new Vector(enginePosVec.X - controllerPos.X, enginePosVec.Y - controllerPos.Y, enginePosVec.Z - controllerPos.Z);
+        VectorVW unOrientedPosDif = new VectorVW(enginePosVec.X - controllerPos.X, enginePosVec.Y - controllerPos.Y, enginePosVec.Z - controllerPos.Z);
 
         double idealYDif = unOrientedPosDif.dot(normalVector);
 
@@ -247,15 +247,15 @@ public class ShipPulseImpulseControlSystem {
 
         double inWorldYDif = enginePosVec.Y - controllerPos.Y;
 
-        Vector angularVelocityAtPoint = angularVelocity.cross(enginePosVec);
+        VectorVW angularVelocityAtPoint = angularVelocity.cross(enginePosVec);
         angularVelocityAtPoint.multiply(secondsToApply);
 
         return idealYDif - (inWorldYDif + angularVelocityAtPoint.Y * angularVelocityBias);
     }
 
-    public double getControllerDistFromIdealY(float[] lToWTransform, double invMass, double posY, Vector linearMomentum, double idealHeight) {
+    public double getControllerDistFromIdealY(float[] lToWTransform, double invMass, double posY, VectorVW linearMomentum, double idealHeight) {
         BlockPos pos = parentTile.getPos();
-        Vector controllerPos = new Vector(pos.getX() + .5D, pos.getY() + .5D, pos.getZ() + .5D);
+        VectorVW controllerPos = new VectorVW(pos.getX() + .5D, pos.getY() + .5D, pos.getZ() + .5D);
         controllerPos.transform(lToWTransform);
         return idealHeight - (posY + (linearMomentum.Y * invMass * linearVelocityBias));
     }

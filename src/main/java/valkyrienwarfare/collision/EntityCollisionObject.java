@@ -16,7 +16,7 @@
 
 package valkyrienwarfare.collision;
 
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 
 /**
  * An enhanced version of the collision Object, designed to prevent entities from moving through a polygon
@@ -25,17 +25,17 @@ import valkyrienwarfare.api.Vector;
  */
 public class EntityCollisionObject {
 
-    public final Vector axis;
+    public final VectorVW axis;
     public final Polygon movable, fixed;
     public double penetrationDistance;
     public boolean seperated;
     public double[] playerMinMax;
     public double[] blockMinMax;
-    public Vector entityVelocity;
+    public VectorVW entityVelocity;
     public boolean originallyCollided = false;
     public double velDot;
 
-    public EntityCollisionObject(Polygon movable_, Polygon stationary, Vector axes, Vector entityVel) {
+    public EntityCollisionObject(Polygon movable_, Polygon stationary, VectorVW axes, VectorVW entityVel) {
         axis = axes;
         movable = movable_;
         fixed = stationary;
@@ -112,7 +112,7 @@ public class EntityCollisionObject {
         seperated = false;
     }
 
-    public Vector getResponse() {
+    public VectorVW getResponse() {
         return axis.getProduct(-penetrationDistance);
     }
 }

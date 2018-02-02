@@ -19,7 +19,7 @@ package valkyrienwarfare;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import valkyrienwarfare.addon.control.ValkyrienWarfareControl;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.physics.BlockForce;
 import valkyrienwarfare.physics.BlockMass;
 
@@ -49,7 +49,7 @@ public class BlockPhysicsRegistration {
     }
 
     public static void registerVanillaBlockForces() {
-        BlockForce.registerBlockForce(ValkyrienWarfareControl.INSTANCE.dopedEtherium, new Vector(0, 10000F, 0), false);
+        BlockForce.registerBlockForce(ValkyrienWarfareControl.INSTANCE.dopedEtherium, new VectorVW(0, 10000F, 0), false);
     }
 
     public static void registerBlocksToNotPhysicise() {

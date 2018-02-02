@@ -20,7 +20,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import valkyrienwarfare.addon.control.tileentity.TileEntityNormalEtherCompressor;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.api.block.ethercompressor.BlockEtherCompressorLore;
 
 public class BlockNormalEtherCompressor extends BlockEtherCompressorLore {
@@ -36,6 +36,6 @@ public class BlockNormalEtherCompressor extends BlockEtherCompressorLore {
 
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new TileEntityNormalEtherCompressor(new Vector(0D, 1.0D, 0.0D), this.enginePower);
+        return new TileEntityNormalEtherCompressor(new VectorVW(0D, 1.0D, 0.0D), this.enginePower);
     }
 }

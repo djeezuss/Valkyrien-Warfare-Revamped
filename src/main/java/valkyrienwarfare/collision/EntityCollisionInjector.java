@@ -35,7 +35,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import valkyrienwarfare.ValkyrienWarfareMod;
 import valkyrienwarfare.api.VWRotationMath;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.interaction.EntityDraggable;
 import valkyrienwarfare.interaction.IDraggable;
 import valkyrienwarfare.math.BigBastardMath;
@@ -53,7 +53,7 @@ public class EntityCollisionInjector {
     // Returns false if game should use default collision
     public static IntermediateMovementVariableStorage alterEntityMovement(Entity entity, MoverType type, double dx, double dy, double dz) {
 
-        Vector velVec = new Vector(dx, dy, dz);
+        VectorVW velVec = new VectorVW(dx, dy, dz);
         double origDx = dx;
         double origDy = dy;
         double origDz = dz;
@@ -73,7 +73,7 @@ public class EntityCollisionInjector {
         PhysicsWrapperEntity worldBelow = null;
         IDraggable draggable = EntityDraggable.getDraggableFromEntity(entity);
 
-        Vector total = new Vector();
+        VectorVW total = new VectorVW();
 
         //Used to reset the player position after collision processing, effectively using the player to integrate their velocity
         double posOffestX = 0;
@@ -90,18 +90,18 @@ public class EntityCollisionInjector {
                         //					fastCollisions.add(fast);
                         worldBelow = shipPoly.shipFrom.wrapper;
 
-                        Vector response = fast.collisions[fast.minDistanceIndex].getResponse();
+                        VectorVW response = fast.collisions[fast.minDistanceIndex].getResponse();
                         // TODO: Add more potential yResponses
                         double stepSquared = entity.stepHeight * entity.stepHeight;
                         boolean isStep = isLiving && entity.onGround;
                         if (response.Y >= 0 && BigBastardMath.canStandOnNormal(fast.potentialSeperatingAxes[fast.minDistanceIndex])) {
-                            response = new Vector(0, -fast.collisions[fast.minDistanceIndex].penetrationDistance / fast.potentialSeperatingAxes[fast.minDistanceIndex].Y, 0);
+                            response = new VectorVW(0, -fast.collisions[fast.minDistanceIndex].penetrationDistance / fast.potentialSeperatingAxes[fast.minDistanceIndex].Y, 0);
                         }
                         if (isStep) {
                             EntityLivingBase living = (EntityLivingBase) entity;
                             if (Math.abs(living.moveForward) > .01D || Math.abs(living.moveStrafing) > .01D) {
                                 for (int i = 3; i < 6; i++) {
-                                    Vector tempResponse = fast.collisions[i].getResponse();
+                                    VectorVW tempResponse = fast.collisions[i].getResponse();
                                     if (tempResponse.Y > 0 && BigBastardMath.canStandOnNormal(fast.collisions[i].axis) && tempResponse.lengthSq() < stepSquared) {
                                         if (tempResponse.lengthSq() < .1D) {
                                             //Too small to be a real step, let it through
@@ -168,8 +168,8 @@ public class EntityCollisionInjector {
         dz += total.Z;
 
         boolean alreadyOnGround = entity.onGround && (dy == origDy) && origDy < 0;
-        Vector original = new Vector(origDx, origDy, origDz);
-        Vector newMov = new Vector(dx - origDx, dy - origDy, dz - origDz);
+        VectorVW original = new VectorVW(origDx, origDy, origDz);
+        VectorVW newMov = new VectorVW(dx - origDx, dy - origDy, dz - origDz);
         entity.collidedHorizontally = original.dot(newMov) < 0;
         entity.collidedVertically = isDifSignificant(dy, origDy);
         entity.onGround = entity.collidedVertically && origDy < 0 || alreadyOnGround;
@@ -180,7 +180,7 @@ public class EntityCollisionInjector {
         double motionYBefore = entity.motionY;
         float oldFallDistance = entity.fallDistance;
 
-        Vector dxyz;
+        VectorVW dxyz;
 
         if (entity instanceof EntityLivingBase) {
             EntityLivingBase base = (EntityLivingBase) entity;
@@ -202,18 +202,18 @@ public class EntityCollisionInjector {
                     base.motionY = 0.0D;
                 }
             }
-            dxyz = new Vector(dx, base.motionY, dz);
+            dxyz = new VectorVW(dx, base.motionY, dz);
         } else {
-            dxyz = new Vector(dx, dy, dz);
+            dxyz = new VectorVW(dx, dy, dz);
         }
 
-        Vector origDxyz = new Vector(origDx, origDy, origDz);
-        Vector origPosXyz = new Vector(origPosX, origPosY, origPosZ);
+        VectorVW origDxyz = new VectorVW(origDx, origDy, origDz);
+        VectorVW origPosXyz = new VectorVW(origPosX, origPosY, origPosZ);
 
         if (worldBelow != null && false) {
             double playerMass = 100D;
-            Vector impulse = new Vector(total);
-            Vector inBodyPos = new Vector(entity.posX, entity.posY, entity.posZ);
+            VectorVW impulse = new VectorVW(total);
+            VectorVW inBodyPos = new VectorVW(entity.posX, entity.posY, entity.posZ);
 
 //			inBodyPos.transform(worldBelow.wrapping.coordTransform.wToLRotation);
 //			impulse.transform(worldBelow.wrapping.coordTransform.wToLRotation);
@@ -261,7 +261,7 @@ public class EntityCollisionInjector {
         entity.collided = entity.collidedHorizontally || entity.collidedVertically;
 
 
-        Vector entityPosInShip = new Vector(entity.posX, entity.posY - 0.20000000298023224D, entity.posZ, worldBelow.wrapping.coordTransform.wToLTransform);
+        VectorVW entityPosInShip = new VectorVW(entity.posX, entity.posY - 0.20000000298023224D, entity.posZ, worldBelow.wrapping.coordTransform.wToLTransform);
 
         int j4 = MathHelper.floor(entityPosInShip.X);
         int l4 = MathHelper.floor(entityPosInShip.Y);
@@ -416,7 +416,7 @@ public class EntityCollisionInjector {
                 double posY = entity.posY;
                 double posZ = entity.posZ;
 
-                Vector entityPos = new Vector(posX, posY, posZ);
+                VectorVW entityPos = new VectorVW(posX, posY, posZ);
                 VWRotationMath.applyTransform(wrapper.wrapping.coordTransform.wToLTransform, entityPos);
 
                 setEntityPositionAndUpdateBB(entity, entityPos.X, entityPos.Y, entityPos.Z);
@@ -467,14 +467,14 @@ public class EntityCollisionInjector {
     }
 
     public static class IntermediateMovementVariableStorage {
-        public Vector dxyz;
-        public Vector origDxyz;
-        public Vector origPosXyz;
+        public VectorVW dxyz;
+        public VectorVW origDxyz;
+        public VectorVW origPosXyz;
         public boolean alreadyOnGround;
         public double motionYBefore;
         public float oldFallDistance;
 
-        public IntermediateMovementVariableStorage(Vector dxyz, Vector origDxyz, Vector origPosXyz, boolean alreadyOnGround, double motionYBefore, float oldFallDistance) {
+        public IntermediateMovementVariableStorage(VectorVW dxyz, VectorVW origDxyz, VectorVW origPosXyz, boolean alreadyOnGround, double motionYBefore, float oldFallDistance) {
             this.dxyz = dxyz;
             this.origDxyz = origDxyz;
             this.origPosXyz = origPosXyz;

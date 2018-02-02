@@ -26,7 +26,7 @@ import valkyrienwarfare.EventsClient;
 import valkyrienwarfare.ValkyrienWarfareMod;
 import valkyrienwarfare.addon.combat.entity.EntityCannonBall;
 import valkyrienwarfare.api.VWRotationMath;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.physicsmanagement.CoordTransformObject;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
 
@@ -88,16 +88,16 @@ public abstract class EntityDraggable {
             float prevYaw = entity.prevRotationYaw;
             float prevPitch = entity.prevRotationPitch;
 
-            Vector oldPos = new Vector(entity);
+            VectorVW oldPos = new VectorVW(entity);
 
             VWRotationMath.applyTransform(coordTransform.prevwToLTransform, coordTransform.prevWToLRotation, entity);
             VWRotationMath.applyTransform(coordTransform.lToWTransform, coordTransform.lToWRotation, entity);
 
-            Vector newPos = new Vector(entity);
+            VectorVW newPos = new VectorVW(entity);
 
             //Move the entity back to its old position, the added velocity will be used afterwards
             entity.setPosition(oldPos.X, oldPos.Y, oldPos.Z);
-            Vector addedVel = oldPos.getSubtraction(newPos);
+            VectorVW addedVel = oldPos.getSubtraction(newPos);
 
             draggable.setVelocityAddedToPlayer(addedVel);
 
@@ -106,7 +106,7 @@ public abstract class EntityDraggable {
             entity.prevRotationYaw = prevYaw;
             entity.prevRotationPitch = prevPitch;
 
-            Vector oldLookingPos = new Vector(entity.getLook(1.0F));
+            VectorVW oldLookingPos = new VectorVW(entity.getLook(1.0F));
             VWRotationMath.applyTransform(coordTransform.prevWToLRotation, oldLookingPos);
             VWRotationMath.applyTransform(coordTransform.lToWRotation, oldLookingPos);
 
@@ -150,9 +150,9 @@ public abstract class EntityDraggable {
                 draggable.getVelocityAddedToPlayer().zero();
             }
 
-            Vector velocityProper = new Vector(draggable.getVelocityAddedToPlayer());
+            VectorVW velocityProper = new VectorVW(draggable.getVelocityAddedToPlayer());
 
-            Vector playerPosOriginal = new Vector(entity);
+            VectorVW playerPosOriginal = new VectorVW(entity);
 
             AxisAlignedBB originalBoundingBox = entity.getEntityBoundingBox();
 
@@ -204,7 +204,7 @@ public abstract class EntityDraggable {
         return (Entity) o;
     }
 
-    public static Vector getVelocityProper(Vector improperVelocity, Entity thisClassAsAnEntity) {
+    public static VectorVW getVelocityProper(VectorVW improperVelocity, Entity thisClassAsAnEntity) {
         double x = improperVelocity.X;
         double y = improperVelocity.Y;
         double z = improperVelocity.Z;
@@ -356,6 +356,6 @@ public abstract class EntityDraggable {
             }
         }
 
-        return new Vector(x, y, z);
+        return new VectorVW(x, y, z);
     }
 }

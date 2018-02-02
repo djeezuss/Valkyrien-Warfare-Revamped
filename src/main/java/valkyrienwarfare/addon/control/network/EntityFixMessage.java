@@ -19,7 +19,7 @@ package valkyrienwarfare.addon.control.network;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
 
 public class EntityFixMessage implements IMessage {
@@ -27,12 +27,12 @@ public class EntityFixMessage implements IMessage {
     public int shipId, entityUUID;
     // If true, then entity is mounting; if false entity is dismounting
     public boolean isFixing;
-    public Vector localPosition;
+    public VectorVW localPosition;
 
     public EntityFixMessage() {
     }
 
-    public EntityFixMessage(PhysicsWrapperEntity toFixOn, Entity toFix, boolean isFixing, Vector localPos) {
+    public EntityFixMessage(PhysicsWrapperEntity toFixOn, Entity toFix, boolean isFixing, VectorVW localPos) {
         shipId = toFixOn.getEntityId();
         entityUUID = toFix.getPersistentID().hashCode();
         this.isFixing = isFixing;
@@ -45,7 +45,7 @@ public class EntityFixMessage implements IMessage {
         entityUUID = buf.readInt();
         isFixing = buf.readBoolean();
         if (isFixing) {
-            localPosition = new Vector(buf);
+            localPosition = new VectorVW(buf);
         }
     }
 

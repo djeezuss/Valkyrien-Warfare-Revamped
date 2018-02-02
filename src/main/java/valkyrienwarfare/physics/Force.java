@@ -16,9 +16,9 @@
 
 package valkyrienwarfare.physics;
 
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 
-public class Force extends Vector {
+public class Force extends VectorVW {
 
     public final boolean inLocal;
 

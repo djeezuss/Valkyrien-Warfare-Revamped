@@ -28,7 +28,7 @@ import valkyrienwarfare.ValkyrienWarfareMod;
 import valkyrienwarfare.addon.control.piloting.ControllerInputType;
 import valkyrienwarfare.addon.control.piloting.IShipPilot;
 import valkyrienwarfare.api.VWRotationMath;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.interaction.ShipUUIDToPosData;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
 
@@ -58,7 +58,7 @@ public abstract class MixinEntityPlayer extends EntityLivingBase implements IShi
             if (positionData != null) {
                 float[] lToWTransform = positionData.lToWTransform;
 
-                Vector bedPositionInWorld = new Vector(bedLocation.getX() + .5D, bedLocation.getY() + .5D, bedLocation.getZ() + .5D);
+                VectorVW bedPositionInWorld = new VectorVW(bedLocation.getX() + .5D, bedLocation.getY() + .5D, bedLocation.getZ() + .5D);
                 VWRotationMath.applyTransform(lToWTransform, bedPositionInWorld);
 
                 bedPositionInWorld.Y += 1D;

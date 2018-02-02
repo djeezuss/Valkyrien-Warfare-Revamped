@@ -31,7 +31,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import valkyrienwarfare.ValkyrienWarfareMod;
 import valkyrienwarfare.api.VWRotationMath;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.interaction.IDraggable;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
 
@@ -40,7 +40,7 @@ public abstract class MixinEntity implements IDraggable {
 
     public PhysicsWrapperEntity worldBelowFeet;
 
-    public Vector velocityAddedToPlayer = new Vector();
+    public VectorVW velocityAddedToPlayer = new VectorVW();
 
     public double yawDifVelocity;
 
@@ -72,11 +72,11 @@ public abstract class MixinEntity implements IDraggable {
         worldBelowFeet = toSet;
     }
 
-    public Vector getVelocityAddedToPlayer() {
+    public VectorVW getVelocityAddedToPlayer() {
         return velocityAddedToPlayer;
     }
 
-    public void setVelocityAddedToPlayer(Vector toSet) {
+    public void setVelocityAddedToPlayer(VectorVW toSet) {
         velocityAddedToPlayer = toSet;
     }
 
@@ -112,7 +112,7 @@ public abstract class MixinEntity implements IDraggable {
 
         PhysicsWrapperEntity wrapper = ValkyrienWarfareMod.physicsManager.getShipFixedOnto(Entity.class.cast(this));
         if (wrapper != null) {
-            Vector newOutput = new Vector(original);
+            VectorVW newOutput = new VectorVW(original);
             VWRotationMath.applyTransform(wrapper.wrapping.coordTransform.RlToWRotation, newOutput);
             return newOutput.toVec3d();
         } else {
@@ -207,7 +207,7 @@ public abstract class MixinEntity implements IDraggable {
         } else {
             PhysicsWrapperEntity wrapper = ValkyrienWarfareMod.physicsManager.getObjectManagingPos(this.world, new BlockPos(x, y, z));
             if (wrapper != null) {
-                Vector posVec = new Vector(x, y, z);
+                VectorVW posVec = new VectorVW(x, y, z);
                 wrapper.wrapping.coordTransform.fromLocalToGlobal(posVec);
                 posVec.X -= this.posX;
                 posVec.Y -= this.posY;
@@ -233,7 +233,7 @@ public abstract class MixinEntity implements IDraggable {
         } else {
             PhysicsWrapperEntity wrapper = ValkyrienWarfareMod.physicsManager.getObjectManagingPos(this.world, pos);
             if (wrapper != null) {
-                Vector posVec = new Vector(pos.getX() + .5D, pos.getY() + .5D, pos.getZ() + .5D);
+                VectorVW posVec = new VectorVW(pos.getX() + .5D, pos.getY() + .5D, pos.getZ() + .5D);
                 wrapper.wrapping.coordTransform.fromLocalToGlobal(posVec);
                 posVec.X -= this.posX;
                 posVec.Y -= this.posY;
@@ -266,7 +266,7 @@ public abstract class MixinEntity implements IDraggable {
                 this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.posX + ((double) thisClassAsAnEntity.rand.nextFloat() - 0.5D) * (double) thisClassAsAnEntity.width, thisClassAsAnEntity.getEntityBoundingBox().minY + 0.1D, this.posZ + ((double) thisClassAsAnEntity.rand.nextFloat() - 0.5D) * (double) thisClassAsAnEntity.width, -thisClassAsAnEntity.motionX * 4.0D, 1.5D, -thisClassAsAnEntity.motionZ * 4.0D, Block.getStateId(iblockstate));
             }
         } else {
-            Vector searchVector = new Vector(this.posX, this.posY - 0.20000000298023224D, this.posZ);
+            VectorVW searchVector = new VectorVW(this.posX, this.posY - 0.20000000298023224D, this.posZ);
             searchVector.transform(worldBelow.wrapping.coordTransform.wToLTransform);
 
             int i = MathHelper.floor(searchVector.X);

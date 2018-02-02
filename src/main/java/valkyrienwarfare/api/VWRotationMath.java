@@ -66,7 +66,7 @@ public class VWRotationMath {
 	}
 
 	public static final float[] rotateAndTranslate(float[] input, float pitch, float yaw, float roll,
-			Vector localOrigin) {
+			VectorVW localOrigin) {
 		input = VWRotationMath.getMatrixProduct(input,
 				VWRotationMath.getRotationMatrix(1.0F, 0.0F, 0.0F, (float) Math.toRadians(pitch)));
 		input = VWRotationMath.getMatrixProduct(input,
@@ -165,7 +165,7 @@ public class VWRotationMath {
 		return product;
 	}
 
-	public static final void applyTransform(float[] M, Vector vec) {
+	public static final void applyTransform(float[] M, VectorVW vec) {
 		float x = vec.X;
 		float y = vec.Y;
 		float z = vec.Z;
@@ -176,9 +176,9 @@ public class VWRotationMath {
 
 	@Deprecated
 	public static final void applyTransform(float[] wholeTransform, float[] rotationTransform, Entity ent) {
-		Vector entityPos = new Vector(ent.posX, ent.posY, ent.posZ);
-		Vector entityLook = new Vector(ent.getLook(1.0F));
-		Vector entityMotion = new Vector(ent.motionX, ent.motionY, ent.motionZ);
+		VectorVW entityPos = new VectorVW(ent.posX, ent.posY, ent.posZ);
+		VectorVW entityLook = new VectorVW(ent.getLook(1.0F));
+		VectorVW entityMotion = new VectorVW(ent.motionX, ent.motionY, ent.motionZ);
 
 		if (ent instanceof EntityFireball) {
 			EntityFireball ball = (EntityFireball) ent;
@@ -221,7 +221,7 @@ public class VWRotationMath {
 	}
 
 	public static final BlockPos applyTransform(float[] M, BlockPos pos) {
-		Vector blockPosVec = new Vector(pos.getX() + .5D, pos.getY() + .5D, pos.getZ() + .5D);
+		VectorVW blockPosVec = new VectorVW(pos.getX() + .5D, pos.getY() + .5D, pos.getZ() + .5D);
 		applyTransform(M, blockPosVec);
 		BlockPos newPos = new BlockPos(Math.round(blockPosVec.X - .5D), Math.round(blockPosVec.Y - .5D),
 				Math.round(blockPosVec.Z - .5D));
@@ -236,7 +236,7 @@ public class VWRotationMath {
 				(x * M[8] + y * M[9] + z * M[10] + M[11]));
 	}
 
-	public static final void applyTransform3by3(float[] M, Vector vec) {
+	public static final void applyTransform3by3(float[] M, VectorVW vec) {
 		float xx = vec.X;
 		float yy = vec.Y;
 		float zz = vec.Z;
@@ -245,23 +245,24 @@ public class VWRotationMath {
 		vec.Z = (xx * M[6] + yy * M[7] + zz * M[8]);
 	}
 
-	public static final void doRotationOnly(float[] M, Vector vec) {
+	public static final void doRotationOnly(float[] M, VectorVW vec) {
 		float x = vec.X;
 		float y = vec.Y;
 		float z = vec.Z;
+
 		vec.X = x * M[0] + y * M[1] + z * M[2];
 		vec.Y = x * M[4] + y * M[5] + z * M[6];
 		vec.Z = x * M[8] + y * M[9] + z * M[10];
 	}
 
-	public static final Vector get3by3TransformedVec(float[] M, Vector v) {
-		Vector vec = new Vector(v);
+	public static final VectorVW get3by3TransformedVec(float[] M, VectorVW v) {
+		VectorVW vec = new VectorVW(v);
 		applyTransform3by3(M, vec);
 		return vec;
 	}
 
-	public static final Vector getTransformedVec(float[] M, Vector v) {
-		Vector vec = new Vector(v);
+	public static final VectorVW getTransformedVec(float[] M, VectorVW v) {
+		VectorVW vec = new VectorVW(v);
 		applyTransform(M, vec);
 		return vec;
 	}
@@ -301,7 +302,7 @@ public class VWRotationMath {
 	}
 
 	public static float[] rotateAndTranslate(float[] lToWTransform, double pitch, double yaw, double roll,
-			Vector centerCoord) {
+			VectorVW centerCoord) {
 		return rotateAndTranslate(lToWTransform, (float) pitch, (float) yaw, (float) roll, centerCoord);
 	}
 

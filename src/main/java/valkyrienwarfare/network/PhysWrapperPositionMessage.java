@@ -18,7 +18,7 @@ package valkyrienwarfare.network;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.physicsmanagement.PhysicsObject;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
 
@@ -29,7 +29,7 @@ public class PhysWrapperPositionMessage implements IMessage {
     public int entityID;
     public double posX, posY, posZ;
     public double pitch, yaw, roll;
-    public Vector centerOfMass;
+    public VectorVW centerOfMass;
     public int relativeTick;
 
     public PhysWrapperPositionMessage() {
@@ -65,7 +65,7 @@ public class PhysWrapperPositionMessage implements IMessage {
         yaw = buf.readDouble();
         roll = buf.readDouble();
 
-        centerOfMass = new Vector(buf.readDouble(), buf.readDouble(), buf.readDouble());
+        centerOfMass = new VectorVW(buf.readDouble(), buf.readDouble(), buf.readDouble());
     }
 
     @Override

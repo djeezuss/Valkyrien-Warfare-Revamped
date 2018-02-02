@@ -18,7 +18,7 @@ package valkyrienwarfare;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -68,47 +68,47 @@ public class NBTUtils {
         return posArray;
     }
 
-    public static final void write3x3MatrixToNBT(String name, double[] matrix, NBTTagCompound compound) {
+    public static final void write3x3MatrixToNBT(String name, float[] matrix, NBTTagCompound compound) {
         for (int i = 0; i < 9; i++) {
-            compound.setDouble(name + i, matrix[i]);
+            compound.setFloat(name + i, matrix[i]);
         }
     }
 
-    public static final double[] read3x3MatrixFromNBT(String name, NBTTagCompound compound) {
-        double[] matrix = new double[9];
+    public static final float[] read3x3MatrixFromNBT(String name, NBTTagCompound compound) {
+        float[] matrix = new float[9];
         for (int i = 0; i < 9; i++) {
-            matrix[i] = compound.getDouble(name + i);
+            matrix[i] = compound.getFloat(name + i);
         }
         return matrix;
     }
 
-    public static final void writeVectorToNBT(String name, Vector vector, NBTTagCompound compound) {
+    public static final void writeVectorToNBT(String name, VectorVW vector, NBTTagCompound compound) {
         compound.setFloat(name + "X", vector.X);
         compound.setFloat(name + "Y", vector.Y);
         compound.setFloat(name + "Z", vector.Z);
     }
 
-    public static final Vector readVectorFromNBT(String name, NBTTagCompound compound) {
-        Vector vector = new Vector();
+    public static final VectorVW readVectorFromNBT(String name, NBTTagCompound compound) {
+        VectorVW vector = new VectorVW();
         vector.X = compound.getFloat(name + "X");
         vector.Y = compound.getFloat(name + "Y");
         vector.Z = compound.getFloat(name + "Z");
         return vector;
     }
 
-    public static final void writeEntityPositionHashMapToNBT(String name, HashMap<Integer, Vector> entityLocalPositions, NBTTagCompound compound) {
+    public static final void writeEntityPositionHashMapToNBT(String name, HashMap<Integer, VectorVW> entityLocalPositions, NBTTagCompound compound) {
         int[] entityIds = new int[entityLocalPositions.size()];
         double[] entityX = new double[entityLocalPositions.size()];
         double[] entityY = new double[entityLocalPositions.size()];
         double[] entityZ = new double[entityLocalPositions.size()];
 
-        Iterator<Entry<Integer, Vector>> inputs = entityLocalPositions.entrySet().iterator();
+        Iterator<Entry<Integer, VectorVW>> inputs = entityLocalPositions.entrySet().iterator();
 
         int cont = 0;
         while (inputs.hasNext()) {
-            Entry<Integer, Vector> currentEntry = inputs.next();
+            Entry<Integer, VectorVW> currentEntry = inputs.next();
             entityIds[cont] = currentEntry.getKey();
-            Vector vec = currentEntry.getValue();
+            VectorVW vec = currentEntry.getValue();
             entityX[cont] = vec.X;
             entityY[cont] = vec.Y;
             entityZ[cont] = vec.Z;
@@ -122,17 +122,17 @@ public class NBTUtils {
         compound.setByteArray(name + "valZ", toByteArray(entityZ));
     }
 
-    public static final HashMap<Integer, Vector> readEntityPositionMap(String name, NBTTagCompound compound) {
+    public static final HashMap<Integer, VectorVW> readEntityPositionMap(String name, NBTTagCompound compound) {
         int[] entityIds = compound.getIntArray(name + "keys");
 
         double[] entityX = toDoubleArray(compound.getByteArray(name + "valX"));
         double[] entityY = toDoubleArray(compound.getByteArray(name + "valY"));
         double[] entityZ = toDoubleArray(compound.getByteArray(name + "valZ"));
 
-        HashMap<Integer, Vector> toReturn = new HashMap<Integer, Vector>(entityIds.length + 1);
+        HashMap<Integer, VectorVW> toReturn = new HashMap<Integer, VectorVW>(entityIds.length + 1);
 
         for (int i = 0; i < entityIds.length; i++) {
-            toReturn.put(entityIds[i], new Vector(entityX[i], entityY[i], entityZ[i]));
+            toReturn.put(entityIds[i], new VectorVW(entityX[i], entityY[i], entityZ[i]));
         }
 
         return toReturn;

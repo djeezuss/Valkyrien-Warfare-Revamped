@@ -16,11 +16,11 @@
 
 package valkyrienwarfare.collision;
 
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 
 public class PhysPolygonCollider {
 
-    public Vector[] potentialSeperatingAxes = null;
+    public VectorVW[] potentialSeperatingAxes = null;
     public boolean seperated = false;
     public PhysCollisionObject[] collisions = null;
     public int minDistanceIndex;
@@ -28,7 +28,7 @@ public class PhysPolygonCollider {
     public Polygon entity;
     public Polygon block;
 
-    public PhysPolygonCollider(Polygon movable, Polygon stationary, Vector[] axes) {
+    public PhysPolygonCollider(Polygon movable, Polygon stationary, VectorVW[] axes) {
         potentialSeperatingAxes = axes;
         entity = movable;
         block = stationary;

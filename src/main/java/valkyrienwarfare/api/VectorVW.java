@@ -26,84 +26,84 @@ import net.minecraft.util.math.Vec3d;
  *
  * @author thebest108
  */
-public class Vector {
+public class VectorVW {
 
 	public float X;
 	public float Y;
 	public float Z;
 
-	public Vector(float x, float y, float z) {
+	public VectorVW(float x, float y, float z) {
 		X = x;
 		Y = y;
 		Z = z;
 	}
 
-	public Vector(double x, double y, double z) {
+	public VectorVW(double x, double y, double z) {
 		this((float) x, (float) y, (float) z);
 	}
 
-	public Vector(float x, float y, float z, float[] rotationMatrix) {
+	public VectorVW(float x, float y, float z, float[] rotationMatrix) {
 		X = x;
 		Y = y;
 		Z = z;
 		VWRotationMath.applyTransform(rotationMatrix, this);
 	}
 
-	public Vector(Vector v) {
+	public VectorVW(VectorVW v) {
 		X = v.X;
 		Y = v.Y;
 		Z = v.Z;
 	}
 
-	public Vector(Vector v, float scale) {
+	public VectorVW(VectorVW v, float scale) {
 		X = v.X * scale;
 		Y = v.Y * scale;
 		Z = v.Z * scale;
 	}
 
-	public Vector(Vec3d positionVector) {
+	public VectorVW(Vec3d positionVector) {
 		X = (float) positionVector.x;
 		Y = (float) positionVector.y;
 		Z = (float) positionVector.z;
 	}
 
-	public Vector(Entity entity) {
+	public VectorVW(Entity entity) {
 		X = (float) entity.posX;
 		Y = (float) entity.posY;
 		Z = (float) entity.posZ;
 	}
 
-	public Vector() {
+	public VectorVW() {
 		X = Y = Z = 0F;
 	}
 
-	public Vector(ByteBuf toRead) {
+	public VectorVW(ByteBuf toRead) {
 		this(toRead.readFloat(), toRead.readFloat(), toRead.readFloat());
 	}
 
-	public Vector(Vector theNormal, float[] matrixTransform) {
+	public VectorVW(VectorVW theNormal, float[] matrixTransform) {
 		this(theNormal.X, theNormal.Y, theNormal.Z, matrixTransform);
 	}
 
-	public Vector(double posX, double posY, double posZ, float[] wToLTransform) {
+	public VectorVW(double posX, double posY, double posZ, float[] wToLTransform) {
 		this((float) posX, (float) posY, (float) posZ, wToLTransform);
 	}
 
-	public static Vector[] generateAxisAlignedNorms() {
-		Vector[] norms = new Vector[] { new Vector(1.0F, 0.0F, 0.0F), new Vector(0.0F, 1.0F, 0.0F),
-				new Vector(0.0F, 0.0F, 1.0F) };
+	public static VectorVW[] generateAxisAlignedNorms() {
+		VectorVW[] norms = new VectorVW[] { new VectorVW(1.0F, 0.0F, 0.0F), new VectorVW(0.0F, 1.0F, 0.0F),
+				new VectorVW(0.0F, 0.0F, 1.0F) };
 		return norms;
 	}
 
-	public Vector getSubtraction(Vector v) {
-		return new Vector(v.X - X, v.Y - Y, v.Z - Z);
+	public VectorVW getSubtraction(VectorVW v) {
+		return new VectorVW(v.X - X, v.Y - Y, v.Z - Z);
 	}
 
-	public Vector getAddition(Vector v) {
-		return new Vector(v.X + X, v.Y + Y, v.Z + Z);
+	public VectorVW getAddition(VectorVW v) {
+		return new VectorVW(v.X + X, v.Y + Y, v.Z + Z);
 	}
 
-	public void subtract(Vector v) {
+	public void subtract(VectorVW v) {
 		X -= v.X;
 		Y -= v.Y;
 		Z -= v.Z;
@@ -121,7 +121,7 @@ public class Vector {
 		Z -= vec.z;
 	}
 
-	public final void add(Vector v) {
+	public final void add(VectorVW v) {
 		X += v.X;
 		Y += v.Y;
 		Z += v.Z;
@@ -139,20 +139,20 @@ public class Vector {
 		Z += vec.z;
 	}
 
-	public float dot(Vector v) {
+	public float dot(VectorVW v) {
 		return X * v.X + Y * v.Y + Z * v.Z;
 	}
 
-	public Vector cross(Vector v) {
-		return new Vector(Y * v.Z - v.Y * Z, Z * v.X - X * v.Z, X * v.Y - v.X * Y);
+	public VectorVW cross(VectorVW v) {
+		return new VectorVW(Y * v.Z - v.Y * Z, Z * v.X - X * v.Z, X * v.Y - v.X * Y);
 	}
 
 	// v.X and v.Z = 0
-	public Vector upCross(Vector v) {
-		return new Vector(-v.Y * Z, 0, X * v.Y);
+	public VectorVW upCross(VectorVW v) {
+		return new VectorVW(-v.Y * Z, 0, X * v.Y);
 	}
 
-	public final void setCross(Vector v1, Vector v) {
+	public final void setCross(VectorVW v1, VectorVW v) {
 		X = v1.Y * v.Z - v.Y * v1.Z;
 		Y = v1.Z * v.X - v1.X * v.Z;
 		Z = v1.X * v.Y - v.X * v1.Y;
@@ -168,8 +168,8 @@ public class Vector {
 		multiply((float) scale);
 	}
 
-	public Vector getProduct(float scale) {
-		return new Vector(X * scale, Y * scale, Z * scale);
+	public VectorVW getProduct(float scale) {
+		return new VectorVW(X * scale, Y * scale, Z * scale);
 	}
 
 	public Vec3d toVec3d() {
@@ -211,7 +211,7 @@ public class Vector {
 		Z = Math.round(Z);
 	}
 
-	public boolean equals(Vector vec) {
+	public boolean equals(VectorVW vec) {
 		return (vec.X == X) && (vec.Y == Y) && (vec.Z == Z);
 	}
 
@@ -226,8 +226,8 @@ public class Vector {
 		return coords;
 	}
 
-	public Vector crossAndUnit(Vector v) {
-		Vector crossProduct = new Vector(Y * v.Z - v.Y * Z, Z * v.X - X * v.Z, X * v.Y - v.X * Y);
+	public VectorVW crossAndUnit(VectorVW v) {
+		VectorVW crossProduct = new VectorVW(Y * v.Z - v.Y * Z, Z * v.X - X * v.Z, X * v.Y - v.X * Y);
 		crossProduct.normalize();
 		return crossProduct;
 	}
@@ -238,7 +238,7 @@ public class Vector {
 		toWrite.writeFloat(Z);
 	}
 
-	public void setSubtraction(Vector inLocal, Vector centerCoord) {
+	public void setSubtraction(VectorVW inLocal, VectorVW centerCoord) {
 		X = inLocal.X - centerCoord.X;
 		Y = inLocal.Y - centerCoord.Y;
 		Z = inLocal.Z - centerCoord.Z;
@@ -252,7 +252,7 @@ public class Vector {
 		add((float) posX, (float) posY, (float) posZ);
 	}
 
-	public Vector getProduct(double d) {
+	public VectorVW getProduct(double d) {
 		return getProduct((float) d);
 	}
 

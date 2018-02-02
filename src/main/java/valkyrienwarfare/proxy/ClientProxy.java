@@ -30,7 +30,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import valkyrienwarfare.EventsClient;
 import valkyrienwarfare.VWKeyHandler;
 import valkyrienwarfare.ValkyrienWarfareMod;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.api.addons.Module;
 import valkyrienwarfare.api.addons.ModuleProxy;
 import valkyrienwarfare.math.Quaternion;
@@ -94,7 +94,7 @@ public class ClientProxy extends CommonProxy {
     public void updateShipPartialTicks(PhysicsWrapperEntity entity) {
         double partialTicks = Minecraft.getMinecraft().getRenderPartialTicks();
         // entity.wrapping.renderer.updateTranslation(partialTicks);
-        Vector centerOfRotation = entity.wrapping.centerCoord;
+        VectorVW centerOfRotation = entity.wrapping.centerCoord;
         if (entity.wrapping.renderer == null) {
             return;
         }

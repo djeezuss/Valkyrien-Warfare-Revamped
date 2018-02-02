@@ -62,7 +62,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 import valkyrienwarfare.addon.combat.entity.EntityMountingWeaponBase;
 import valkyrienwarfare.api.VWRotationMath;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.capability.IAirshipCounterCapability;
 import valkyrienwarfare.interaction.ValkyrienWarfareWorldEventListener;
 import valkyrienwarfare.mixin.MixinLoaderForge;
@@ -187,7 +187,7 @@ public class EventsCommon {
         if (!(entity instanceof EntityFallingBlock) && wrapper != null && wrapper.wrapping.coordTransform != null) {
             if (entity instanceof EntityMountingWeaponBase || entity instanceof EntityArmorStand || entity instanceof EntityPig || entity instanceof EntityBoat) {
 //				entity.startRiding(wrapper);
-                wrapper.wrapping.fixEntity(entity, new Vector(entity));
+                wrapper.wrapping.fixEntity(entity, new VectorVW(entity));
                 wrapper.wrapping.queueEntityForMounting(entity);
             }
             VWRotationMath.applyTransform(wrapper.wrapping.coordTransform.lToWTransform, wrapper.wrapping.coordTransform.lToWRotation, entity);

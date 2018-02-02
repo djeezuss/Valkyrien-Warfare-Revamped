@@ -41,7 +41,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import valkyrienwarfare.ValkyrienWarfareMod;
 import valkyrienwarfare.addon.control.nodenetwork.INodeProvider;
 import valkyrienwarfare.api.VWRotationMath;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.collision.Polygon;
 import valkyrienwarfare.fixes.WorldChunkloadingCrashFix;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
@@ -79,7 +79,7 @@ public abstract class MixinWorld {
         BlockPos pos = new BlockPos(x, y, z);
         PhysicsWrapperEntity wrapper = ValkyrienWarfareMod.physicsManager.getObjectManagingPos(World.class.cast(this), pos);
         if (wrapper != null) {
-            Vector newPosVec = new Vector(x, y, z);
+            VectorVW newPosVec = new VectorVW(x, y, z);
             VWRotationMath.applyTransform(wrapper.wrapping.coordTransform.lToWTransform, newPosVec);
             x = newPosVec.X;
             y = newPosVec.Y;
@@ -458,7 +458,7 @@ public abstract class MixinWorld {
         BlockPos pos = new BlockPos(x, y, z);
         PhysicsWrapperEntity wrapper = ValkyrienWarfareMod.physicsManager.getObjectManagingPos(World.class.cast(this), pos);
         if (wrapper != null) {
-            Vector posVec = new Vector(x, y, z);
+            VectorVW posVec = new VectorVW(x, y, z);
             wrapper.wrapping.coordTransform.fromLocalToGlobal(posVec);
             x = posVec.X;
             y = posVec.Y;

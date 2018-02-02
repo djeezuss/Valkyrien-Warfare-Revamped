@@ -22,7 +22,7 @@ import net.minecraft.util.IThreadListener;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
 
 public class EntityRelativePositionMessageHandler implements IMessageHandler<EntityRelativePositionMessage, IMessage> {
@@ -44,7 +44,7 @@ public class EntityRelativePositionMessageHandler implements IMessageHandler<Ent
 
 					for (int i = 0; i < message.listSize; i++) {
 						int entityID = message.entitiesToSendIDs.get(i);
-						Vector entityPosition = message.entitiesRelativePosition.get(i);
+						VectorVW entityPosition = message.entitiesRelativePosition.get(i);
 
 						Entity entity = Minecraft.getMinecraft().world.getEntityByID(entityID);
 

@@ -24,7 +24,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import valkyrienwarfare.ValkyrienWarfareMod;
 import valkyrienwarfare.api.VWRotationMath;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.collision.EntityCollisionInjector;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
 
@@ -54,7 +54,7 @@ public class MixinMethods {
                 return null;
             }
 
-            Vector endPos = new Vector(newX, newY, newZ);
+            VectorVW endPos = new VectorVW(newX, newY, newZ);
             VWRotationMath.applyTransform(wrapper.wrapping.coordTransform.wToLTransform, endPos);
             dx = endPos.X - this_.posX;
             dy = endPos.Y - this_.posY;

@@ -16,12 +16,12 @@
 
 package valkyrienwarfare.collision;
 
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.math.BigBastardMath;
 
 public class PhysCollisionObject {
 
-    public final Vector axis;
+    public final VectorVW axis;
     public final Polygon movable, fixed;
     public float penetrationDistance;
     public boolean seperated;
@@ -29,9 +29,9 @@ public class PhysCollisionObject {
     public float[] blockMinMax;
     public float movMaxFixMin;
     public float movMinFixMax;
-    public Vector firstContactPoint;
+    public VectorVW firstContactPoint;
 
-    public PhysCollisionObject(Polygon movable_, Polygon stationary, Vector axes) {
+    public PhysCollisionObject(Polygon movable_, Polygon stationary, VectorVW axes) {
         axis = axes;
         movable = movable_;
         fixed = stationary;
@@ -51,14 +51,14 @@ public class PhysCollisionObject {
         // Set the penetration to be the smaller distance
         if (Math.abs(movMaxFixMin) > Math.abs(movMinFixMax)) {
             penetrationDistance = movMinFixMax;
-            for (Vector v : movable.vertices) {
+            for (VectorVW v : movable.vertices) {
                 if (v.dot(axis) == playerMinMax[1]) {
                     firstContactPoint = v;
                 }
             }
         } else {
             penetrationDistance = movMaxFixMin;
-            for (Vector v : movable.vertices) {
+            for (VectorVW v : movable.vertices) {
                 if (v.dot(axis) == playerMinMax[0]) {
                     firstContactPoint = v;
                 }
@@ -67,15 +67,15 @@ public class PhysCollisionObject {
         seperated = false;
     }
 
-    public Vector getSecondContactPoint() {
+    public VectorVW getSecondContactPoint() {
         if (Math.abs(movMaxFixMin) > Math.abs(movMinFixMax)) {
-            for (Vector v : fixed.vertices) {
+            for (VectorVW v : fixed.vertices) {
                 if (v.dot(axis) == blockMinMax[0]) {
                     return v;
                 }
             }
         } else {
-            for (Vector v : fixed.vertices) {
+            for (VectorVW v : fixed.vertices) {
                 if (v.dot(axis) == blockMinMax[1]) {
                     return v;
                 }
@@ -84,11 +84,11 @@ public class PhysCollisionObject {
         return null;
     }
 
-    public Vector getResponse() {
+    public VectorVW getResponse() {
         return axis.getProduct(penetrationDistance);
     }
 
-    public void setResponse(Vector v) {
+    public void setResponse(VectorVW v) {
         v.X = axis.X * penetrationDistance;
         v.Y = axis.Y * penetrationDistance;
         v.Z = axis.Z * penetrationDistance;

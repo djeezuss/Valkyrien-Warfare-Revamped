@@ -16,7 +16,7 @@
 
 package valkyrienwarfare.addon.control.tileentity;
 
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.api.block.ethercompressor.TileEntityEtherCompressor;
 
 public class TileEntityNormalEtherCompressor extends TileEntityEtherCompressor {
@@ -25,7 +25,7 @@ public class TileEntityNormalEtherCompressor extends TileEntityEtherCompressor {
         super();
     }
 
-    public TileEntityNormalEtherCompressor(Vector normalForceVector, double power) {
+    public TileEntityNormalEtherCompressor(VectorVW normalForceVector, double power) {
         super(normalForceVector, power);
     }
 

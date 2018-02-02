@@ -33,8 +33,8 @@ public interface IBlockForceProvider {
      * @param secondsToApply
      * @return
      */
-    default Vector getBlockForceInWorldSpace(World world, BlockPos pos, IBlockState state, Entity shipEntity, double secondsToApply) {
-        Vector toReturn = getBlockForceInShipSpace(world, pos, state, shipEntity, secondsToApply);
+    default VectorVW getBlockForceInWorldSpace(World world, BlockPos pos, IBlockState state, Entity shipEntity, double secondsToApply) {
+        VectorVW toReturn = getBlockForceInShipSpace(world, pos, state, shipEntity, secondsToApply);
         if (toReturn == null || shipEntity == null) {
             return null;
         }
@@ -57,7 +57,7 @@ public interface IBlockForceProvider {
      * @param secondsToApply
      * @return
      */
-    Vector getBlockForceInShipSpace(World world, BlockPos pos, IBlockState state, Entity shipEntity, double secondsToApply);
+    VectorVW getBlockForceInShipSpace(World world, BlockPos pos, IBlockState state, Entity shipEntity, double secondsToApply);
 
     /**
      * Returns true by default, blocks that shouldn't have their force rotated (Like Ether Compressors) must return false
@@ -82,7 +82,7 @@ public interface IBlockForceProvider {
      * @param secondsToApply
      * @return
      */
-    default Vector getCustomBlockForcePosition(World world, BlockPos pos, IBlockState state, Entity shipEntity, double secondsToApply) {
+    default VectorVW getCustomBlockForcePosition(World world, BlockPos pos, IBlockState state, Entity shipEntity, double secondsToApply) {
         return null;
     }
 

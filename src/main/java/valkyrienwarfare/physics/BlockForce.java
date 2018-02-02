@@ -23,7 +23,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import valkyrienwarfare.api.IBlockForceProvider;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.physicsmanagement.PhysicsObject;
 
 public class BlockForce {
@@ -32,16 +32,16 @@ public class BlockForce {
 
 	public HashMap<Block, Force> blocksToForces = new HashMap<Block, Force>();
 
-	public static void registerBlockForce(Block block, Vector forceVec, boolean isLocal) {
+	public static void registerBlockForce(Block block, VectorVW forceVec, boolean isLocal) {
 		Force force = new Force(forceVec.X, forceVec.Y, forceVec.Z, isLocal);
 		basicForces.blocksToForces.put(block, force);
 	}
 
 	public void getForceFromState(IBlockState state, BlockPos pos, World world, double secondsToApply,
-			PhysicsObject obj, Vector toSet) {
+			PhysicsObject obj, VectorVW toSet) {
 		Block block = state.getBlock();
 		if (block instanceof IBlockForceProvider) {
-			Vector forceVector = ((IBlockForceProvider) block).getBlockForceInWorldSpace(world, pos, state, obj.wrapper,
+			VectorVW forceVector = ((IBlockForceProvider) block).getBlockForceInWorldSpace(world, pos, state, obj.wrapper,
 					secondsToApply);
 			if (forceVector == null) {
 				toSet.zero();

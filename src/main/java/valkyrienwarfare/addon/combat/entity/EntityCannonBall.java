@@ -25,7 +25,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 
 public class EntityCannonBall extends Entity {
 
@@ -39,7 +39,7 @@ public class EntityCannonBall extends Entity {
         explosionPower = 2f;
     }
 
-    public EntityCannonBall(World worldIn, Vector velocityVector, Entity parent) {
+    public EntityCannonBall(World worldIn, VectorVW velocityVector, Entity parent) {
         this(worldIn);
         motionX = velocityVector.X;
         motionY = velocityVector.Y;

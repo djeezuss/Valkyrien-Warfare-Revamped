@@ -37,7 +37,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import valkyrienwarfare.ValkyrienWarfareMod;
 import valkyrienwarfare.addon.control.tileentity.TileEntityPilotsChair;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
 
 import javax.annotation.Nullable;
@@ -67,7 +67,7 @@ public class BlockShipPilotsChair extends Block implements ITileEntityProvider {
                 if (playerIn.getLowestRidingEntity() != wrapper.getLowestRidingEntity()) {
                     TileEntity tileEntity = worldIn.getTileEntity(pos);
                     if (tileEntity instanceof TileEntityPilotsChair) {
-                        Vector playerPos = new Vector(playerIn);
+                        VectorVW playerPos = new VectorVW(playerIn);
 
                         wrapper.wrapping.coordTransform.fromLocalToGlobal(playerPos);
 
@@ -76,7 +76,7 @@ public class BlockShipPilotsChair extends Block implements ITileEntityProvider {
                         playerIn.posZ = playerPos.Z;
 
                         playerIn.startRiding(wrapper);
-                        Vector localMountPos = getPlayerMountOffset(state, pos);
+                        VectorVW localMountPos = getPlayerMountOffset(state, pos);
                         wrapper.wrapping.fixEntity(playerIn, localMountPos);
 
 
@@ -112,19 +112,19 @@ public class BlockShipPilotsChair extends Block implements ITileEntityProvider {
         return wrapper != null;
     }
 
-    private Vector getPlayerMountOffset(IBlockState state, BlockPos pos) {
+    private VectorVW getPlayerMountOffset(IBlockState state, BlockPos pos) {
         EnumFacing facing = (EnumFacing) state.getValue(FACING);
         switch (facing) {
             case NORTH:
-                return new Vector(pos.getX() + .5D, pos.getY(), pos.getZ() + .6D);
+                return new VectorVW(pos.getX() + .5D, pos.getY(), pos.getZ() + .6D);
             case SOUTH:
-                return new Vector(pos.getX() + .5D, pos.getY(), pos.getZ() + .4D);
+                return new VectorVW(pos.getX() + .5D, pos.getY(), pos.getZ() + .4D);
             case WEST:
-                return new Vector(pos.getX() + .6D, pos.getY(), pos.getZ() + .5D);
+                return new VectorVW(pos.getX() + .6D, pos.getY(), pos.getZ() + .5D);
             case EAST:
-                return new Vector(pos.getX() + .4D, pos.getY(), pos.getZ() + .5D);
+                return new VectorVW(pos.getX() + .4D, pos.getY(), pos.getZ() + .5D);
             default:
-                return new Vector(pos.getX() + .5D, pos.getY() + .5D, pos.getZ() + .5D);
+                return new VectorVW(pos.getX() + .5D, pos.getY() + .5D, pos.getZ() + .5D);
         }
     }
 

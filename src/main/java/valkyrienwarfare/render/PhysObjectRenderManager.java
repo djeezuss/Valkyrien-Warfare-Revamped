@@ -29,7 +29,7 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.BlockPos;
 import valkyrienwarfare.ValkyrienWarfareMod;
 import valkyrienwarfare.api.VWRotationMath;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.math.Quaternion;
 import valkyrienwarfare.physicsmanagement.PhysicsObject;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
@@ -181,7 +181,7 @@ public class PhysObjectRenderManager {
 
 	public void updateTranslation(double partialTicks) {
 		PhysicsWrapperEntity entity = parent.wrapper;
-		Vector centerOfRotation = entity.wrapping.centerCoord;
+		VectorVW centerOfRotation = entity.wrapping.centerCoord;
 		curPartialTick = partialTicks;
 
 		double moddedX = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTicks;
@@ -227,11 +227,11 @@ public class PhysObjectRenderManager {
 		PhysicsWrapperEntity entity = parent.wrapper;
 		float[] oldRotation = VWRotationMath.getFloatIdentity();
 		oldRotation = VWRotationMath.rotateAndTranslate(oldRotation, entity.prevPitch, entity.prevYaw, entity.prevRoll,
-				new Vector());
+				new VectorVW());
 		Quaternion oneTickBefore = Quaternion.QuaternionFromMatrix(oldRotation);
 		float[] newRotation = VWRotationMath.getFloatIdentity();
 		newRotation = VWRotationMath.rotateAndTranslate(newRotation, entity.pitch, entity.yaw, entity.roll,
-				new Vector());
+				new VectorVW());
 		Quaternion nextQuat = Quaternion.QuaternionFromMatrix(newRotation);
 		return Quaternion.getBetweenQuat(oneTickBefore, nextQuat, partialTick);
 	}
@@ -239,7 +239,7 @@ public class PhysObjectRenderManager {
 	// TODO: Program me
 	public void inverseTransform(double partialTicks) {
 		PhysicsWrapperEntity entity = parent.wrapper;
-		Vector centerOfRotation = entity.wrapping.centerCoord;
+		VectorVW centerOfRotation = entity.wrapping.centerCoord;
 		curPartialTick = partialTicks;
 
 		double moddedX = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTicks;

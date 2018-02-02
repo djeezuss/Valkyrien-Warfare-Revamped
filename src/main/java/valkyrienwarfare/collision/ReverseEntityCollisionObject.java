@@ -16,7 +16,7 @@
 
 package valkyrienwarfare.collision;
 
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.math.BigBastardMath;
 
 /**
@@ -26,15 +26,15 @@ import valkyrienwarfare.math.BigBastardMath;
  */
 public class ReverseEntityCollisionObject {
 
-    public final Vector axis;
+    public final VectorVW axis;
     public final Polygon movable, fixed;
     public float penetrationDistance;
     public boolean seperated;
     public float[] playerMinMax;
     public float[] blockMinMax;
-    public Vector entityVelocity;
+    public VectorVW entityVelocity;
 
-    public ReverseEntityCollisionObject(Polygon movable_, Polygon stationary, Vector axes, Vector entityVel) {
+    public ReverseEntityCollisionObject(Polygon movable_, Polygon stationary, VectorVW axes, VectorVW entityVel) {
         axis = axes;
         movable = movable_;
         fixed = stationary;
@@ -65,7 +65,7 @@ public class ReverseEntityCollisionObject {
         seperated = false;
     }
 
-    public Vector getResponse() {
+    public VectorVW getResponse() {
         return axis.getProduct(-penetrationDistance);
     }
 }

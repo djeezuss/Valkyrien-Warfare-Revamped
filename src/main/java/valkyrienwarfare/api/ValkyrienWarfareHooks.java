@@ -55,7 +55,7 @@ public class ValkyrienWarfareHooks {
      * @param positionInWorld
      * @return A new Vector object, not the same as the one inputed
      */
-    public static Vector getPositionInShipFromReal(World worldObj, Entity shipEnt, Vector positionInWorld) {
+    public static VectorVW getPositionInShipFromReal(World worldObj, Entity shipEnt, VectorVW positionInWorld) {
         return methods.getPositionInShipFromReal(worldObj, shipEnt, positionInWorld);
     }
 
@@ -67,7 +67,7 @@ public class ValkyrienWarfareHooks {
      * @param positionInWorld
      * @return A new Vector object, not the same as the one inputed
      */
-    public static Vector getPositionInRealFromShip(World worldObj, Entity shipEnt, Vector posInShip) {
+    public static VectorVW getPositionInRealFromShip(World worldObj, Entity shipEnt, VectorVW posInShip) {
         return methods.getPositionInRealFromShip(worldObj, shipEnt, posInShip);
     }
 
@@ -83,7 +83,7 @@ public class ValkyrienWarfareHooks {
      * @param shipEnt
      * @return The Center of Mass coordinates of a Ship in Ship space
      */
-    public static Vector getShipCenterOfMass(Entity shipEnt) {
+    public static VectorVW getShipCenterOfMass(Entity shipEnt) {
         return methods.getShipCenterOfMass(shipEnt);
     }
 
@@ -92,7 +92,7 @@ public class ValkyrienWarfareHooks {
      * @param secondsToApply
      * @return A vector with the linear velocity of a Ship at that instant
      */
-    public static Vector getLinearVelocity(Entity shipEnt, double secondsToApply) {
+    public static VectorVW getLinearVelocity(Entity shipEnt, double secondsToApply) {
         return methods.getLinearVelocity(shipEnt, secondsToApply);
     }
 
@@ -100,7 +100,7 @@ public class ValkyrienWarfareHooks {
      * @param shipEnt
      * @return A vector with the angular velocty of a Ship at that instant
      */
-    public static Vector getAngularVelocity(Entity shipEnt) {
+    public static VectorVW getAngularVelocity(Entity shipEnt) {
         return methods.getAngularVelocity(shipEnt);
     }
 
@@ -118,7 +118,7 @@ public class ValkyrienWarfareHooks {
      * @param secondsToApply
      * @return A Vector with the velocity of a point in Ship space relative to the real world, at that instant
      */
-    public static Vector getVelocityAtPoint(Entity shipEnt, Vector inBody, double secondsToApply) {
+    public static VectorVW getVelocityAtPoint(Entity shipEnt, VectorVW inBody, double secondsToApply) {
         return methods.getVelocityAtPoint(shipEnt, inBody, secondsToApply);
     }
 

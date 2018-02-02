@@ -17,7 +17,7 @@
 package valkyrienwarfare.interaction;
 
 import net.minecraft.entity.MoverType;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
 
 public interface IDraggable {
@@ -26,9 +26,9 @@ public interface IDraggable {
 
     void setWorldBelowFeet(PhysicsWrapperEntity toSet);
 
-    Vector getVelocityAddedToPlayer();
+    VectorVW getVelocityAddedToPlayer();
 
-    void setVelocityAddedToPlayer(Vector toSet);
+    void setVelocityAddedToPlayer(VectorVW toSet);
 
     double getYawDifVelocity();
 

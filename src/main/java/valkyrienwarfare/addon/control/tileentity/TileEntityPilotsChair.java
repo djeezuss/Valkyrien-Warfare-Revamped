@@ -25,7 +25,7 @@ import valkyrienwarfare.addon.control.block.BlockShipPilotsChair;
 import valkyrienwarfare.addon.control.piloting.ControllerInputType;
 import valkyrienwarfare.addon.control.piloting.PilotControlsMessage;
 import valkyrienwarfare.api.VWRotationMath;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.physicsmanagement.PhysicsObject;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
 
@@ -75,26 +75,26 @@ public class TileEntityPilotsChair extends ImplTileEntityPilotable {
 
         float[] pilotRotationMatrix = VWRotationMath.getRotationMatrix(pilotPitch, pilotYaw, pilotRoll);
 
-        Vector playerDirection = new Vector(1, 0, 0);
+        VectorVW playerDirection = new VectorVW(1, 0, 0);
 
-        Vector rightDirection = new Vector(0, 0, 1);
+        VectorVW rightDirection = new VectorVW(0, 0, 1);
 
-        Vector leftDirection = new Vector(0, 0, -1);
+        VectorVW leftDirection = new VectorVW(0, 0, -1);
 
         VWRotationMath.applyTransform(pilotRotationMatrix, playerDirection);
         VWRotationMath.applyTransform(pilotRotationMatrix, rightDirection);
         VWRotationMath.applyTransform(pilotRotationMatrix, leftDirection);
 
-        Vector upDirection = new Vector(0, 1, 0);
+        VectorVW upDirection = new VectorVW(0, 1, 0);
 
-        Vector downDirection = new Vector(0, -1, 0);
+        VectorVW downDirection = new VectorVW(0, -1, 0);
 
-        Vector idealAngularDirection = new Vector();
+        VectorVW idealAngularDirection = new VectorVW();
 
-        Vector idealLinearVelocity = new Vector();
+        VectorVW idealLinearVelocity = new VectorVW();
 
-        Vector shipUp = new Vector(0, 1, 0);
-        Vector shipUpPos = new Vector(0, 1, 0);
+        VectorVW shipUp = new VectorVW(0, 1, 0);
+        VectorVW shipUpPos = new VectorVW(0, 1, 0);
 
         if (message.airshipForward_KeyDown) {
             idealLinearVelocity.add(playerDirection);
@@ -124,7 +124,7 @@ public class TileEntityPilotsChair extends ImplTileEntityPilotable {
 
         //Upside down if you want it
 //		Vector shipUpOffset = shipUpPos.getSubtraction(shipUp);
-        Vector shipUpOffset = shipUp.getSubtraction(shipUpPos);
+        VectorVW shipUpOffset = shipUp.getSubtraction(shipUpPos);
 
 
         double mass = controlledShip.physicsProcessor.getMass();
@@ -137,11 +137,11 @@ public class TileEntityPilotsChair extends ImplTileEntityPilotable {
         idealAngularDirection.multiply(1D / 6D);
         shipUpOffset.multiply(1D / 3D);
 
-        Vector velocityCompenstationLinear = controlledShip.physicsProcessor.getLinearMomentum();
+        VectorVW velocityCompenstationLinear = controlledShip.physicsProcessor.getLinearMomentum();
 
-        Vector velocityCompensationAngular = controlledShip.physicsProcessor.getAngularVelocity().cross(playerDirection);
+        VectorVW velocityCompensationAngular = controlledShip.physicsProcessor.getAngularVelocity().cross(playerDirection);
 
-        Vector velocityCompensationAlignment = controlledShip.physicsProcessor.getAngularVelocity().cross(shipUpPos);
+        VectorVW velocityCompensationAlignment = controlledShip.physicsProcessor.getAngularVelocity().cross(shipUpPos);
 
         velocityCompensationAlignment.multiply(controlledShip.physicsProcessor.getPhysRawSpeed());
         velocityCompensationAngular.multiply(2D * controlledShip.physicsProcessor.getPhysRawSpeed());
@@ -166,7 +166,7 @@ public class TileEntityPilotsChair extends ImplTileEntityPilotable {
 
         controlledShip.physicsProcessor.addForceAtPoint(shipUpPos, shipUpOffset);
 
-        controlledShip.physicsProcessor.addForceAtPoint(new Vector(), idealLinearVelocity);
+        controlledShip.physicsProcessor.addForceAtPoint(new VectorVW(), idealLinearVelocity);
 
         controlledShip.physicsProcessor.convertTorqueToVelocity();
     }

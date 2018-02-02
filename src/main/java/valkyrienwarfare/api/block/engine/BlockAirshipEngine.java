@@ -32,7 +32,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import valkyrienwarfare.addon.control.tileentity.TileEntityPropellerEngine;
 import valkyrienwarfare.api.IBlockForceProvider;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 
 /**
  * All engines should extend this class, that way other kinds of engines can be made without making tons of new classes for them. Only engines that add new functionality should have their own class.
@@ -69,9 +69,9 @@ public abstract class BlockAirshipEngine extends Block implements IBlockForcePro
     }
 
     @Override
-    public Vector getBlockForceInShipSpace(World world, BlockPos pos, IBlockState state, Entity shipEntity, double secondsToApply) {
+    public VectorVW getBlockForceInShipSpace(World world, BlockPos pos, IBlockState state, Entity shipEntity, double secondsToApply) {
         EnumFacing enumfacing = state.getValue(FACING);
-        Vector acting = new Vector(0, 0, 0);
+        VectorVW acting = new VectorVW(0, 0, 0);
         if (!world.isBlockPowered(pos)) {
             return acting;
         }
@@ -140,27 +140,27 @@ public abstract class BlockAirshipEngine extends Block implements IBlockForcePro
     }
 
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        Vector normalVector = new Vector(1, 0, 0);
+        VectorVW normalVector = new VectorVW(1, 0, 0);
         IBlockState state = getStateFromMeta(meta);
         EnumFacing facing = state.getValue(FACING);
         switch (facing) {
             case DOWN:
-                normalVector = new Vector(0, 1, 0);
+                normalVector = new VectorVW(0, 1, 0);
                 break;
             case UP:
-                normalVector = new Vector(0, -1, 0);
+                normalVector = new VectorVW(0, -1, 0);
                 break;
             case EAST:
-                normalVector = new Vector(-1, 0, 0);
+                normalVector = new VectorVW(-1, 0, 0);
                 break;
             case NORTH:
-                normalVector = new Vector(0, 0, 1);
+                normalVector = new VectorVW(0, 0, 1);
                 break;
             case WEST:
-                normalVector = new Vector(1, 0, 0);
+                normalVector = new VectorVW(1, 0, 0);
                 break;
             case SOUTH:
-                normalVector = new Vector(0, 0, -1);
+                normalVector = new VectorVW(0, 0, -1);
         }
 
         return new TileEntityPropellerEngine(normalVector, true, enginePower);

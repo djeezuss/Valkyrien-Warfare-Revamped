@@ -16,7 +16,7 @@
 
 package valkyrienwarfare.collision;
 
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 
 /**
  * Heavily modified version of the original Polygon Collider, with checks on polygons passing through eachother, normals not to be considered, and a consideration for Net Velocity between the polygons
@@ -25,17 +25,17 @@ import valkyrienwarfare.api.Vector;
  */
 public class EntityPolygonCollider {
 
-    public Vector[] potentialSeperatingAxes;
+    public VectorVW[] potentialSeperatingAxes;
     public boolean seperated = false;
     public EntityCollisionObject[] collisions;
     public int minDistanceIndex;
     public double minDistance;
     public EntityPolygon entity;
     public Polygon block;
-    public Vector entityVelocity;
+    public VectorVW entityVelocity;
     public boolean originallySeperated;
 
-    public EntityPolygonCollider(EntityPolygon movable, Polygon stationary, Vector[] axes, Vector entityVel) {
+    public EntityPolygonCollider(EntityPolygon movable, Polygon stationary, VectorVW[] axes, VectorVW entityVel) {
         potentialSeperatingAxes = axes;
         entity = movable;
         block = stationary;

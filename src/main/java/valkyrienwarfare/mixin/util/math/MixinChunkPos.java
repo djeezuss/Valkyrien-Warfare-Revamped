@@ -25,7 +25,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import valkyrienwarfare.ValkyrienWarfareMod;
 import valkyrienwarfare.api.VWRotationMath;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
 
 @Mixin(ChunkPos.class)
@@ -59,7 +59,7 @@ public abstract class MixinChunkPos {
         PhysicsWrapperEntity wrapper = ValkyrienWarfareMod.physicsManager.getObjectManagingPos(entityIn.world, new BlockPos(d0, 127, d1));
 
         if (wrapper != null) {
-            Vector entityPosInLocal = new Vector(entityIn);
+            VectorVW entityPosInLocal = new VectorVW(entityIn);
             VWRotationMath.applyTransform(wrapper.wrapping.coordTransform.wToLTransform, entityPosInLocal);
             entityPosInLocal.subtract(d0, entityPosInLocal.Y, d1);
             return entityPosInLocal.lengthSq();

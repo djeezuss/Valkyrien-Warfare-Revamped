@@ -34,7 +34,7 @@ import net.minecraft.world.World;
 import valkyrienwarfare.ValkyrienWarfareMod;
 import valkyrienwarfare.addon.combat.entity.EntityMountingWeaponBase;
 import valkyrienwarfare.api.VWRotationMath;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
 
 public class ValkyrienWarfareWorldEventListener implements IWorldEventListener {
@@ -114,7 +114,7 @@ public class ValkyrienWarfareWorldEventListener implements IWorldEventListener {
         if (!(entityIn instanceof EntityFallingBlock) && wrapper != null && wrapper.wrapping.coordTransform != null) {
             if (entityIn instanceof EntityMountingWeaponBase || entityIn instanceof EntityArmorStand || entityIn instanceof EntityPig || entityIn instanceof EntityBoat) {
 //				entity.startRiding(wrapper);
-                wrapper.wrapping.fixEntity(entityIn, new Vector(entityIn));
+                wrapper.wrapping.fixEntity(entityIn, new VectorVW(entityIn));
                 wrapper.wrapping.queueEntityForMounting(entityIn);
             }
             VWRotationMath.applyTransform(wrapper.wrapping.coordTransform.lToWTransform, wrapper.wrapping.coordTransform.lToWRotation, entityIn);
@@ -134,7 +134,7 @@ public class ValkyrienWarfareWorldEventListener implements IWorldEventListener {
         if (!(entityIn instanceof EntityFallingBlock) && wrapper != null && wrapper.wrapping.coordTransform != null) {
             if (entityIn instanceof EntityMountingWeaponBase || entityIn instanceof EntityArmorStand || entityIn instanceof EntityPig || entityIn instanceof EntityBoat) {
 //				entity.startRiding(wrapper);
-                wrapper.wrapping.fixEntity(entityIn, new Vector(entityIn));
+                wrapper.wrapping.fixEntity(entityIn, new VectorVW(entityIn));
                 wrapper.wrapping.queueEntityForMounting(entityIn);
             }
             VWRotationMath.applyTransform(wrapper.wrapping.coordTransform.lToWTransform, wrapper.wrapping.coordTransform.lToWRotation, entityIn);
@@ -165,7 +165,7 @@ public class ValkyrienWarfareWorldEventListener implements IWorldEventListener {
         if (!worldObj.isRemote) {
             for (EntityPlayer entityplayermp : worldObj.playerEntities) {
                 if (entityplayermp != null && entityplayermp.getEntityId() != breakerId) {
-                    Vector posVector = new Vector(pos.getX(), pos.getY(), pos.getZ());
+                    VectorVW posVector = new VectorVW(pos.getX(), pos.getY(), pos.getZ());
 
                     PhysicsWrapperEntity wrapper = ValkyrienWarfareMod.physicsManager.getObjectManagingPos(worldObj, pos);
 

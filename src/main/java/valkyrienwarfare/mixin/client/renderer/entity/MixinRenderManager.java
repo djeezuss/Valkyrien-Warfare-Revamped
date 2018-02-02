@@ -29,7 +29,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import valkyrienwarfare.ValkyrienWarfareMod;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
 
 @Mixin(RenderManager.class)
@@ -55,12 +55,12 @@ public abstract class MixinRenderManager {
                 double oldLastPosY = entityIn.lastTickPosY;
                 double oldLastPosZ = entityIn.lastTickPosZ;
 
-                Vector localPosition = fixedOnto.wrapping.getLocalPositionForEntity(entityIn);
+                VectorVW localPosition = fixedOnto.wrapping.getLocalPositionForEntity(entityIn);
 
                 fixedOnto.wrapping.renderer.setupTranslation(partialTicks);
 
                 if (localPosition != null) {
-                    localPosition = new Vector(localPosition);
+                    localPosition = new VectorVW(localPosition);
 
                     localPosition.X -= fixedOnto.wrapping.renderer.offsetPos.getX();
                     localPosition.Y -= fixedOnto.wrapping.renderer.offsetPos.getY();
@@ -88,7 +88,7 @@ public abstract class MixinRenderManager {
                             makePlayerMount = true;
 
                             //Now fix the rotation of sleeping players
-                            Vector playerPosInLocal = new Vector(fixedOnto.wrapping.getLocalPositionForEntity(entityIn));
+                            VectorVW playerPosInLocal = new VectorVW(fixedOnto.wrapping.getLocalPositionForEntity(entityIn));
 
                             playerPosInLocal.subtract(.5D, .6875, .5);
                             playerPosInLocal.roundToWhole();

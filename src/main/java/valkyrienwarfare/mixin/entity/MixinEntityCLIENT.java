@@ -25,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import valkyrienwarfare.ValkyrienWarfareMod;
 import valkyrienwarfare.api.VWRotationMath;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
 
 @Mixin(Entity.class)
@@ -49,11 +49,11 @@ public abstract class MixinEntityCLIENT {
         PhysicsWrapperEntity wrapper = ValkyrienWarfareMod.physicsManager.getShipFixedOnto(Entity.class.cast(this));
 
         if (wrapper != null) {
-            Vector playerPosition = new Vector(wrapper.wrapping.getLocalPositionForEntity(Entity.class.cast(this)));
+            VectorVW playerPosition = new VectorVW(wrapper.wrapping.getLocalPositionForEntity(Entity.class.cast(this)));
 
             VWRotationMath.applyTransform(wrapper.wrapping.coordTransform.RlToWTransform, playerPosition);
 
-            Vector playerEyes = new Vector(0, this.getEyeHeight(), 0);
+            VectorVW playerEyes = new VectorVW(0, this.getEyeHeight(), 0);
             //Remove the original position added for the player's eyes
             VWRotationMath.applyTransform(wrapper.wrapping.coordTransform.lToWRotation, playerEyes);
             //Add the new rotate player eyes to the position

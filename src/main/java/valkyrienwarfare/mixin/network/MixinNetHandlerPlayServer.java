@@ -42,7 +42,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import valkyrienwarfare.ValkyrienWarfareMod;
 import valkyrienwarfare.api.VWRotationMath;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.interaction.EntityDraggable;
 import valkyrienwarfare.interaction.IDraggable;
 import valkyrienwarfare.interaction.PlayerDataBackup;
@@ -178,7 +178,7 @@ public abstract class MixinNetHandlerPlayServer {
             double dist = player.interactionManager.getBlockReachDistance() + 3;
             dist *= dist;
             if (thisClassAsAHandler.targetPos == null && this.player.getDistanceSq((double) blockpos.getX() + 0.5D, (double) blockpos.getY() + 0.5D, (double) blockpos.getZ() + 0.5D) < dist && !thisClassAsAHandler.serverController.isBlockProtected(worldserver, blockpos, this.player) && worldserver.getWorldBorder().contains(blockpos)) {
-                Vector playerHitVec = new Vector(packetIn.getFacingX(), packetIn.getFacingY(), packetIn.getFacingZ());
+                VectorVW playerHitVec = new VectorVW(packetIn.getFacingX(), packetIn.getFacingY(), packetIn.getFacingZ());
 //
 //                Vector distanceVector = new Vector(playerHitVec);
 //                distanceVector.subtract(blockpos.getX(), blockpos.getY(), blockpos.getZ());

@@ -28,7 +28,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import valkyrienwarfare.NBTUtils;
 import valkyrienwarfare.addon.control.network.HovercraftControllerGUIInputMessage;
 import valkyrienwarfare.api.VWRotationMath;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.api.block.ethercompressor.TileEntityEtherCompressor;
 import valkyrienwarfare.physics.IPhysicsManager;
 import valkyrienwarfare.physicsmanagement.PhysicsObject;
@@ -43,7 +43,7 @@ public class TileEntityHoverController extends TileEntity {
     public double linearVelocityBias = 1D;
     public double angularVelocityBias = 50D;
 
-    public Vector normalVector = new Vector(0F, 1F, 0F);
+    public VectorVW normalVector = new VectorVW(0F, 1F, 0F);
 
     public double angularConstant = 500000000D;
     public double linearConstant = 1000000D;
@@ -57,12 +57,12 @@ public class TileEntityHoverController extends TileEntity {
     /*
      * Returns the Force Vector the engine will send to the physics engine
      */
-    public Vector getForceForEngine(TileEntityEtherCompressor engine, World world, BlockPos enginePos, IBlockState state, PhysicsObject physObj, double secondsToApply) {
+    public VectorVW getForceForEngine(TileEntityEtherCompressor engine, World world, BlockPos enginePos, IBlockState state, PhysicsObject physObj, double secondsToApply) {
         // physObj.physicsProcessor.convertTorqueToVelocity();
         // secondsToApply*=5D;
         // idealHeight = 100D;
 
-        Vector shipVel = new Vector(physObj.physicsProcessor.getLinearMomentum());
+        VectorVW shipVel = new VectorVW(physObj.physicsProcessor.getLinearMomentum());
 
         shipVel.multiply(physObj.physicsProcessor.getInvMass());
 
@@ -74,17 +74,17 @@ public class TileEntityHoverController extends TileEntity {
         IPhysicsManager calculations = physObj.physicsProcessor;
 
         float[] rotationAndTranslationMatrix = physObj.coordTransform.lToWTransform;
-        Vector angularVelocity = new Vector(calculations.getAngularVelocity());
-        Vector linearMomentum = new Vector(calculations.getLinearMomentum());
+        VectorVW angularVelocity = new VectorVW(calculations.getAngularVelocity());
+        VectorVW linearMomentum = new VectorVW(calculations.getLinearMomentum());
 
         double currentErrorY = -getControllerDistFromIdealY(physObj);
         double currentEngineErrorAngularY = -getEngineDistFromIdealAngular(enginePos, physObj, secondsToApply);
 
 
-        Vector potentialMaxForce = new Vector(0, (float) engine.getMaxThrust(), 0);
+        VectorVW potentialMaxForce = new VectorVW(0, (float) engine.getMaxThrust(), 0);
         potentialMaxForce.multiply(calculations.getInvMass());
         potentialMaxForce.multiply(calculations.getPhysTickSpeed());
-        Vector potentialMaxThrust = engine.getPositionInLocalSpaceWithOrientation().cross(potentialMaxForce);
+        VectorVW potentialMaxThrust = engine.getPositionInLocalSpaceWithOrientation().cross(potentialMaxForce);
         VWRotationMath.applyTransform3by3(calculations.getInvFramedMOI(), potentialMaxThrust);
         potentialMaxThrust.multiply(calculations.getPhysTickSpeed());
 
@@ -129,13 +129,13 @@ public class TileEntityHoverController extends TileEntity {
     }
 
     public double getEngineDistFromIdealAngular(BlockPos enginePos, PhysicsObject physObj, double secondsToApply) {
-        Vector controllerPos = new Vector(pos.getX() + .5D, pos.getY() + .5D, pos.getZ() + .5D);
-        Vector enginePosVec = new Vector(enginePos.getX() + .5D, enginePos.getY() + .5D, enginePos.getZ() + .5D);
+        VectorVW controllerPos = new VectorVW(pos.getX() + .5D, pos.getY() + .5D, pos.getZ() + .5D);
+        VectorVW enginePosVec = new VectorVW(enginePos.getX() + .5D, enginePos.getY() + .5D, enginePos.getZ() + .5D);
 
         controllerPos.subtract(physObj.physicsProcessor.getCenterOfMass());
         enginePosVec.subtract(physObj.physicsProcessor.getCenterOfMass());
 
-        Vector unOrientedPosDif = new Vector(enginePosVec.X - controllerPos.X, enginePosVec.Y - controllerPos.Y, enginePosVec.Z - controllerPos.Z);
+        VectorVW unOrientedPosDif = new VectorVW(enginePosVec.X - controllerPos.X, enginePosVec.Y - controllerPos.Y, enginePosVec.Z - controllerPos.Z);
 
         double idealYDif = unOrientedPosDif.dot(normalVector);
 
@@ -144,21 +144,21 @@ public class TileEntityHoverController extends TileEntity {
 
         double inWorldYDif = enginePosVec.Y - controllerPos.Y;
 
-        Vector angularVelocityAtPoint = physObj.physicsProcessor.getAngularVelocity().cross(enginePosVec);
+        VectorVW angularVelocityAtPoint = physObj.physicsProcessor.getAngularVelocity().cross(enginePosVec);
         angularVelocityAtPoint.multiply(secondsToApply);
 
         return idealYDif - (inWorldYDif + angularVelocityAtPoint.Y * angularVelocityBias);
     }
 
-    public double getEngineDistFromIdealAngular(BlockPos enginePos, float[] lToWRotation, Vector angularVelocity, Vector centerOfMass, double secondsToApply) {
+    public double getEngineDistFromIdealAngular(BlockPos enginePos, float[] lToWRotation, VectorVW angularVelocity, VectorVW centerOfMass, double secondsToApply) {
 
-        Vector controllerPos = new Vector(pos.getX() + .5D, pos.getY() + .5D, pos.getZ() + .5D);
-        Vector enginePosVec = new Vector(enginePos.getX() + .5D, enginePos.getY() + .5D, enginePos.getZ() + .5D);
+        VectorVW controllerPos = new VectorVW(pos.getX() + .5D, pos.getY() + .5D, pos.getZ() + .5D);
+        VectorVW enginePosVec = new VectorVW(enginePos.getX() + .5D, enginePos.getY() + .5D, enginePos.getZ() + .5D);
 
         controllerPos.subtract(centerOfMass);
         enginePosVec.subtract(centerOfMass);
 
-        Vector unOrientedPosDif = new Vector(enginePosVec.X - controllerPos.X, enginePosVec.Y - controllerPos.Y, enginePosVec.Z - controllerPos.Z);
+        VectorVW unOrientedPosDif = new VectorVW(enginePosVec.X - controllerPos.X, enginePosVec.Y - controllerPos.Y, enginePosVec.Z - controllerPos.Z);
 
         double idealYDif = unOrientedPosDif.dot(normalVector);
 
@@ -167,14 +167,14 @@ public class TileEntityHoverController extends TileEntity {
 
         double inWorldYDif = enginePosVec.Y - controllerPos.Y;
 
-        Vector angularVelocityAtPoint = angularVelocity.cross(enginePosVec);
+        VectorVW angularVelocityAtPoint = angularVelocity.cross(enginePosVec);
         angularVelocityAtPoint.multiply(secondsToApply);
 
         return idealYDif - (inWorldYDif + angularVelocityAtPoint.Y * angularVelocityBias);
     }
 
     public double getControllerDistFromIdealY(PhysicsObject physObj) {
-        Vector controllerPos = new Vector(pos.getX() + .5D, pos.getY() + .5D, pos.getZ() + .5D);
+        VectorVW controllerPos = new VectorVW(pos.getX() + .5D, pos.getY() + .5D, pos.getZ() + .5D);
         physObj.coordTransform.fromLocalToGlobal(controllerPos);
         return idealHeight - (physObj.physicsProcessor.getParent().wrapper.posY + (physObj.physicsProcessor.getLinearMomentum().Y * physObj.physicsProcessor.getInvMass() * linearVelocityBias * 3D));
     }
@@ -198,7 +198,7 @@ public class TileEntityHoverController extends TileEntity {
     }
 
     private void setAutoStabilizationValue(PhysicsObject physObj) {
-        Vector controllerPos = new Vector(pos.getX() + .5D, pos.getY() + .5D, pos.getZ() + .5D);
+        VectorVW controllerPos = new VectorVW(pos.getX() + .5D, pos.getY() + .5D, pos.getZ() + .5D);
         physObj.coordTransform.fromLocalToGlobal(controllerPos);
 
         double controllerDistToIdeal = -(idealHeight - physObj.physicsProcessor.getParent().wrapper.posY);
@@ -254,7 +254,7 @@ public class TileEntityHoverController extends TileEntity {
         enginePositions = NBTUtils.readBlockPosArrayListFromNBT("enginePositions", compound);
         normalVector = NBTUtils.readVectorFromNBT("normalVector", compound);
         if (normalVector.isZero()) {
-            normalVector = new Vector(0, 1, 0);
+            normalVector = new VectorVW(0, 1, 0);
         }
         idealHeight = compound.getDouble("idealHeight");
         stabilityBias = compound.getDouble("stabilityBias");

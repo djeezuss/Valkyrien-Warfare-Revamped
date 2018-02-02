@@ -39,7 +39,7 @@ import valkyrienwarfare.ValkyrienWarfareMod;
 import valkyrienwarfare.addon.control.piloting.IShipPilot;
 import valkyrienwarfare.api.MixinMethods;
 import valkyrienwarfare.api.VWRotationMath;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 import valkyrienwarfare.math.Quaternion;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
 
@@ -79,7 +79,7 @@ public abstract class MixinEntityRenderer {
 //		Minecraft.getMinecraft().thePlayer.sleeping = false;
 
         if (wrapper != null) {
-            Vector playerPosNew = new Vector(entity.posX, entity.posY, entity.posZ);
+            VectorVW playerPosNew = new VectorVW(entity.posX, entity.posY, entity.posZ);
             VWRotationMath.applyTransform(wrapper.wrapping.coordTransform.lToWTransform, playerPosNew);
 
             entity.posX = entity.prevPosX = entity.lastTickPosX = playerPosNew.X;
@@ -87,7 +87,7 @@ public abstract class MixinEntityRenderer {
             entity.posZ = entity.prevPosZ = entity.lastTickPosZ = playerPosNew.Z;
         }
 
-        Vector eyeVector = new Vector(0, entity.getEyeHeight(), 0);
+        VectorVW eyeVector = new VectorVW(0, entity.getEyeHeight(), 0);
 
         if (entity instanceof EntityLivingBase && ((EntityLivingBase) entity).isPlayerSleeping()) {
             eyeVector.Y += .7D;
@@ -112,7 +112,7 @@ public abstract class MixinEntityRenderer {
 
             VWRotationMath.applyTransform(orientationMatrix, eyeVector);
 
-            Vector playerPosition = new Vector(fixedOnto.wrapping.getLocalPositionForEntity(entity));
+            VectorVW playerPosition = new VectorVW(fixedOnto.wrapping.getLocalPositionForEntity(entity));
 
             VWRotationMath.applyTransform(fixedOnto.wrapping.coordTransform.RlToWTransform, playerPosition);
 
@@ -136,7 +136,7 @@ public abstract class MixinEntityRenderer {
             if (!this.mc.gameSettings.debugCamEnable) {
                 //VW code starts here
                 if (fixedOnto != null) {
-                    Vector playerPosInLocal = new Vector(fixedOnto.wrapping.getLocalPositionForEntity(entity));
+                    VectorVW playerPosInLocal = new VectorVW(fixedOnto.wrapping.getLocalPositionForEntity(entity));
 
                     playerPosInLocal.subtract(.5D, .6875, .5);
                     playerPosInLocal.roundToWhole();

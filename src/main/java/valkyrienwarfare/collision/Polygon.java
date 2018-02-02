@@ -19,7 +19,7 @@ package valkyrienwarfare.collision;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.AxisAlignedBB;
 import valkyrienwarfare.api.VWRotationMath;
-import valkyrienwarfare.api.Vector;
+import valkyrienwarfare.api.VectorVW;
 
 import java.util.List;
 
@@ -30,9 +30,9 @@ import java.util.List;
  */
 public class Polygon {
 
-	public final Vector[] vertices;
+	public final VectorVW[] vertices;
 	final boolean isAxisAligned;
-	public Vector velocity = new Vector(0, 0, 0);
+	public VectorVW velocity = new VectorVW(0, 0, 0);
 
 	public Polygon(AxisAlignedBB bb, float[] rotationMatrix) {
 		vertices = getCornersForAABB(bb);
@@ -44,10 +44,10 @@ public class Polygon {
 
 	public Polygon(Entity entity, double dx, double dy, double dz) {
 		this(entity.getEntityBoundingBox());
-		velocity = new Vector(dx, dy, dz);
+		velocity = new VectorVW(dx, dy, dz);
 	}
 
-	public Polygon(Vector[] points) {
+	public Polygon(VectorVW[] points) {
 		vertices = points;
 		isAxisAligned = false;
 	}
@@ -57,10 +57,10 @@ public class Polygon {
 		for (Polygon p : polysToMerge) {
 			totalVertices += p.vertices.length;
 		}
-		vertices = new Vector[totalVertices];
+		vertices = new VectorVW[totalVertices];
 		totalVertices = 0;
 		for (Polygon p : polysToMerge) {
-			for (Vector v : p.vertices) {
+			for (VectorVW v : p.vertices) {
 				vertices[totalVertices] = v;
 				totalVertices++;
 			}
@@ -73,11 +73,11 @@ public class Polygon {
 		isAxisAligned = true;
 	}
 
-	public static Vector[] getCornersForAABB(AxisAlignedBB bb) {
-		return new Vector[] { new Vector(bb.minX, bb.minY, bb.minZ), new Vector(bb.minX, bb.maxY, bb.minZ),
-				new Vector(bb.minX, bb.minY, bb.maxZ), new Vector(bb.minX, bb.maxY, bb.maxZ),
-				new Vector(bb.maxX, bb.minY, bb.minZ), new Vector(bb.maxX, bb.maxY, bb.minZ),
-				new Vector(bb.maxX, bb.minY, bb.maxZ), new Vector(bb.maxX, bb.maxY, bb.maxZ) };
+	public static VectorVW[] getCornersForAABB(AxisAlignedBB bb) {
+		return new VectorVW[] { new VectorVW(bb.minX, bb.minY, bb.minZ), new VectorVW(bb.minX, bb.maxY, bb.minZ),
+				new VectorVW(bb.minX, bb.minY, bb.maxZ), new VectorVW(bb.minX, bb.maxY, bb.maxZ),
+				new VectorVW(bb.maxX, bb.minY, bb.minZ), new VectorVW(bb.maxX, bb.maxY, bb.minZ),
+				new VectorVW(bb.maxX, bb.minY, bb.maxZ), new VectorVW(bb.maxX, bb.maxY, bb.maxZ) };
 	}
 
 	public void setAABBAndMatrix(AxisAlignedBB bb, float[] matrix) {
@@ -159,7 +159,7 @@ public class Polygon {
 		VWRotationMath.applyTransform(matrix, vertices[7]);
 	}
 
-	public float[] getProjectionOnVector(Vector axis) {
+	public float[] getProjectionOnVector(VectorVW axis) {
 		float[] distances = new float[vertices.length];
 		for (int i = 0; i < vertices.length; i++) {
 			distances[i] = axis.dot(vertices[i]);
@@ -167,9 +167,9 @@ public class Polygon {
 		return distances;
 	}
 
-	public Vector getCenter() {
-		Vector center = new Vector(0, 0, 0);
-		for (Vector v : vertices) {
+	public VectorVW getCenter() {
+		VectorVW center = new VectorVW(0, 0, 0);
+		for (VectorVW v : vertices) {
 			center.add(v);
 		}
 		center.multiply(1D / vertices.length);
@@ -177,7 +177,7 @@ public class Polygon {
 	}
 
 	public AxisAlignedBB getEnclosedAABB() {
-		Vector c = vertices[0];
+		VectorVW c = vertices[0];
 		double x = c.X;
 		double y = c.Y;
 		double z = c.Z;
