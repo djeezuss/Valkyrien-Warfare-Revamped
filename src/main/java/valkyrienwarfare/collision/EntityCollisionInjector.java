@@ -34,7 +34,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import valkyrienwarfare.ValkyrienWarfareMod;
-import valkyrienwarfare.api.RotationMatrices;
+import valkyrienwarfare.api.VWRotationMath;
 import valkyrienwarfare.api.Vector;
 import valkyrienwarfare.interaction.EntityDraggable;
 import valkyrienwarfare.interaction.IDraggable;
@@ -417,7 +417,7 @@ public class EntityCollisionInjector {
                 double posZ = entity.posZ;
 
                 Vector entityPos = new Vector(posX, posY, posZ);
-                RotationMatrices.applyTransform(wrapper.wrapping.coordTransform.wToLTransform, entityPos);
+                VWRotationMath.applyTransform(wrapper.wrapping.coordTransform.wToLTransform, entityPos);
 
                 setEntityPositionAndUpdateBB(entity, entityPos.X, entityPos.Y, entityPos.Z);
 

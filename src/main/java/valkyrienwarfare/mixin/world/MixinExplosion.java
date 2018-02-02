@@ -30,7 +30,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import valkyrienwarfare.ValkyrienWarfareMod;
-import valkyrienwarfare.api.RotationMatrices;
+import valkyrienwarfare.api.VWRotationMath;
 import valkyrienwarfare.api.Vector;
 import valkyrienwarfare.physics.BlockMass;
 import valkyrienwarfare.physics.PhysicsQueuedForce;
@@ -72,7 +72,7 @@ public abstract class MixinExplosion {
         // TODO: Make this compatible and shit!
         for (PhysicsWrapperEntity ship : shipsNear) {
             Vector inLocal = new Vector(center);
-            RotationMatrices.applyTransform(ship.wrapping.coordTransform.wToLTransform, inLocal);
+            VWRotationMath.applyTransform(ship.wrapping.coordTransform.wToLTransform, inLocal);
             // inLocal.roundToWhole();
             Explosion expl = new Explosion(ship.world, null, inLocal.X, inLocal.Y, inLocal.Z, radius, false, false);
 
@@ -118,7 +118,7 @@ public abstract class MixinExplosion {
                             forceVector.normalize();
                             forceVector.multiply(explosionForce / vectorDist);
 
-                            RotationMatrices.doRotationOnly(ship.wrapping.coordTransform.lToWRotation, forceVector);
+                            VWRotationMath.doRotationOnly(ship.wrapping.coordTransform.lToWRotation, forceVector);
                             PhysicsQueuedForce queuedForce = new PhysicsQueuedForce(forceVector, posVector, false, 1);
 
                             if (!ship.wrapping.explodedPositionsThisTick.contains(pos)) {

@@ -24,7 +24,7 @@ import valkyrienwarfare.addon.control.ValkyrienWarfareControl;
 import valkyrienwarfare.addon.control.block.BlockShipPilotsChair;
 import valkyrienwarfare.addon.control.piloting.ControllerInputType;
 import valkyrienwarfare.addon.control.piloting.PilotControlsMessage;
-import valkyrienwarfare.api.RotationMatrices;
+import valkyrienwarfare.api.VWRotationMath;
 import valkyrienwarfare.api.Vector;
 import valkyrienwarfare.physicsmanagement.PhysicsObject;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
@@ -57,12 +57,12 @@ public class TileEntityPilotsChair extends ImplTileEntityPilotable {
 
     @Override
     public final void onStartTileUsage(EntityPlayer player) {
-        getParentPhysicsEntity().wrapping.physicsProcessor.actAsArchimedes = true;
+        getParentPhysicsEntity().wrapping.physicsProcessor.setActAsArchimedes(true);
     }
 
     @Override
     public final void onStopTileUsage() {
-        getParentPhysicsEntity().wrapping.physicsProcessor.actAsArchimedes = false;
+        getParentPhysicsEntity().wrapping.physicsProcessor.setActAsArchimedes(false);
     }
 
     private final void processCalculationsForControlMessageAndApplyCalculations(PhysicsWrapperEntity wrapper, PilotControlsMessage message, IBlockState state) {
@@ -73,7 +73,7 @@ public class TileEntityPilotsChair extends ImplTileEntityPilotable {
         double pilotYaw = ((BlockShipPilotsChair) state.getBlock()).getChairYaw(state, chairPosition);
         double pilotRoll = 0D;
 
-        double[] pilotRotationMatrix = RotationMatrices.getRotationMatrix(pilotPitch, pilotYaw, pilotRoll);
+        float[] pilotRotationMatrix = VWRotationMath.getRotationMatrix(pilotPitch, pilotYaw, pilotRoll);
 
         Vector playerDirection = new Vector(1, 0, 0);
 
@@ -81,9 +81,9 @@ public class TileEntityPilotsChair extends ImplTileEntityPilotable {
 
         Vector leftDirection = new Vector(0, 0, -1);
 
-        RotationMatrices.applyTransform(pilotRotationMatrix, playerDirection);
-        RotationMatrices.applyTransform(pilotRotationMatrix, rightDirection);
-        RotationMatrices.applyTransform(pilotRotationMatrix, leftDirection);
+        VWRotationMath.applyTransform(pilotRotationMatrix, playerDirection);
+        VWRotationMath.applyTransform(pilotRotationMatrix, rightDirection);
+        VWRotationMath.applyTransform(pilotRotationMatrix, leftDirection);
 
         Vector upDirection = new Vector(0, 1, 0);
 
@@ -103,9 +103,9 @@ public class TileEntityPilotsChair extends ImplTileEntityPilotable {
             idealLinearVelocity.subtract(playerDirection);
         }
 
-        RotationMatrices.applyTransform(controlledShip.coordTransform.lToWRotation, idealLinearVelocity);
+        VWRotationMath.applyTransform(controlledShip.coordTransform.lToWRotation, idealLinearVelocity);
 
-        RotationMatrices.applyTransform(controlledShip.coordTransform.lToWRotation, shipUp);
+        VWRotationMath.applyTransform(controlledShip.coordTransform.lToWRotation, shipUp);
 
         if (message.airshipUp_KeyDown) {
             idealLinearVelocity.add(upDirection);
@@ -127,7 +127,7 @@ public class TileEntityPilotsChair extends ImplTileEntityPilotable {
         Vector shipUpOffset = shipUp.getSubtraction(shipUpPos);
 
 
-        double mass = controlledShip.physicsProcessor.mass;
+        double mass = controlledShip.physicsProcessor.getMass();
 
 //		idealAngularDirection.multiply(mass/2.5D);
         idealLinearVelocity.multiply(mass / 5D);
@@ -137,20 +137,20 @@ public class TileEntityPilotsChair extends ImplTileEntityPilotable {
         idealAngularDirection.multiply(1D / 6D);
         shipUpOffset.multiply(1D / 3D);
 
-        Vector velocityCompenstationLinear = controlledShip.physicsProcessor.linearMomentum;
+        Vector velocityCompenstationLinear = controlledShip.physicsProcessor.getLinearMomentum();
 
-        Vector velocityCompensationAngular = controlledShip.physicsProcessor.angularVelocity.cross(playerDirection);
+        Vector velocityCompensationAngular = controlledShip.physicsProcessor.getAngularVelocity().cross(playerDirection);
 
-        Vector velocityCompensationAlignment = controlledShip.physicsProcessor.angularVelocity.cross(shipUpPos);
+        Vector velocityCompensationAlignment = controlledShip.physicsProcessor.getAngularVelocity().cross(shipUpPos);
 
-        velocityCompensationAlignment.multiply(controlledShip.physicsProcessor.physRawSpeed);
-        velocityCompensationAngular.multiply(2D * controlledShip.physicsProcessor.physRawSpeed);
+        velocityCompensationAlignment.multiply(controlledShip.physicsProcessor.getPhysRawSpeed());
+        velocityCompensationAngular.multiply(2D * controlledShip.physicsProcessor.getPhysRawSpeed());
 
         shipUpOffset.subtract(velocityCompensationAlignment);
         velocityCompensationAngular.subtract(velocityCompensationAngular);
 
-        RotationMatrices.applyTransform3by3(controlledShip.physicsProcessor.framedMOI, idealAngularDirection);
-        RotationMatrices.applyTransform3by3(controlledShip.physicsProcessor.framedMOI, shipUpOffset);
+        VWRotationMath.applyTransform3by3(controlledShip.physicsProcessor.getFramedMOI(), idealAngularDirection);
+        VWRotationMath.applyTransform3by3(controlledShip.physicsProcessor.getFramedMOI(), shipUpOffset);
 
 
         if (message.airshipSprinting) {

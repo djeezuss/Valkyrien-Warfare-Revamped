@@ -16,6 +16,17 @@
 
 package valkyrienwarfare.physicsmanagement;
 
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.UUID;
+
 import gnu.trove.iterator.TIntIterator;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.state.IBlockState;
@@ -48,28 +59,24 @@ import valkyrienwarfare.BlockPhysicsRegistration;
 import valkyrienwarfare.NBTUtils;
 import valkyrienwarfare.ValkyrienWarfareMod;
 import valkyrienwarfare.addon.control.ValkyrienWarfareControl;
-import valkyrienwarfare.addon.control.balloon.ShipBalloonManager;
 import valkyrienwarfare.addon.control.network.EntityFixMessage;
 import valkyrienwarfare.addon.control.nodenetwork.INodeProvider;
 import valkyrienwarfare.addon.control.nodenetwork.Node;
 import valkyrienwarfare.api.EnumChangeOwnerResult;
-import valkyrienwarfare.api.RotationMatrices;
+import valkyrienwarfare.api.VWRotationMath;
 import valkyrienwarfare.api.Vector;
 import valkyrienwarfare.api.block.ethercompressor.TileEntityEtherCompressor;
 import valkyrienwarfare.chunkmanagement.ChunkSet;
 import valkyrienwarfare.network.PhysWrapperPositionMessage;
-import valkyrienwarfare.physics.*;
+import valkyrienwarfare.physics.BasicPhysicsManager;
+import valkyrienwarfare.physics.BlockForce;
+import valkyrienwarfare.physics.IPhysicsManager;
+import valkyrienwarfare.physics.PhysicsQueuedForce;
 import valkyrienwarfare.relocation.DetectorManager;
 import valkyrienwarfare.relocation.SpatialDetector;
 import valkyrienwarfare.relocation.VWChunkCache;
 import valkyrienwarfare.render.PhysObjectRenderManager;
 import valkyrienwarfare.schematics.SchematicReader.Schematic;
-
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.*;
-import java.util.Map.Entry;
 
 public class PhysicsObject {
 
@@ -85,7 +92,7 @@ public class PhysicsObject {
     public Vector centerCoord, lastTickCenterCoord;
     public CoordTransformObject coordTransform;
     public PhysObjectRenderManager renderer;
-    public PhysicsCalculations physicsProcessor;
+    public IPhysicsManager physicsProcessor;
     public HashSet<BlockPos> blockPositions = new HashSet<BlockPos>();
     public AxisAlignedBB collisionBB = PhysicsWrapperEntity.ZERO_AABB;
 
@@ -95,8 +102,6 @@ public class PhysicsObject {
     public boolean fromSplit = false;
 
     public String creator;
-
-    public PhysCollisionCallable collisionCallable = new PhysCollisionCallable(this);
 
     public int lastMessageTick;
     public int detectorID;
@@ -112,8 +117,6 @@ public class PhysicsObject {
     public VWChunkCache VKChunkCache;
     // Some badly written mods use these Maps to determine who to send packets to, so we need to manually fill them with nearby players
     public PlayerChunkMapEntry[][] claimedChunksEntries;
-
-    public ShipBalloonManager balloonManager;
 
     public HashMap<Integer, Vector> entityLocalPositions = new HashMap<Integer, Vector>();
 
@@ -134,8 +137,6 @@ public class PhysicsObject {
         worldObj = host.world;
         if (host.world.isRemote) {
             renderer = new PhysObjectRenderManager(this);
-        } else {
-            balloonManager = new ShipBalloonManager(this);
         }
     }
 
@@ -167,14 +168,10 @@ public class PhysicsObject {
 
         if (isNewAir) {
             blockPositions.remove(posAt);
-            if (!worldObj.isRemote) {
-                balloonManager.onBlockPositionRemoved(posAt);
-            }
         }
 
         if ((isOldAir && !isNewAir)) {
             if (!worldObj.isRemote) {
-                balloonManager.onBlockPositionAdded(posAt);
                 blockPositions.add(posAt);
             } else {
                 if (!blockPositions.contains(posAt)) {
@@ -296,11 +293,7 @@ public class PhysicsObject {
         centerCoord = new Vector(refrenceBlockPos.getX(), refrenceBlockPos.getY(), refrenceBlockPos.getZ());
 
         createPhysicsCalculations();
-        //The ship just got build, how can it not be the latest?
-        physicsProcessor.isShipPastBuild91 = true;
-
         BlockPos centerDifference = refrenceBlockPos.subtract(centerInWorld);
-
 
         toFollow.placeBlockAndTilesInWorld(worldObj, centerDifference);
 
@@ -327,15 +320,20 @@ public class PhysicsObject {
      */
     private void createPhysicsCalculations() {
         if (physicsProcessor == null) {
-            if (shipType == ShipType.Oribtal || shipType == ShipType.Semi_Unlocked_Orbital) {
+        	physicsProcessor = new BasicPhysicsManager(this);
+        	/*
+        	if (shipType == ShipType.Oribtal || shipType == ShipType.Semi_Unlocked_Orbital) {
                 physicsProcessor = new PhysicsCalculationsOrbital(this);
             } else {
                 if (shipType == ShipType.Zepplin || shipType == ShipType.Dungeon_Sky) {
                     physicsProcessor = new PhysicsCalculationsManualControl(this);
                 } else {
-                    physicsProcessor = new PhysicsCalculations(this);
+                    physicsProcessor = new IPhysicsManager(this);
                 }
             }
+            */
+        } else {
+        	System.err.println("WHY DID SOMETHING JUST CREATE PHYSICS WHERE WE DIDNT NEED THEM?!");
         }
     }
 
@@ -388,8 +386,6 @@ public class PhysicsObject {
         centerCoord = new Vector(refrenceBlockPos.getX(), refrenceBlockPos.getY(), refrenceBlockPos.getZ());
 
         createPhysicsCalculations();
-        //The ship just got build, how can it not be the latest?
-        physicsProcessor.isShipPastBuild91 = true;
 
         BlockPos centerDifference = refrenceBlockPos.subtract(centerInWorld);
         while (iter.hasNext()) {
@@ -661,7 +657,6 @@ public class PhysicsObject {
 
     public void onTick() {
         if (!worldObj.isRemote) {
-            balloonManager.onPostTick();
             for (Entity e : queuedEntitiesToMount) {
                 if (e != null) {
                     e.startRiding(this.wrapper, true);
@@ -725,7 +720,7 @@ public class PhysicsObject {
             }
 
             Vector CMDif = toUse.centerOfRotation.getSubtraction(centerCoord);
-            RotationMatrices.applyTransform(coordTransform.lToWRotation, CMDif);
+            VWRotationMath.applyTransform(coordTransform.lToWRotation, CMDif);
 
             wrapper.lastTickPosX -= CMDif.X;
             wrapper.lastTickPosY -= CMDif.Y;
@@ -820,7 +815,7 @@ public class PhysicsObject {
                                             blockPositions.add(pos);
                                             if (!worldObj.isRemote) {
                                                 if (BlockForce.basicForces.isBlockProvidingForce(worldObj.getBlockState(pos), pos, worldObj)) {
-                                                    physicsProcessor.activeForcePositions.add(pos);
+                                                    physicsProcessor.addActiveForcePosition(pos);
                                                 }
                                             }
                                         }

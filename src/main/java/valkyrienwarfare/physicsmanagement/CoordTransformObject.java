@@ -22,7 +22,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.border.WorldBorder;
 import valkyrienwarfare.ValkyrienWarfareMod;
-import valkyrienwarfare.api.RotationMatrices;
+import valkyrienwarfare.api.VWRotationMath;
 import valkyrienwarfare.api.Vector;
 import valkyrienwarfare.interaction.IDraggable;
 import valkyrienwarfare.network.EntityRelativePositionMessage;
@@ -39,20 +39,20 @@ public class CoordTransformObject {
 
     public PhysicsObject parent;
 
-    public double[] lToWRotation = RotationMatrices.getDoubleIdentity();
-    public double[] wToLRotation = RotationMatrices.getDoubleIdentity();
-    public double[] lToWTransform = RotationMatrices.getDoubleIdentity();
-    public double[] wToLTransform = RotationMatrices.getDoubleIdentity();
+    public float[] lToWRotation = VWRotationMath.getFloatIdentity();
+    public float[] wToLRotation = VWRotationMath.getFloatIdentity();
+    public float[] lToWTransform = VWRotationMath.getFloatIdentity();
+    public float[] wToLTransform = VWRotationMath.getFloatIdentity();
 
-    public double[] RlToWRotation = RotationMatrices.getDoubleIdentity();
-    public double[] RwToLRotation = RotationMatrices.getDoubleIdentity();
-    public double[] RlToWTransform = RotationMatrices.getDoubleIdentity();
-    public double[] RwToLTransform = RotationMatrices.getDoubleIdentity();
+    public float[] RlToWRotation = VWRotationMath.getFloatIdentity();
+    public float[] RwToLRotation = VWRotationMath.getFloatIdentity();
+    public float[] RlToWTransform = VWRotationMath.getFloatIdentity();
+    public float[] RwToLTransform = VWRotationMath.getFloatIdentity();
 
-    public double[] prevlToWTransform;
-    public double[] prevwToLTransform;
-    public double[] prevLToWRotation;
-    public double[] prevWToLRotation;
+    public float[] prevlToWTransform;
+    public float[] prevwToLTransform;
+    public float[] prevLToWRotation;
+    public float[] prevWToLRotation;
 
     public Vector[] normals = Vector.generateAxisAlignedNorms();
 
@@ -66,16 +66,16 @@ public class CoordTransformObject {
     }
 
     public void updateMatricesOnly() {
-        lToWTransform = RotationMatrices.getTranslationMatrix(parent.wrapper.posX, parent.wrapper.posY, parent.wrapper.posZ);
+        lToWTransform = VWRotationMath.getTranslationMatrix(parent.wrapper.posX, parent.wrapper.posY, parent.wrapper.posZ);
 
-        lToWTransform = RotationMatrices.rotateAndTranslate(lToWTransform, parent.wrapper.pitch, parent.wrapper.yaw, parent.wrapper.roll, parent.centerCoord);
+        lToWTransform = VWRotationMath.rotateAndTranslate(lToWTransform, parent.wrapper.pitch, parent.wrapper.yaw, parent.wrapper.roll, parent.centerCoord);
 
-        lToWRotation = RotationMatrices.getDoubleIdentity();
+        lToWRotation = VWRotationMath.getFloatIdentity();
 
-        lToWRotation = RotationMatrices.rotateOnly(lToWRotation, parent.wrapper.pitch, parent.wrapper.yaw, parent.wrapper.roll);
+        lToWRotation = VWRotationMath.rotateOnly(lToWRotation, parent.wrapper.pitch, parent.wrapper.yaw, parent.wrapper.roll);
 
-        wToLTransform = RotationMatrices.inverse(lToWTransform);
-        wToLRotation = RotationMatrices.inverse(lToWRotation);
+        wToLTransform = VWRotationMath.inverse(lToWTransform);
+        wToLRotation = VWRotationMath.inverse(lToWRotation);
 
         RlToWTransform = lToWTransform;
         RwToLTransform = wToLTransform;
@@ -84,14 +84,14 @@ public class CoordTransformObject {
     }
 
     public void updateRenderMatrices(double x, double y, double z, double pitch, double yaw, double roll) {
-        RlToWTransform = RotationMatrices.getTranslationMatrix(x, y, z);
+        RlToWTransform = VWRotationMath.getTranslationMatrix(x, y, z);
 
-        RlToWTransform = RotationMatrices.rotateAndTranslate(RlToWTransform, pitch, yaw, roll, parent.centerCoord);
+        RlToWTransform = VWRotationMath.rotateAndTranslate(RlToWTransform, pitch, yaw, roll, parent.centerCoord);
 
-        RwToLTransform = RotationMatrices.inverse(RlToWTransform);
+        RwToLTransform = VWRotationMath.inverse(RlToWTransform);
 
-        RlToWRotation = RotationMatrices.rotateOnly(RotationMatrices.getDoubleIdentity(), pitch, yaw, roll);
-        RwToLRotation = RotationMatrices.inverse(RlToWRotation);
+        RlToWRotation = VWRotationMath.rotateOnly(VWRotationMath.getFloatIdentity(), pitch, yaw, roll);
+        RwToLRotation = VWRotationMath.inverse(RlToWRotation);
     }
 
     // Used for the moveRiders() method
@@ -194,7 +194,7 @@ public class CoordTransformObject {
     public Vector[] generateRotationNormals() {
         Vector[] norms = Vector.generateAxisAlignedNorms();
         for (int i = 0; i < 3; i++) {
-            RotationMatrices.applyTransform(lToWRotation, norms[i]);
+            VWRotationMath.applyTransform(lToWRotation, norms[i]);
         }
         return norms;
     }
@@ -238,9 +238,9 @@ public class CoordTransformObject {
 
         for (BlockPos pos : parent.blockPositions) {
 
-            currentLocation.X = pos.getX() + .5D;
-            currentLocation.Y = pos.getY() + .5D;
-            currentLocation.Z = pos.getZ() + .5D;
+            currentLocation.X = (float) (pos.getX() + .5D);
+            currentLocation.Y = (float) (pos.getY() + .5D);
+            currentLocation.Z = (float) (pos.getZ() + .5D);
 
             fromLocalToGlobal(currentLocation);
 
@@ -271,11 +271,11 @@ public class CoordTransformObject {
     }
 
     public void fromGlobalToLocal(Vector inGlobal) {
-        RotationMatrices.applyTransform(wToLTransform, inGlobal);
+        VWRotationMath.applyTransform(wToLTransform, inGlobal);
     }
 
     public void fromLocalToGlobal(Vector inLocal) {
-        RotationMatrices.applyTransform(lToWTransform, inLocal);
+        VWRotationMath.applyTransform(lToWTransform, inLocal);
     }
 
 }

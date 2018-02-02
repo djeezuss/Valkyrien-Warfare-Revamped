@@ -125,7 +125,7 @@ public class BlockAirshipController_Zepplin extends Block implements ITileEntity
 
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new TileEntityZepplinController();
+        return null;//new TileEntityZepplinController();
     }
 
 }

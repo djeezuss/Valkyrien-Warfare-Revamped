@@ -24,7 +24,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import valkyrienwarfare.ValkyrienWarfareMod;
-import valkyrienwarfare.api.RotationMatrices;
+import valkyrienwarfare.api.VWRotationMath;
 import valkyrienwarfare.api.Vector;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
 
@@ -60,7 +60,7 @@ public abstract class MixinChunkPos {
 
         if (wrapper != null) {
             Vector entityPosInLocal = new Vector(entityIn);
-            RotationMatrices.applyTransform(wrapper.wrapping.coordTransform.wToLTransform, entityPosInLocal);
+            VWRotationMath.applyTransform(wrapper.wrapping.coordTransform.wToLTransform, entityPosInLocal);
             entityPosInLocal.subtract(d0, entityPosInLocal.Y, d1);
             return entityPosInLocal.lengthSq();
         }

@@ -25,7 +25,7 @@ import net.minecraft.world.World;
 import valkyrienwarfare.EventsClient;
 import valkyrienwarfare.ValkyrienWarfareMod;
 import valkyrienwarfare.addon.combat.entity.EntityCannonBall;
-import valkyrienwarfare.api.RotationMatrices;
+import valkyrienwarfare.api.VWRotationMath;
 import valkyrienwarfare.api.Vector;
 import valkyrienwarfare.physicsmanagement.CoordTransformObject;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
@@ -90,8 +90,8 @@ public abstract class EntityDraggable {
 
             Vector oldPos = new Vector(entity);
 
-            RotationMatrices.applyTransform(coordTransform.prevwToLTransform, coordTransform.prevWToLRotation, entity);
-            RotationMatrices.applyTransform(coordTransform.lToWTransform, coordTransform.lToWRotation, entity);
+            VWRotationMath.applyTransform(coordTransform.prevwToLTransform, coordTransform.prevWToLRotation, entity);
+            VWRotationMath.applyTransform(coordTransform.lToWTransform, coordTransform.lToWRotation, entity);
 
             Vector newPos = new Vector(entity);
 
@@ -107,8 +107,8 @@ public abstract class EntityDraggable {
             entity.prevRotationPitch = prevPitch;
 
             Vector oldLookingPos = new Vector(entity.getLook(1.0F));
-            RotationMatrices.applyTransform(coordTransform.prevWToLRotation, oldLookingPos);
-            RotationMatrices.applyTransform(coordTransform.lToWRotation, oldLookingPos);
+            VWRotationMath.applyTransform(coordTransform.prevWToLRotation, oldLookingPos);
+            VWRotationMath.applyTransform(coordTransform.lToWRotation, oldLookingPos);
 
             double newPitch = Math.asin(oldLookingPos.Y) * -180D / Math.PI;
             double f4 = -Math.cos(-newPitch * 0.017453292D);

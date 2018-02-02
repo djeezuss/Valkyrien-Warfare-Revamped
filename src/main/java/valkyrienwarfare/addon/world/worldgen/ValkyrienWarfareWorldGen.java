@@ -16,6 +16,8 @@
 
 package valkyrienwarfare.addon.world.worldgen;
 
+import java.util.Random;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -25,10 +27,7 @@ import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.fml.common.IWorldGenerator;
 import valkyrienwarfare.addon.world.ValkyrienWarfareWorld;
-import valkyrienwarfare.addon.world.worldgen.mobiledungeons.SkyTempleGenerator;
 import valkyrienwarfare.chunkmanagement.PhysicsChunkManager;
-
-import java.util.Random;
 
 /**
  * Created by joeyr on 4/18/2017.
@@ -78,7 +77,7 @@ public class ValkyrienWarfareWorldGen implements IWorldGenerator {
         if (!isLikelyShipChunk && Minecraft.getMinecraft().player != null) {
             double random = Math.random();
 
-            SkyTempleGenerator.runGenerator(world, chunk_X, chunk_Z, random);
+//            SkyTempleGenerator.runGenerator(world, chunk_X, chunk_Z, random);
         }
     }
 }

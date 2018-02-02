@@ -28,7 +28,7 @@ import valkyrienwarfare.addon.control.nodenetwork.BasicNodeTileEntity;
 import valkyrienwarfare.addon.control.piloting.ControllerInputType;
 import valkyrienwarfare.addon.control.piloting.ITileEntityPilotable;
 import valkyrienwarfare.addon.control.piloting.PilotControlsMessage;
-import valkyrienwarfare.api.RotationMatrices;
+import valkyrienwarfare.api.VWRotationMath;
 import valkyrienwarfare.api.Vector;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
 
@@ -121,7 +121,7 @@ public abstract class ImplTileEntityPilotable extends BasicNodeTileEntity implem
         Vector pos = new Vector(getPos().getX(), getPos().getY(), getPos().getZ());
         PhysicsWrapperEntity wrapper = ValkyrienWarfareMod.physicsManager.getObjectManagingPos(getWorld(), getPos());
         if (wrapper != null) {
-            RotationMatrices.applyTransform(wrapper.wrapping.coordTransform.lToWTransform, pos);
+            VWRotationMath.applyTransform(wrapper.wrapping.coordTransform.lToWTransform, pos);
         }
         serverWorld.mcServer.getPlayerList().sendToAllNearExcept(null, pos.X, pos.Y, pos.Z, 128D, getWorld().provider.getDimension(), spacketupdatetileentity);
     }

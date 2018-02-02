@@ -31,7 +31,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import valkyrienwarfare.ValkyrienWarfareMod;
-import valkyrienwarfare.api.RotationMatrices;
+import valkyrienwarfare.api.VWRotationMath;
 import valkyrienwarfare.api.Vector;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
 
@@ -59,7 +59,7 @@ public abstract class MixinWorldCLIENT {
             List<PhysicsWrapperEntity> physEnts = ValkyrienWarfareMod.physicsManager.getManagerForWorld(World.class.cast(this)).getNearbyPhysObjects(lightBB);
 
             for (PhysicsWrapperEntity physEnt : physEnts) {
-                BlockPos posInLocal = RotationMatrices.applyTransform(physEnt.wrapping.coordTransform.wToLTransform, pos);
+                BlockPos posInLocal = VWRotationMath.applyTransform(physEnt.wrapping.coordTransform.wToLTransform, pos);
                 int localI = this.getLightFromNeighborsFor(EnumSkyBlock.SKY, posInLocal);
                 int localJ = this.getLightFromNeighborsFor(EnumSkyBlock.BLOCK, posInLocal);
                 if (localI == 0 && localJ == 0) {

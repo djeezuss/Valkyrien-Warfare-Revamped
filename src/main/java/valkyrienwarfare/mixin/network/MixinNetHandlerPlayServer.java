@@ -41,7 +41,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import valkyrienwarfare.ValkyrienWarfareMod;
-import valkyrienwarfare.api.RotationMatrices;
+import valkyrienwarfare.api.VWRotationMath;
 import valkyrienwarfare.api.Vector;
 import valkyrienwarfare.interaction.EntityDraggable;
 import valkyrienwarfare.interaction.IDraggable;
@@ -91,7 +91,7 @@ public abstract class MixinNetHandlerPlayServer {
             ticksSinceLastTry = 0;
         }
         if (wrapper != null && wrapper.wrapping.coordTransform != null) {
-            RotationMatrices.applyTransform(wrapper.wrapping.coordTransform.wToLTransform, wrapper.wrapping.coordTransform.wToLRotation, player);
+            VWRotationMath.applyTransform(wrapper.wrapping.coordTransform.wToLTransform, wrapper.wrapping.coordTransform.wToLRotation, player);
             if (player.getHeldItem(packetIn.getHand()) != null && player.getHeldItem(packetIn.getHand()).getItem() instanceof ItemBucket) {
                 player.interactionManager.setBlockReachDistance(lastGoodBlockReachDist);
             }
@@ -126,9 +126,9 @@ public abstract class MixinNetHandlerPlayServer {
             ticksSinceLastTry = 0;
         }
         if (wrapper != null && wrapper.wrapping.coordTransform != null) {
-            RotationMatrices.applyTransform(wrapper.wrapping.coordTransform.wToLTransform, wrapper.wrapping.coordTransform.wToLRotation, player);
+            VWRotationMath.applyTransform(wrapper.wrapping.coordTransform.wToLTransform, wrapper.wrapping.coordTransform.wToLRotation, player);
             processPlayerDiggingOriginal(packetIn);
-            RotationMatrices.applyTransform(wrapper.wrapping.coordTransform.lToWTransform, wrapper.wrapping.coordTransform.lToWRotation, player);
+            VWRotationMath.applyTransform(wrapper.wrapping.coordTransform.lToWTransform, wrapper.wrapping.coordTransform.lToWRotation, player);
             playerBackup.restorePlayerToBackup();
         } else {
             processPlayerDiggingOriginal(packetIn);
@@ -156,9 +156,9 @@ public abstract class MixinNetHandlerPlayServer {
         }
 
         if (wrapper != null && wrapper.wrapping.coordTransform != null) {
-            RotationMatrices.applyTransform(wrapper.wrapping.coordTransform.wToLTransform, wrapper.wrapping.coordTransform.wToLRotation, player);
+            VWRotationMath.applyTransform(wrapper.wrapping.coordTransform.wToLTransform, wrapper.wrapping.coordTransform.wToLRotation, player);
             processUpdateSignOriginal(packetIn);
-            RotationMatrices.applyTransform(wrapper.wrapping.coordTransform.lToWTransform, wrapper.wrapping.coordTransform.lToWRotation, player);
+            VWRotationMath.applyTransform(wrapper.wrapping.coordTransform.lToWTransform, wrapper.wrapping.coordTransform.lToWRotation, player);
             playerBackup.restorePlayerToBackup();
         } else {
             processUpdateSignOriginal(packetIn);

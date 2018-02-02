@@ -61,7 +61,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 import valkyrienwarfare.addon.combat.entity.EntityMountingWeaponBase;
-import valkyrienwarfare.api.RotationMatrices;
+import valkyrienwarfare.api.VWRotationMath;
 import valkyrienwarfare.api.Vector;
 import valkyrienwarfare.capability.IAirshipCounterCapability;
 import valkyrienwarfare.interaction.ValkyrienWarfareWorldEventListener;
@@ -190,7 +190,7 @@ public class EventsCommon {
                 wrapper.wrapping.fixEntity(entity, new Vector(entity));
                 wrapper.wrapping.queueEntityForMounting(entity);
             }
-            RotationMatrices.applyTransform(wrapper.wrapping.coordTransform.lToWTransform, wrapper.wrapping.coordTransform.lToWRotation, entity);
+            VWRotationMath.applyTransform(wrapper.wrapping.coordTransform.lToWTransform, wrapper.wrapping.coordTransform.lToWRotation, entity);
         }
     }
 

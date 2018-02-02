@@ -27,7 +27,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import valkyrienwarfare.ValkyrienWarfareMod;
 import valkyrienwarfare.addon.control.piloting.ControllerInputType;
 import valkyrienwarfare.addon.control.piloting.IShipPilot;
-import valkyrienwarfare.api.RotationMatrices;
+import valkyrienwarfare.api.VWRotationMath;
 import valkyrienwarfare.api.Vector;
 import valkyrienwarfare.interaction.ShipUUIDToPosData;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
@@ -56,10 +56,10 @@ public abstract class MixinEntityPlayer extends EntityLivingBase implements IShi
             ShipUUIDToPosData.ShipPositionData positionData = ValkyrienWarfareMod.chunkManager.getShipPosition_Persistant(worldIn, shipManagingID);
 
             if (positionData != null) {
-                double[] lToWTransform = RotationMatrices.convertToDouble(positionData.lToWTransform);
+                float[] lToWTransform = positionData.lToWTransform;
 
                 Vector bedPositionInWorld = new Vector(bedLocation.getX() + .5D, bedLocation.getY() + .5D, bedLocation.getZ() + .5D);
-                RotationMatrices.applyTransform(lToWTransform, bedPositionInWorld);
+                VWRotationMath.applyTransform(lToWTransform, bedPositionInWorld);
 
                 bedPositionInWorld.Y += 1D;
 

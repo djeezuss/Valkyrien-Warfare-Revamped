@@ -39,8 +39,8 @@ public interface IBlockForceProvider {
             return null;
         }
         if (shouldLocalForceBeRotated(world, pos, state, secondsToApply)) {
-            double[] tranformationMatrix = ValkyrienWarfareHooks.getShipTransformMatrix(shipEntity);
-            RotationMatrices.doRotationOnly(tranformationMatrix, toReturn);
+            float[] tranformationMatrix = ValkyrienWarfareHooks.getShipTransformMatrix(shipEntity);
+            VWRotationMath.doRotationOnly(tranformationMatrix, toReturn);
         }
         return toReturn;
     }

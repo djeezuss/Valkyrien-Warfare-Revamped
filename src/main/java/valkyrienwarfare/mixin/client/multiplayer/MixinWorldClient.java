@@ -26,7 +26,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import valkyrienwarfare.ValkyrienWarfareMod;
-import valkyrienwarfare.api.RotationMatrices;
+import valkyrienwarfare.api.VWRotationMath;
 import valkyrienwarfare.api.Vector;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
 
@@ -54,7 +54,7 @@ public abstract class MixinWorldClient extends World {
             hasChanged = true;
             for (PhysicsWrapperEntity wrapper : physEntities) {
                 Vector playPosInShip = new Vector(posX + .5D, posY + .5D, posZ + .5D);
-                RotationMatrices.applyTransform(wrapper.wrapping.coordTransform.wToLTransform, playPosInShip);
+                VWRotationMath.applyTransform(wrapper.wrapping.coordTransform.wToLTransform, playPosInShip);
                 this.doVoidFogParticles(MathHelper.floor(playPosInShip.X), MathHelper.floor(playPosInShip.Y), MathHelper.floor(playPosInShip.Z));
             }
             hasChanged = false;

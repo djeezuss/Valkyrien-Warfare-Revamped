@@ -49,7 +49,7 @@ public class BlockPhysicsRegistration {
     }
 
     public static void registerVanillaBlockForces() {
-        BlockForce.registerBlockForce(ValkyrienWarfareControl.INSTANCE.dopedEtherium, new Vector(0, 10000D, 0), false);
+        BlockForce.registerBlockForce(ValkyrienWarfareControl.INSTANCE.dopedEtherium, new Vector(0, 10000F, 0), false);
     }
 
     public static void registerBlocksToNotPhysicise() {

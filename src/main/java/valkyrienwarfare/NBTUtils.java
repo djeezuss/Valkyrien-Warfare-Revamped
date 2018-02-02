@@ -83,16 +83,16 @@ public class NBTUtils {
     }
 
     public static final void writeVectorToNBT(String name, Vector vector, NBTTagCompound compound) {
-        compound.setDouble(name + "X", vector.X);
-        compound.setDouble(name + "Y", vector.Y);
-        compound.setDouble(name + "Z", vector.Z);
+        compound.setFloat(name + "X", vector.X);
+        compound.setFloat(name + "Y", vector.Y);
+        compound.setFloat(name + "Z", vector.Z);
     }
 
     public static final Vector readVectorFromNBT(String name, NBTTagCompound compound) {
         Vector vector = new Vector();
-        vector.X = compound.getDouble(name + "X");
-        vector.Y = compound.getDouble(name + "Y");
-        vector.Z = compound.getDouble(name + "Z");
+        vector.X = compound.getFloat(name + "X");
+        vector.Y = compound.getFloat(name + "Y");
+        vector.Z = compound.getFloat(name + "Z");
         return vector;
     }
 

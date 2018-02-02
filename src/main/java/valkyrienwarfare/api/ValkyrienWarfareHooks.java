@@ -108,7 +108,7 @@ public class ValkyrienWarfareHooks {
      * @param shipEnt
      * @return The matrix which converts local coordinates (The positions of the blocks in the world) to the entity coordinates (The position in front of the player)
      */
-    public static double[] getShipTransformMatrix(Entity shipEnt) {
+    public static float[] getShipTransformMatrix(Entity shipEnt) {
         return methods.getShipTransformMatrix(shipEnt);
     }
 

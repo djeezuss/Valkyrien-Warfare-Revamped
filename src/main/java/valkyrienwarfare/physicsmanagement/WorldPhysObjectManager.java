@@ -47,7 +47,6 @@ public class WorldPhysObjectManager {
     public World worldObj;
     public ArrayList<PhysicsWrapperEntity> physicsEntities = new ArrayList<PhysicsWrapperEntity>();
     public ArrayList<PhysicsWrapperEntity> physicsEntitiesToUnload = new ArrayList<PhysicsWrapperEntity>();
-    public ArrayList<Callable<Void>> physCollisonCallables = new ArrayList<Callable<Void>>();
 //	private static Field droppedChunksField;
 
     public Future physicsThreadStatus = null;
@@ -143,14 +142,12 @@ public class WorldPhysObjectManager {
 
                 for (PhysicsWrapperEntity caught : potentialMatches) {
                     physicsEntities.remove(caught);
-                    physCollisonCallables.remove(caught.wrapping.collisionCallable);
                     caught.wrapping.onThisUnload();
 //					System.out.println("Caught one");
                 }
             }
             loaded.isDead = false;
             physicsEntities.add(loaded);
-            physCollisonCallables.add(loaded.wrapping.collisionCallable);
 //            preloadPhysicsWrapperEntityMappings(loaded);
         } else {
             // reset check to prevent strange errors
@@ -174,7 +171,6 @@ public class WorldPhysObjectManager {
     public void onUnload(PhysicsWrapperEntity loaded) {
         if (!loaded.world.isRemote) {
             physicsEntities.remove(loaded);
-            physCollisonCallables.remove(loaded.wrapping.collisionCallable);
             loaded.wrapping.onThisUnload();
             for (Chunk[] chunks : loaded.wrapping.claimedChunks) {
                 for (Chunk chunk : chunks) {

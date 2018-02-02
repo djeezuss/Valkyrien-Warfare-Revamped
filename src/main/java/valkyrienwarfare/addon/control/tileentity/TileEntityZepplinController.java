@@ -20,11 +20,11 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import valkyrienwarfare.ValkyrienWarfareMod;
 import valkyrienwarfare.addon.control.piloting.ControllerInputType;
 import valkyrienwarfare.addon.control.piloting.PilotControlsMessage;
-import valkyrienwarfare.physics.PhysicsCalculationsManualControl;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
 
-public class TileEntityZepplinController extends ImplTileEntityPilotable {
+public abstract class TileEntityZepplinController extends ImplTileEntityPilotable {
 
+	/*
     @Override
     public void onStopTileUsage() {
         PhysicsWrapperEntity wrapper = ValkyrienWarfareMod.physicsManager.getObjectManagingPos(getWorld(), getPos());
@@ -76,5 +76,6 @@ public class TileEntityZepplinController extends ImplTileEntityPilotable {
             zepplinPhysics.forwardRate = Math.min(Math.max(-20, zepplinPhysics.forwardRate), 20);
         }
     }
+    */
 
 }

@@ -73,7 +73,6 @@ public class ValkyrienWarfareControl extends Module<ValkyrienWarfareControl> {
     public Block redstoneEngine;
     public Block basicHoverController;
     public Block dopedEtherium;
-    public Block balloonBurner;
     public Block pilotsChair;
     public Block passengerChair;
     public Block shipHelm;
@@ -148,7 +147,6 @@ public class ValkyrienWarfareControl extends Module<ValkyrienWarfareControl> {
 
         basicHoverController = new BlockHovercraftController(Material.IRON).setHardness(10f).setUnlocalizedName("basichovercraftcontroller").setRegistryName(getModID(), "basichovercraftcontroller").setCreativeTab(ValkyrienWarfareMod.vwTab);
         dopedEtherium = new BlockDopedEtherium(Material.GLASS).setHardness(4f).setUnlocalizedName("dopedetherium").setRegistryName(getModID(), "dopedetherium").setCreativeTab(ValkyrienWarfareMod.vwTab);
-        balloonBurner = new BlockBalloonBurner(Material.IRON).setHardness(4f).setUnlocalizedName("balloonburner").setRegistryName(getModID(), "balloonburner").setCreativeTab(ValkyrienWarfareMod.vwTab);
         pilotsChair = new BlockShipPilotsChair(Material.IRON).setHardness(4f).setUnlocalizedName("shippilotschair").setRegistryName(getModID(), "shippilotschair").setCreativeTab(ValkyrienWarfareMod.vwTab);
 
         passengerChair = new BlockShipPassengerChair(Material.IRON).setHardness(4f).setUnlocalizedName("shippassengerchair").setRegistryName(getModID(), "shippassengerchair").setCreativeTab(ValkyrienWarfareMod.vwTab);
@@ -179,7 +177,6 @@ public class ValkyrienWarfareControl extends Module<ValkyrienWarfareControl> {
 
         event.getRegistry().register(basicHoverController);
         event.getRegistry().register(dopedEtherium);
-        event.getRegistry().register(balloonBurner);
         event.getRegistry().register(pilotsChair);
 
         event.getRegistry().register(passengerChair);
@@ -201,7 +198,6 @@ public class ValkyrienWarfareControl extends Module<ValkyrienWarfareControl> {
     protected void registerTileEntities() {
         GameRegistry.registerTileEntity(TileEntityHoverController.class, "tilehovercontroller");
         GameRegistry.registerTileEntity(TileEntityNormalEtherCompressor.class, "tileantigravengine");
-        GameRegistry.registerTileEntity(BalloonBurnerTileEntity.class, "tileballoonburner");
         GameRegistry.registerTileEntity(TileEntityPilotsChair.class, "tilemanualshipcontroller");
         GameRegistry.registerTileEntity(ThrustRelayTileEntity.class, "tilethrustrelay");
         GameRegistry.registerTileEntity(ThrustModulatorTileEntity.class, "tilethrustmodulator");
@@ -237,8 +233,6 @@ public class ValkyrienWarfareControl extends Module<ValkyrienWarfareControl> {
         registerItemBlock(event, creativeEtherCompressor);
 
         registerItemBlock(event, basicHoverController);
-        registerItemBlock(event, dopedEtherium);
-        registerItemBlock(event, balloonBurner);
         registerItemBlock(event, pilotsChair);
 
         registerItemBlock(event, passengerChair);
@@ -260,7 +254,6 @@ public class ValkyrienWarfareControl extends Module<ValkyrienWarfareControl> {
     public void registerRecipes(RegistryEvent.Register<IRecipe> event) {
         registerRecipe(event, new ItemStack(pilotsChair), "SLS", "EWE", " S ", 'S', Items.STICK, 'L', Items.LEATHER, 'W', Item.getItemFromBlock(Blocks.LOG), 'E', ValkyrienWarfareWorld.INSTANCE.etheriumCrystal);
         registerRecipe(event, new ItemStack(systemLinker), "IR ", " DR", "I I", 'I', Items.IRON_INGOT, 'D', Items.DIAMOND, 'R', Items.REDSTONE);
-        registerRecipe(event, new ItemStack(balloonBurner), "IFI", "WIW", "PPP", 'I', Items.IRON_INGOT, 'F', Items.FLINT_AND_STEEL, 'W', Item.getItemFromBlock(Blocks.LOG), 'P', Item.getItemFromBlock(Blocks.PLANKS));
 
         registerRecipe(event, new ItemStack(basicHoverController), "III", "TCT", "III", 'I', Item.getItemFromBlock(Blocks.IRON_BLOCK), 'C', Items.COMPASS, 'T', Item.getItemFromBlock(Blocks.CRAFTING_TABLE));
 

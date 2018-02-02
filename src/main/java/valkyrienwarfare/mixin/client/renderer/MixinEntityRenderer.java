@@ -38,7 +38,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import valkyrienwarfare.ValkyrienWarfareMod;
 import valkyrienwarfare.addon.control.piloting.IShipPilot;
 import valkyrienwarfare.api.MixinMethods;
-import valkyrienwarfare.api.RotationMatrices;
+import valkyrienwarfare.api.VWRotationMath;
 import valkyrienwarfare.api.Vector;
 import valkyrienwarfare.math.Quaternion;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
@@ -80,7 +80,7 @@ public abstract class MixinEntityRenderer {
 
         if (wrapper != null) {
             Vector playerPosNew = new Vector(entity.posX, entity.posY, entity.posZ);
-            RotationMatrices.applyTransform(wrapper.wrapping.coordTransform.lToWTransform, playerPosNew);
+            VWRotationMath.applyTransform(wrapper.wrapping.coordTransform.lToWTransform, playerPosNew);
 
             entity.posX = entity.prevPosX = entity.lastTickPosX = playerPosNew.X;
             entity.posY = entity.prevPosY = entity.lastTickPosY = playerPosNew.Y;
@@ -108,13 +108,13 @@ public abstract class MixinEntityRenderer {
             float moddedYaw = (float) Math.toDegrees(radians[1]);
             float moddedRoll = (float) Math.toDegrees(radians[2]);
 
-            double[] orientationMatrix = RotationMatrices.getRotationMatrix(moddedPitch, moddedYaw, moddedRoll);
+            float[] orientationMatrix = VWRotationMath.getRotationMatrix(moddedPitch, moddedYaw, moddedRoll);
 
-            RotationMatrices.applyTransform(orientationMatrix, eyeVector);
+            VWRotationMath.applyTransform(orientationMatrix, eyeVector);
 
             Vector playerPosition = new Vector(fixedOnto.wrapping.getLocalPositionForEntity(entity));
 
-            RotationMatrices.applyTransform(fixedOnto.wrapping.coordTransform.RlToWTransform, playerPosition);
+            VWRotationMath.applyTransform(fixedOnto.wrapping.coordTransform.RlToWTransform, playerPosition);
 
             d0 = playerPosition.X;
             d1 = playerPosition.Y;
@@ -275,7 +275,7 @@ public abstract class MixinEntityRenderer {
         if (wrapper == null) {
             return vec.distanceTo(in);
         } else {
-            return this.mc.objectMouseOver.hitVec.distanceTo(RotationMatrices.applyTransform(wrapper.wrapping.coordTransform.wToLTransform, in));
+            return this.mc.objectMouseOver.hitVec.distanceTo(VWRotationMath.applyTransform(wrapper.wrapping.coordTransform.wToLTransform, in));
         }
     }
 }

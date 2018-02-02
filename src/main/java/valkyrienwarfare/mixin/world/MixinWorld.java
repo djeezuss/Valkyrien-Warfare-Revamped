@@ -40,7 +40,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import valkyrienwarfare.ValkyrienWarfareMod;
 import valkyrienwarfare.addon.control.nodenetwork.INodeProvider;
-import valkyrienwarfare.api.RotationMatrices;
+import valkyrienwarfare.api.VWRotationMath;
 import valkyrienwarfare.api.Vector;
 import valkyrienwarfare.collision.Polygon;
 import valkyrienwarfare.fixes.WorldChunkloadingCrashFix;
@@ -80,7 +80,7 @@ public abstract class MixinWorld {
         PhysicsWrapperEntity wrapper = ValkyrienWarfareMod.physicsManager.getObjectManagingPos(World.class.cast(this), pos);
         if (wrapper != null) {
             Vector newPosVec = new Vector(x, y, z);
-            RotationMatrices.applyTransform(wrapper.wrapping.coordTransform.lToWTransform, newPosVec);
+            VWRotationMath.applyTransform(wrapper.wrapping.coordTransform.lToWTransform, newPosVec);
             x = newPosVec.X;
             y = newPosVec.Y;
             z = newPosVec.Z;
@@ -131,15 +131,15 @@ public abstract class MixinWorld {
                 // ValkyrienWarfareMod.proxy.updateShipPartialTicks(wrapper);
             }
             // Transform the coordinate system for the player eye pos
-            playerEyesPos = RotationMatrices.applyTransform(wrapper.wrapping.coordTransform.RwToLTransform, playerEyesPos);
-            playerReachVector = RotationMatrices.applyTransform(wrapper.wrapping.coordTransform.RwToLRotation, playerReachVector);
+            playerEyesPos = VWRotationMath.applyTransform(wrapper.wrapping.coordTransform.RwToLTransform, playerEyesPos);
+            playerReachVector = VWRotationMath.applyTransform(wrapper.wrapping.coordTransform.RwToLRotation, playerReachVector);
             Vec3d playerEyesReachAdded = playerEyesPos.addVector(playerReachVector.x * reachDistance, playerReachVector.y * reachDistance, playerReachVector.z * reachDistance);
             RayTraceResult resultInShip = rayTraceBlocksOriginal(World.class.cast(this), playerEyesPos, playerEyesReachAdded, stopOnLiquid, ignoreBlockWithoutBoundingBox, returnLastUncollidableBlock);
             if (resultInShip != null && resultInShip.hitVec != null && resultInShip.typeOfHit == RayTraceResult.Type.BLOCK) {
                 double shipResultDistFromPlayer = resultInShip.hitVec.distanceTo(playerEyesPos);
                 if (shipResultDistFromPlayer < worldResultDistFromPlayer) {
                     worldResultDistFromPlayer = shipResultDistFromPlayer;
-                    resultInShip.hitVec = RotationMatrices.applyTransform(wrapper.wrapping.coordTransform.RlToWTransform, resultInShip.hitVec);
+                    resultInShip.hitVec = VWRotationMath.applyTransform(wrapper.wrapping.coordTransform.RlToWTransform, resultInShip.hitVec);
                     vanillaTrace = resultInShip;
                     transformedEntity = wrapper;
                 }
@@ -148,7 +148,7 @@ public abstract class MixinWorld {
 
         if (transformedEntity != null) {
             Vec3d hitVec2 = vanillaTrace.hitVec;
-            hitVec2 = RotationMatrices.applyTransform(transformedEntity.wrapping.coordTransform.RwToLTransform, hitVec2);
+            hitVec2 = VWRotationMath.applyTransform(transformedEntity.wrapping.coordTransform.RwToLTransform, hitVec2);
             vanillaTrace.hitVec = hitVec2;
         }
 
@@ -483,7 +483,7 @@ public abstract class MixinWorld {
             }
             PhysicsWrapperEntity wrapper = ValkyrienWarfareMod.physicsManager.getObjectManagingPos(thisClassAsWorld, pos);
             if (wrapper != null && wrapper.wrapping != null && wrapper.wrapping.coordTransform != null && wrapper.wrapping.coordTransform.lToWTransform != null && pos != null) {
-                BlockPos realPos = RotationMatrices.applyTransform(wrapper.wrapping.coordTransform.lToWTransform, pos);
+                BlockPos realPos = VWRotationMath.applyTransform(wrapper.wrapping.coordTransform.lToWTransform, pos);
                 Biome toReturn = thisClassAsWorld.getBiome(realPos);
                 if (toReturn != null) {
                     callbackInfoReturnable.setReturnValue(toReturn);

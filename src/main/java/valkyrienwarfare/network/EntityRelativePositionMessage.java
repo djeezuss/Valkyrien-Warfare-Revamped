@@ -38,7 +38,7 @@ public class EntityRelativePositionMessage implements IMessage {
 
         listSize = entitiesToSendRelativePosition.size();
 
-        double[] wToLTransformationMatrix = wrapperEntity.wrapping.coordTransform.wToLTransform;
+        float[] wToLTransformationMatrix = wrapperEntity.wrapping.coordTransform.wToLTransform;
 
         for (int i = 0; i < entitiesToSendRelativePosition.size(); i++) {
             Entity entity = entitiesToSendRelativePosition.get(i);

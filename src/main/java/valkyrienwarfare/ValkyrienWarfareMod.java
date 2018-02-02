@@ -300,7 +300,6 @@ public class ValkyrienWarfareMod {
         registerNetworks(event);
         runConfiguration(event);
         registerCapibilities();
-        ValkyrienWarfareHooks.methods = new RealMethods();
         ValkyrienWarfareHooks.isValkyrienWarfareInstalled = true;
         VWLogger = Logger.getLogger("ValkyrienWarfare");
 

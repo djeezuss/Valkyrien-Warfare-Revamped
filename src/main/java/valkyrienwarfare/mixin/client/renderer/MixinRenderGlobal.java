@@ -45,7 +45,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import valkyrienwarfare.ValkyrienWarfareMod;
-import valkyrienwarfare.api.RotationMatrices;
+import valkyrienwarfare.api.VWRotationMath;
 import valkyrienwarfare.api.Vector;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
 import valkyrienwarfare.proxy.ClientProxy;
@@ -296,7 +296,7 @@ public abstract class MixinRenderGlobal {
             PhysicsWrapperEntity wrapper = ValkyrienWarfareMod.physicsManager.getObjectManagingPos(this.world, particlePos);
             if (wrapper != null) {
                 Vector newCoords = new Vector(x, y, z);
-                RotationMatrices.applyTransform(wrapper.wrapping.coordTransform.lToWTransform, newCoords);
+                VWRotationMath.applyTransform(wrapper.wrapping.coordTransform.lToWTransform, newCoords);
 
                 x = newCoords.X;
                 y = newCoords.Y;

@@ -28,10 +28,10 @@ public class ReverseEntityCollisionObject {
 
     public final Vector axis;
     public final Polygon movable, fixed;
-    public double penetrationDistance;
+    public float penetrationDistance;
     public boolean seperated;
-    public double[] playerMinMax;
-    public double[] blockMinMax;
+    public float[] playerMinMax;
+    public float[] blockMinMax;
     public Vector entityVelocity;
 
     public ReverseEntityCollisionObject(Polygon movable_, Polygon stationary, Vector axes, Vector entityVel) {
@@ -46,14 +46,14 @@ public class ReverseEntityCollisionObject {
         // velDot = -entityVelocity.dot(axis);
         playerMinMax = BigBastardMath.getMinMaxOfArray(movable.getProjectionOnVector(axis));
         blockMinMax = BigBastardMath.getMinMaxOfArray(fixed.getProjectionOnVector(axis));
-        double movMaxFixMin = playerMinMax[0] - blockMinMax[1];
-        double movMinFixMax = playerMinMax[1] - blockMinMax[0];
+        float movMaxFixMin = playerMinMax[0] - blockMinMax[1];
+        float movMinFixMax = playerMinMax[1] - blockMinMax[0];
         /*
 		 * if(velDot>0){ movMaxFixMin-=velDot; }else{ movMinFixMax-=velDot; // }
 		 */
         if (movMaxFixMin > 0 || movMinFixMax < 0) {
             seperated = true;
-            penetrationDistance = 0.0D;
+            penetrationDistance = 0.0F;
             return;
         }
         // Set the penetration to be the smaller distance

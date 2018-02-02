@@ -22,7 +22,7 @@ import valkyrienwarfare.addon.control.controlsystems.ShipPulseImpulseControlSyst
 import valkyrienwarfare.addon.control.network.ThrustModulatorGuiInputMessage;
 import valkyrienwarfare.addon.control.nodenetwork.Node;
 import valkyrienwarfare.addon.control.proxy.ClientProxyControl;
-import valkyrienwarfare.physics.PhysicsCalculations;
+import valkyrienwarfare.physics.IPhysicsManager;
 import valkyrienwarfare.physicsmanagement.PhysicsObject;
 
 public class ThrustModulatorTileEntity extends ImplPhysicsProcessorNodeTileEntity {
@@ -37,7 +37,7 @@ public class ThrustModulatorTileEntity extends ImplPhysicsProcessorNodeTileEntit
     }
 
     @Override
-    public void onPhysicsTick(PhysicsObject object, PhysicsCalculations calculations, double secondsToSimulate) {
+    public void onPhysicsTick(PhysicsObject object, IPhysicsManager calculations, double secondsToSimulate) {
         controlSystem.solveThrustValues(calculations);
 //    	System.out.println("test");
     }

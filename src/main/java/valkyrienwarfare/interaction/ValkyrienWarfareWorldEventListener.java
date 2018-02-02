@@ -33,7 +33,7 @@ import net.minecraft.world.IWorldEventListener;
 import net.minecraft.world.World;
 import valkyrienwarfare.ValkyrienWarfareMod;
 import valkyrienwarfare.addon.combat.entity.EntityMountingWeaponBase;
-import valkyrienwarfare.api.RotationMatrices;
+import valkyrienwarfare.api.VWRotationMath;
 import valkyrienwarfare.api.Vector;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
 
@@ -117,7 +117,7 @@ public class ValkyrienWarfareWorldEventListener implements IWorldEventListener {
                 wrapper.wrapping.fixEntity(entityIn, new Vector(entityIn));
                 wrapper.wrapping.queueEntityForMounting(entityIn);
             }
-            RotationMatrices.applyTransform(wrapper.wrapping.coordTransform.lToWTransform, wrapper.wrapping.coordTransform.lToWRotation, entityIn);
+            VWRotationMath.applyTransform(wrapper.wrapping.coordTransform.lToWTransform, wrapper.wrapping.coordTransform.lToWRotation, entityIn);
 
             int newChunkX = MathHelper.floor(entityIn.posX / 16.0D);
             int newChunkZ = MathHelper.floor(entityIn.posZ / 16.0D);
@@ -137,7 +137,7 @@ public class ValkyrienWarfareWorldEventListener implements IWorldEventListener {
                 wrapper.wrapping.fixEntity(entityIn, new Vector(entityIn));
                 wrapper.wrapping.queueEntityForMounting(entityIn);
             }
-            RotationMatrices.applyTransform(wrapper.wrapping.coordTransform.lToWTransform, wrapper.wrapping.coordTransform.lToWRotation, entityIn);
+            VWRotationMath.applyTransform(wrapper.wrapping.coordTransform.lToWTransform, wrapper.wrapping.coordTransform.lToWRotation, entityIn);
         }
     }
 
@@ -170,7 +170,7 @@ public class ValkyrienWarfareWorldEventListener implements IWorldEventListener {
                     PhysicsWrapperEntity wrapper = ValkyrienWarfareMod.physicsManager.getObjectManagingPos(worldObj, pos);
 
                     if (wrapper != null) {
-                        RotationMatrices.applyTransform(wrapper.wrapping.coordTransform.lToWTransform, posVector);
+                        VWRotationMath.applyTransform(wrapper.wrapping.coordTransform.lToWTransform, posVector);
                     }
 
                     double d0 = posVector.X - entityplayermp.posX;

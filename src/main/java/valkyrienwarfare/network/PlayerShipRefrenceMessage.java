@@ -19,7 +19,7 @@ package valkyrienwarfare.network;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import valkyrienwarfare.api.RotationMatrices;
+import valkyrienwarfare.api.VWRotationMath;
 import valkyrienwarfare.api.Vector;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
 
@@ -40,9 +40,9 @@ public class PlayerShipRefrenceMessage implements IMessage {
         velocityInLocal = new Vector(playerToSend.motionX, playerToSend.motionY, playerToSend.motionZ);
         playerLookVectorInLocal = new Vector(playerToSend.getLook(1.0F));
 
-        RotationMatrices.applyTransform(shipOn.wrapping.coordTransform.wToLTransform, playerPosInLocal);
-        RotationMatrices.doRotationOnly(shipOn.wrapping.coordTransform.wToLRotation, velocityInLocal);
-        RotationMatrices.doRotationOnly(shipOn.wrapping.coordTransform.wToLRotation, playerLookVectorInLocal);
+        VWRotationMath.applyTransform(shipOn.wrapping.coordTransform.wToLTransform, playerPosInLocal);
+        VWRotationMath.doRotationOnly(shipOn.wrapping.coordTransform.wToLRotation, velocityInLocal);
+        VWRotationMath.doRotationOnly(shipOn.wrapping.coordTransform.wToLRotation, playerLookVectorInLocal);
 
         shipInID = shipOn.getEntityId();
     }

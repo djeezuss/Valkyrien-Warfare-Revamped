@@ -29,7 +29,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import valkyrienwarfare.api.RotationMatrices;
+import valkyrienwarfare.api.VWRotationMath;
 import valkyrienwarfare.api.Vector;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
 
@@ -227,9 +227,9 @@ public abstract class EntityMountingWeaponBase extends Entity implements IEntity
     public Vector getRiderPositionOffset() {
         Vector riderOffset = new Vector(.55D, 0, 0);
 
-        double[] rotMatrix = RotationMatrices.getDoubleIdentity();
-        rotMatrix = RotationMatrices.rotateOnly(rotMatrix, 0, getBaseAngleOffset(), 0);
-        RotationMatrices.applyTransform(rotMatrix, riderOffset);
+        float[] rotMatrix = VWRotationMath.getFloatIdentity();
+        rotMatrix = VWRotationMath.rotateOnly(rotMatrix, 0, getBaseAngleOffset(), 0);
+        VWRotationMath.applyTransform(rotMatrix, riderOffset);
 
         riderOffset.Y += getMountedYOffset();
 

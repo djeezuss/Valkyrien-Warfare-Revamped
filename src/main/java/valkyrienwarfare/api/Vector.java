@@ -28,210 +28,236 @@ import net.minecraft.util.math.Vec3d;
  */
 public class Vector {
 
-    public double X;
-    public double Y;
-    public double Z;
+	public float X;
+	public float Y;
+	public float Z;
 
-    public Vector(double x, double y, double z) {
-        X = x;
-        Y = y;
-        Z = z;
-    }
+	public Vector(float x, float y, float z) {
+		X = x;
+		Y = y;
+		Z = z;
+	}
 
-    public Vector(double x, double y, double z, double[] rotationMatrix) {
-        X = x;
-        Y = y;
-        Z = z;
-        RotationMatrices.applyTransform(rotationMatrix, this);
-    }
+	public Vector(double x, double y, double z) {
+		this((float) x, (float) y, (float) z);
+	}
 
-    public Vector(Vector v) {
-        X = v.X;
-        Y = v.Y;
-        Z = v.Z;
-    }
+	public Vector(float x, float y, float z, float[] rotationMatrix) {
+		X = x;
+		Y = y;
+		Z = z;
+		VWRotationMath.applyTransform(rotationMatrix, this);
+	}
 
-    public Vector(Vector v, double scale) {
-        X = v.X * scale;
-        Y = v.Y * scale;
-        Z = v.Z * scale;
-    }
+	public Vector(Vector v) {
+		X = v.X;
+		Y = v.Y;
+		Z = v.Z;
+	}
 
-    public Vector(Vec3d positionVector) {
-        X = positionVector.x;
-        Y = positionVector.y;
-        Z = positionVector.z;
-    }
+	public Vector(Vector v, float scale) {
+		X = v.X * scale;
+		Y = v.Y * scale;
+		Z = v.Z * scale;
+	}
 
-    public Vector(Entity entity) {
-        X = entity.posX;
-        Y = entity.posY;
-        Z = entity.posZ;
-    }
+	public Vector(Vec3d positionVector) {
+		X = (float) positionVector.x;
+		Y = (float) positionVector.y;
+		Z = (float) positionVector.z;
+	}
 
-    public Vector() {
-        X = Y = Z = 0D;
-    }
+	public Vector(Entity entity) {
+		X = (float) entity.posX;
+		Y = (float) entity.posY;
+		Z = (float) entity.posZ;
+	}
 
-    public Vector(ByteBuf toRead) {
-        this(toRead.readDouble(), toRead.readDouble(), toRead.readDouble());
-    }
+	public Vector() {
+		X = Y = Z = 0F;
+	}
 
-    public Vector(Vector theNormal, double[] matrixTransform) {
-        this(theNormal.X, theNormal.Y, theNormal.Z, matrixTransform);
-    }
+	public Vector(ByteBuf toRead) {
+		this(toRead.readFloat(), toRead.readFloat(), toRead.readFloat());
+	}
 
-    public static Vector[] generateAxisAlignedNorms() {
-        Vector[] norms = new Vector[]{new Vector(1.0D, 0.0D, 0.0D), new Vector(0.0D, 1.0D, 0.0D), new Vector(0.0D, 0.0D, 1.0D)};
-        return norms;
-    }
+	public Vector(Vector theNormal, float[] matrixTransform) {
+		this(theNormal.X, theNormal.Y, theNormal.Z, matrixTransform);
+	}
 
-    public Vector getSubtraction(Vector v) {
-        return new Vector(v.X - X, v.Y - Y, v.Z - Z);
-    }
+	public Vector(double posX, double posY, double posZ, float[] wToLTransform) {
+		this((float) posX, (float) posY, (float) posZ, wToLTransform);
+	}
 
-    public Vector getAddition(Vector v) {
-        return new Vector(v.X + X, v.Y + Y, v.Z + Z);
-    }
+	public static Vector[] generateAxisAlignedNorms() {
+		Vector[] norms = new Vector[] { new Vector(1.0F, 0.0F, 0.0F), new Vector(0.0F, 1.0F, 0.0F),
+				new Vector(0.0F, 0.0F, 1.0F) };
+		return norms;
+	}
 
-    public void subtract(Vector v) {
-        X -= v.X;
-        Y -= v.Y;
-        Z -= v.Z;
-    }
+	public Vector getSubtraction(Vector v) {
+		return new Vector(v.X - X, v.Y - Y, v.Z - Z);
+	}
 
-    public void subtract(double x, double y, double z) {
-        X -= x;
-        Y -= y;
-        Z -= z;
-    }
+	public Vector getAddition(Vector v) {
+		return new Vector(v.X + X, v.Y + Y, v.Z + Z);
+	}
 
-    public void subtract(Vec3d vec) {
-        X -= vec.x;
-        Y -= vec.y;
-        Z -= vec.z;
-    }
+	public void subtract(Vector v) {
+		X -= v.X;
+		Y -= v.Y;
+		Z -= v.Z;
+	}
 
-    public final void add(Vector v) {
-        X += v.X;
-        Y += v.Y;
-        Z += v.Z;
-    }
+	public void subtract(float x, float y, float z) {
+		X -= x;
+		Y -= y;
+		Z -= z;
+	}
 
-    public final void add(double x, double y, double z) {
-        X += x;
-        Y += y;
-        Z += z;
-    }
+	public void subtract(Vec3d vec) {
+		X -= vec.x;
+		Y -= vec.y;
+		Z -= vec.z;
+	}
 
-    public void add(Vec3d vec) {
-        X += vec.x;
-        Y += vec.y;
-        Z += vec.z;
-    }
+	public final void add(Vector v) {
+		X += v.X;
+		Y += v.Y;
+		Z += v.Z;
+	}
 
-    public double dot(Vector v) {
-        return X * v.X + Y * v.Y + Z * v.Z;
-    }
+	public final void add(float x, float y, float z) {
+		X += x;
+		Y += y;
+		Z += z;
+	}
 
-    public Vector cross(Vector v) {
-        return new Vector(Y * v.Z - v.Y * Z, Z * v.X - X * v.Z, X * v.Y - v.X * Y);
-    }
+	public void add(Vec3d vec) {
+		X += vec.x;
+		Y += vec.y;
+		Z += vec.z;
+	}
 
-    // v.X and v.Z = 0
-    public Vector upCross(Vector v) {
-        return new Vector(-v.Y * Z, 0, X * v.Y);
-    }
+	public float dot(Vector v) {
+		return X * v.X + Y * v.Y + Z * v.Z;
+	}
 
-    public final void setCross(Vector v1, Vector v) {
-        X = v1.Y * v.Z - v.Y * v1.Z;
-        Y = v1.Z * v.X - v1.X * v.Z;
-        Z = v1.X * v.Y - v.X * v1.Y;
-    }
+	public Vector cross(Vector v) {
+		return new Vector(Y * v.Z - v.Y * Z, Z * v.X - X * v.Z, X * v.Y - v.X * Y);
+	}
 
-    public void multiply(double scale) {
-        X *= scale;
-        Y *= scale;
-        Z *= scale;
-    }
+	// v.X and v.Z = 0
+	public Vector upCross(Vector v) {
+		return new Vector(-v.Y * Z, 0, X * v.Y);
+	}
 
-    public Vector getProduct(double scale) {
-        return new Vector(X * scale, Y * scale, Z * scale);
-    }
+	public final void setCross(Vector v1, Vector v) {
+		X = v1.Y * v.Z - v.Y * v1.Z;
+		Y = v1.Z * v.X - v1.X * v.Z;
+		Z = v1.X * v.Y - v.X * v1.Y;
+	}
 
-    public Vec3d toVec3d() {
-        return new Vec3d(X, Y, Z);
-    }
+	public void multiply(float scale) {
+		X *= scale;
+		Y *= scale;
+		Z *= scale;
+	}
 
-    public void normalize() {
-        double d = MathHelper.sqrt(X * X + Y * Y + Z * Z);
-        if (d < 1.0E-6D) {
-            X = 0.0D;
-            Y = 0.0D;
-            Z = 0.0D;
-        } else {
-            X /= d;
-            Y /= d;
-            Z /= d;
-        }
-    }
+	public void multiply(double scale) {
+		multiply((float) scale);
+	}
 
-    public double length() {
-        return Math.sqrt(X * X + Y * Y + Z * Z);
-    }
+	public Vector getProduct(float scale) {
+		return new Vector(X * scale, Y * scale, Z * scale);
+	}
 
-    public double lengthSq() {
-        return X * X + Y * Y + Z * Z;
-    }
+	public Vec3d toVec3d() {
+		return new Vec3d(X, Y, Z);
+	}
 
-    public boolean isZero() {
-        return (X * X + Y * Y + Z * Z) < 1.0E-12D;
-    }
+	public void normalize() {
+		float d = MathHelper.sqrt(X * X + Y * Y + Z * Z);
+		if (d < 1.0E-6D) {
+			X = 0.0F;
+			Y = 0.0F;
+			Z = 0.0F;
+		} else {
+			X /= d;
+			Y /= d;
+			Z /= d;
+		}
+	}
 
-    public void zero() {
-        X = Y = Z = 0D;
-    }
+	public float length() {
+		return (float) Math.sqrt(X * X + Y * Y + Z * Z);
+	}
 
-    public void roundToWhole() {
-        X = Math.round(X);
-        Y = Math.round(Y);
-        Z = Math.round(Z);
-    }
+	public float lengthSq() {
+		return X * X + Y * Y + Z * Z;
+	}
 
-    public boolean equals(Vector vec) {
-        return (vec.X == X) && (vec.Y == Y) && (vec.Z == Z);
-    }
+	public boolean isZero() {
+		return (X * X + Y * Y + Z * Z) < 1.0E-12D;
+	}
 
-    public String toString() {
-        String coords = new String("<" + X + ", " + Y + ", " + Z + ">");
-        return coords;
-    }
+	public void zero() {
+		X = Y = Z = 0F;
+	}
 
-    public String toRoundedString() {
-        String coords = new String("<" + Math.round(X * 100.0) / 100.0 + ", " + Math.round(Y * 100.0) / 100.0 + ", " + Math.round(Z * 100.0) / 100.0 + ">");
-        return coords;
-    }
+	public void roundToWhole() {
+		X = Math.round(X);
+		Y = Math.round(Y);
+		Z = Math.round(Z);
+	}
 
-    public Vector crossAndUnit(Vector v) {
-        Vector crossProduct = new Vector(Y * v.Z - v.Y * Z, Z * v.X - X * v.Z, X * v.Y - v.X * Y);
-        crossProduct.normalize();
-        return crossProduct;
-    }
+	public boolean equals(Vector vec) {
+		return (vec.X == X) && (vec.Y == Y) && (vec.Z == Z);
+	}
 
-    public void writeToByteBuf(ByteBuf toWrite) {
-        toWrite.writeDouble(X);
-        toWrite.writeDouble(Y);
-        toWrite.writeDouble(Z);
-    }
+	public String toString() {
+		String coords = new String("<" + X + ", " + Y + ", " + Z + ">");
+		return coords;
+	}
 
-    public void setSubtraction(Vector inLocal, Vector centerCoord) {
-        X = inLocal.X - centerCoord.X;
-        Y = inLocal.Y - centerCoord.Y;
-        Z = inLocal.Z - centerCoord.Z;
-    }
+	public String toRoundedString() {
+		String coords = new String("<" + Math.round(X * 100.0) / 100.0 + ", " + Math.round(Y * 100.0) / 100.0 + ", "
+				+ Math.round(Z * 100.0) / 100.0 + ">");
+		return coords;
+	}
 
-    public void transform(double[] rotationMatrix) {
-        RotationMatrices.applyTransform(rotationMatrix, this);
-    }
+	public Vector crossAndUnit(Vector v) {
+		Vector crossProduct = new Vector(Y * v.Z - v.Y * Z, Z * v.X - X * v.Z, X * v.Y - v.X * Y);
+		crossProduct.normalize();
+		return crossProduct;
+	}
+
+	public void writeToByteBuf(ByteBuf toWrite) {
+		toWrite.writeFloat(X);
+		toWrite.writeFloat(Y);
+		toWrite.writeFloat(Z);
+	}
+
+	public void setSubtraction(Vector inLocal, Vector centerCoord) {
+		X = inLocal.X - centerCoord.X;
+		Y = inLocal.Y - centerCoord.Y;
+		Z = inLocal.Z - centerCoord.Z;
+	}
+
+	public void transform(float[] rotationMatrix) {
+		VWRotationMath.applyTransform(rotationMatrix, this);
+	}
+
+	public void add(double posX, double posY, double posZ) {
+		add((float) posX, (float) posY, (float) posZ);
+	}
+
+	public Vector getProduct(double d) {
+		return getProduct((float) d);
+	}
+
+	public void subtract(double posX, double posY, double posZ) {
+		subtract((float) posX, (float) posY, (float) posZ);
+	}
 
 }

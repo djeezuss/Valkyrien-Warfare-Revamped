@@ -21,9 +21,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import valkyrienwarfare.NBTUtils;
 import valkyrienwarfare.ValkyrienWarfareMod;
-import valkyrienwarfare.api.RotationMatrices;
+import valkyrienwarfare.api.VWRotationMath;
 import valkyrienwarfare.api.Vector;
-import valkyrienwarfare.physics.PhysicsCalculations;
+import valkyrienwarfare.physics.IPhysicsManager;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
 
 public abstract class BasicForceNodeTileEntity extends BasicNodeTileEntity implements IForceTile {
@@ -72,7 +72,7 @@ public abstract class BasicForceNodeTileEntity extends BasicNodeTileEntity imple
         Vector outputForce = getForceOutputUnoriented(secondsToApply);
         if (isForceOutputOriented()) {
             if (updateParentShip()) {
-                RotationMatrices.applyTransform(tileNode.getPhysicsObject().coordTransform.lToWRotation, outputForce);
+                VWRotationMath.applyTransform(tileNode.getPhysicsObject().coordTransform.lToWRotation, outputForce);
             }
         }
         return outputForce;
@@ -100,7 +100,7 @@ public abstract class BasicForceNodeTileEntity extends BasicNodeTileEntity imple
         }
         PhysicsWrapperEntity parentShip = tileNode.getPhysicsObject().wrapper;
         Vector engineCenter = new Vector(getPos().getX() + .5D, getPos().getY() + .5D, getPos().getZ() + .5D);
-        RotationMatrices.applyTransform(parentShip.wrapping.coordTransform.lToWTransform, engineCenter);
+        VWRotationMath.applyTransform(parentShip.wrapping.coordTransform.lToWTransform, engineCenter);
         engineCenter.subtract(parentShip.posX, parentShip.posY, parentShip.posZ);
         return engineCenter;
     }
@@ -110,7 +110,7 @@ public abstract class BasicForceNodeTileEntity extends BasicNodeTileEntity imple
         if (updateParentShip()) {
             return null;
         }
-        PhysicsCalculations calculations = tileNode.getPhysicsObject().physicsProcessor;
+        IPhysicsManager calculations = tileNode.getPhysicsObject().physicsProcessor;
         return calculations.getVelocityAtPoint(getPositionInLocalSpaceWithOrientation());
     }
 
@@ -119,8 +119,8 @@ public abstract class BasicForceNodeTileEntity extends BasicNodeTileEntity imple
         if (updateParentShip()) {
             return null;
         }
-        PhysicsCalculations calculations = tileNode.getPhysicsObject().physicsProcessor;
-        return calculations.linearMomentum;
+        IPhysicsManager calculations = tileNode.getPhysicsObject().physicsProcessor;
+        return calculations.getLinearMomentum();
     }
 
     @Override
@@ -128,8 +128,8 @@ public abstract class BasicForceNodeTileEntity extends BasicNodeTileEntity imple
         if (updateParentShip()) {
             return null;
         }
-        PhysicsCalculations calculations = tileNode.getPhysicsObject().physicsProcessor;
-        return calculations.angularVelocity.cross(getPositionInLocalSpaceWithOrientation());
+        IPhysicsManager calculations = tileNode.getPhysicsObject().physicsProcessor;
+        return calculations.getAngularVelocity().cross(getPositionInLocalSpaceWithOrientation());
     }
 
 

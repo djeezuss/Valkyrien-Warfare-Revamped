@@ -35,7 +35,7 @@ public class Quaternion {
     private Quaternion() {
     }
 
-    public static Quaternion QuaternionFromMatrix(final double[] matrix) {
+    public static Quaternion QuaternionFromMatrix(float[] matrix) {
         Quaternion q = new Quaternion();
         q.w = Math.sqrt(Math.max(0, 1 + matrix[0] + matrix[5] + matrix[10])) / 2;
         q.x = Math.sqrt(Math.max(0, 1 + matrix[0] - matrix[5] - matrix[10])) / 2;

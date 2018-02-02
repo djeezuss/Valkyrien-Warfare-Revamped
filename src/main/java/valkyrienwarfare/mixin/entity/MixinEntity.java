@@ -30,7 +30,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import valkyrienwarfare.ValkyrienWarfareMod;
-import valkyrienwarfare.api.RotationMatrices;
+import valkyrienwarfare.api.VWRotationMath;
 import valkyrienwarfare.api.Vector;
 import valkyrienwarfare.interaction.IDraggable;
 import valkyrienwarfare.physicsmanagement.PhysicsWrapperEntity;
@@ -113,7 +113,7 @@ public abstract class MixinEntity implements IDraggable {
         PhysicsWrapperEntity wrapper = ValkyrienWarfareMod.physicsManager.getShipFixedOnto(Entity.class.cast(this));
         if (wrapper != null) {
             Vector newOutput = new Vector(original);
-            RotationMatrices.applyTransform(wrapper.wrapping.coordTransform.RlToWRotation, newOutput);
+            VWRotationMath.applyTransform(wrapper.wrapping.coordTransform.RlToWRotation, newOutput);
             return newOutput.toVec3d();
         } else {
             return original;
@@ -137,7 +137,7 @@ public abstract class MixinEntity implements IDraggable {
 
         PhysicsWrapperEntity wrapper = ValkyrienWarfareMod.physicsManager.getShipFixedOnto(Entity.class.cast(this));
         if (wrapper != null) {
-            return RotationMatrices.applyTransform(wrapper.wrapping.coordTransform.RlToWRotation, vanilla);
+            return VWRotationMath.applyTransform(wrapper.wrapping.coordTransform.RlToWRotation, vanilla);
         }
 
         return vanilla;

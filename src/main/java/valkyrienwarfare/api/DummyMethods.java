@@ -41,7 +41,7 @@ public interface DummyMethods {
     Vector getAngularVelocity(Entity shipEnt);
 
     // Returns the matrix which converts local coordinates (The positions of the blocks in the world) to the entity coordinates (The position in front of the player)
-    double[] getShipTransformMatrix(Entity shipEnt);
+    float[] getShipTransformMatrix(Entity shipEnt);
 
     // Note, do not call this from World coordinates; first subtract the world coords from the shipEntity xyz and then call!
     Vector getVelocityAtPoint(Entity shipEnt, Vector inBody, double secondsToApply);

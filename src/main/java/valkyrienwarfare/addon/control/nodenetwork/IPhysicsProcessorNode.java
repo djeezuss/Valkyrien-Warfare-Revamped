@@ -16,7 +16,7 @@
 
 package valkyrienwarfare.addon.control.nodenetwork;
 
-import valkyrienwarfare.physics.PhysicsCalculations;
+import valkyrienwarfare.physics.IPhysicsManager;
 import valkyrienwarfare.physicsmanagement.PhysicsObject;
 
 public interface IPhysicsProcessorNode extends INodeProvider {
@@ -32,6 +32,6 @@ public interface IPhysicsProcessorNode extends INodeProvider {
      * @param calculations
      * @param secondsToSimulate
      */
-    public void onPhysicsTick(PhysicsObject object, PhysicsCalculations calculations, double secondsToSimulate);
+    public void onPhysicsTick(PhysicsObject object, IPhysicsManager calculations, double secondsToSimulate);
 
 }

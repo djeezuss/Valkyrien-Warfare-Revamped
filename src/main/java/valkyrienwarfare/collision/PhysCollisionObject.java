@@ -23,12 +23,12 @@ public class PhysCollisionObject {
 
     public final Vector axis;
     public final Polygon movable, fixed;
-    public double penetrationDistance;
+    public float penetrationDistance;
     public boolean seperated;
-    public double[] playerMinMax;
-    public double[] blockMinMax;
-    public double movMaxFixMin;
-    public double movMinFixMax;
+    public float[] playerMinMax;
+    public float[] blockMinMax;
+    public float movMaxFixMin;
+    public float movMinFixMax;
     public Vector firstContactPoint;
 
     public PhysCollisionObject(Polygon movable_, Polygon stationary, Vector axes) {
@@ -45,7 +45,7 @@ public class PhysCollisionObject {
         movMinFixMax = playerMinMax[1] - blockMinMax[0];
         if (movMaxFixMin > 0 || movMinFixMax < 0) {
             seperated = true;
-            penetrationDistance = 0.0D;
+            penetrationDistance = 0.0F;
             return;
         }
         // Set the penetration to be the smaller distance

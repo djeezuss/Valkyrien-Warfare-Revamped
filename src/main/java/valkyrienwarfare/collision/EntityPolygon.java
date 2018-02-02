@@ -28,7 +28,7 @@ public class EntityPolygon extends Polygon {
         entityFor = ent;
     }
 
-    public EntityPolygon(AxisAlignedBB bb, double[] matrix, Entity ent) {
+    public EntityPolygon(AxisAlignedBB bb, float[] matrix, Entity ent) {
         super(bb, matrix);
         entityFor = ent;
     }
