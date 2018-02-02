@@ -47,6 +47,9 @@ public class PhysicsTickHandler {
 
         for (PhysicsWrapperEntity wrapperEnt : physicsEntities) {
             wrapperEnt.wrapping.onPostTick();
+            if (!wrapperEnt.firstUpdate) {
+            	wrapperEnt.wrapping.physicsProcessor.physicsPostTick();
+            }
         }
     }
 

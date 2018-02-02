@@ -65,7 +65,7 @@ public class PhysWrapperPositionMessage implements IMessage {
         yaw = buf.readDouble();
         roll = buf.readDouble();
 
-        centerOfMass = new VectorVW(buf.readDouble(), buf.readDouble(), buf.readDouble());
+        centerOfMass = new VectorVW(buf.readFloat(), buf.readFloat(), buf.readFloat());
     }
 
     @Override
@@ -81,9 +81,9 @@ public class PhysWrapperPositionMessage implements IMessage {
         buf.writeDouble(toSpawn.yaw);
         buf.writeDouble(toSpawn.roll);
 
-        buf.writeDouble(toSpawn.wrapping.centerCoord.X);
-        buf.writeDouble(toSpawn.wrapping.centerCoord.Y);
-        buf.writeDouble(toSpawn.wrapping.centerCoord.Z);
+        buf.writeFloat(toSpawn.wrapping.centerCoord.X);
+        buf.writeFloat(toSpawn.wrapping.centerCoord.Y);
+        buf.writeFloat(toSpawn.wrapping.centerCoord.Z);
     }
 
 }

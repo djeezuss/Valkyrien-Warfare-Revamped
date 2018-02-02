@@ -16,6 +16,8 @@
 
 package valkyrienwarfare.physicsmanagement;
 
+import java.util.ArrayList;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -28,254 +30,260 @@ import valkyrienwarfare.interaction.IDraggable;
 import valkyrienwarfare.network.EntityRelativePositionMessage;
 import valkyrienwarfare.network.PhysWrapperPositionMessage;
 
-import java.util.ArrayList;
-
 /**
- * Handles ALL functions for moving between Ship coordinates and world coordinates
+ * Handles ALL functions for moving between Ship coordinates and world
+ * coordinates
  *
  * @author thebest108
  */
 public class CoordTransformObject {
 
-    public PhysicsObject parent;
+	public PhysicsObject parent;
 
-    public float[] lToWRotation = VWRotationMath.getFloatIdentity();
-    public float[] wToLRotation = VWRotationMath.getFloatIdentity();
-    public float[] lToWTransform = VWRotationMath.getFloatIdentity();
-    public float[] wToLTransform = VWRotationMath.getFloatIdentity();
+	public float[] lToWRotation = VWRotationMath.getFloatIdentity();
+	public float[] wToLRotation = VWRotationMath.getFloatIdentity();
+	public float[] lToWTransform = VWRotationMath.getFloatIdentity();
+	public float[] wToLTransform = VWRotationMath.getFloatIdentity();
 
-    public float[] RlToWRotation = VWRotationMath.getFloatIdentity();
-    public float[] RwToLRotation = VWRotationMath.getFloatIdentity();
-    public float[] RlToWTransform = VWRotationMath.getFloatIdentity();
-    public float[] RwToLTransform = VWRotationMath.getFloatIdentity();
+	public float[] RlToWRotation = VWRotationMath.getFloatIdentity();
+	public float[] RwToLRotation = VWRotationMath.getFloatIdentity();
+	public float[] RlToWTransform = VWRotationMath.getFloatIdentity();
+	public float[] RwToLTransform = VWRotationMath.getFloatIdentity();
 
-    public float[] prevlToWTransform;
-    public float[] prevwToLTransform;
-    public float[] prevLToWRotation;
-    public float[] prevWToLRotation;
+	public float[] prevlToWTransform;
+	public float[] prevwToLTransform;
+	public float[] prevLToWRotation;
+	public float[] prevWToLRotation;
 
-    public VectorVW[] normals = VectorVW.generateAxisAlignedNorms();
+	public VectorVW[] normals = VectorVW.generateAxisAlignedNorms();
 
-    public ShipTransformationStack stack = new ShipTransformationStack();
+	public ShipTransformationStack stack = new ShipTransformationStack();
 
-    public CoordTransformObject(PhysicsObject object) {
-        parent = object;
-        updateAllTransforms();
-        prevlToWTransform = lToWTransform;
-        prevwToLTransform = wToLTransform;
-    }
+	public CoordTransformObject(PhysicsObject object) {
+		parent = object;
+		updateAllTransforms();
+		prevlToWTransform = lToWTransform;
+		prevwToLTransform = wToLTransform;
+	}
 
-    public void updateMatricesOnly() {
-        lToWTransform = VWRotationMath.getTranslationMatrix(parent.wrapper.posX, parent.wrapper.posY, parent.wrapper.posZ);
+	public void updateMatricesOnly() {
+		lToWTransform = VWRotationMath.getTranslationMatrix(parent.wrapper.posX, parent.wrapper.posY,
+				parent.wrapper.posZ);
 
-        lToWTransform = VWRotationMath.rotateAndTranslate(lToWTransform, parent.wrapper.pitch, parent.wrapper.yaw, parent.wrapper.roll, parent.centerCoord);
+		lToWTransform = VWRotationMath.rotateAndTranslate(lToWTransform, parent.wrapper.pitch, parent.wrapper.yaw,
+				parent.wrapper.roll, parent.centerCoord);
 
-        lToWRotation = VWRotationMath.getFloatIdentity();
+		lToWRotation = VWRotationMath.getFloatIdentity();
 
-        lToWRotation = VWRotationMath.rotateOnly(lToWRotation, parent.wrapper.pitch, parent.wrapper.yaw, parent.wrapper.roll);
+		lToWRotation = VWRotationMath.rotateOnly(lToWRotation, parent.wrapper.pitch, parent.wrapper.yaw,
+				parent.wrapper.roll);
 
-        wToLTransform = VWRotationMath.inverse(lToWTransform);
-        wToLRotation = VWRotationMath.inverse(lToWRotation);
+		wToLTransform = VWRotationMath.inverse(lToWTransform);
+		wToLRotation = VWRotationMath.inverse(lToWRotation);
 
-        RlToWTransform = lToWTransform;
-        RwToLTransform = wToLTransform;
-        RlToWRotation = lToWRotation;
-        RwToLRotation = wToLRotation;
-    }
+		RlToWTransform = lToWTransform;
+		RwToLTransform = wToLTransform;
+		RlToWRotation = lToWRotation;
+		RwToLRotation = wToLRotation;
+	}
 
-    public void updateRenderMatrices(double x, double y, double z, double pitch, double yaw, double roll) {
-        RlToWTransform = VWRotationMath.getTranslationMatrix(x, y, z);
+	public void updateRenderMatrices(double x, double y, double z, double pitch, double yaw, double roll) {
+		RlToWTransform = VWRotationMath.getTranslationMatrix(x, y, z);
 
-        RlToWTransform = VWRotationMath.rotateAndTranslate(RlToWTransform, pitch, yaw, roll, parent.centerCoord);
+		RlToWTransform = VWRotationMath.rotateAndTranslate(RlToWTransform, pitch, yaw, roll, parent.centerCoord);
 
-        RwToLTransform = VWRotationMath.inverse(RlToWTransform);
+		RwToLTransform = VWRotationMath.inverse(RlToWTransform);
 
-        RlToWRotation = VWRotationMath.rotateOnly(VWRotationMath.getFloatIdentity(), pitch, yaw, roll);
-        RwToLRotation = VWRotationMath.inverse(RlToWRotation);
-    }
+		RlToWRotation = VWRotationMath.rotateOnly(VWRotationMath.getFloatIdentity(), pitch, yaw, roll);
+		RwToLRotation = VWRotationMath.inverse(RlToWRotation);
+	}
 
-    // Used for the moveRiders() method
-    public void setPrevMatrices() {
-        prevlToWTransform = lToWTransform;
-        prevwToLTransform = wToLTransform;
-        prevLToWRotation = lToWRotation;
-        prevWToLRotation = wToLRotation;
-    }
+	// Used for the moveRiders() method
+	public void setPrevMatrices() {
+		prevlToWTransform = lToWTransform;
+		prevwToLTransform = wToLTransform;
+		prevLToWRotation = lToWRotation;
+		prevWToLRotation = wToLRotation;
+	}
 
-    public void updateAllTransforms() {
-        updatePosRelativeToWorldBorder();
-        updateMatricesOnly();
-        updateParentAABB();
-        updateParentNormals();
-        updatePassengerPositions();
-    }
+	public void updateAllTransforms() {
+		updatePosRelativeToWorldBorder();
+		updateMatricesOnly();
+		updateParentAABB();
+		updateParentNormals();
+		updatePassengerPositions();
+	}
 
-    /**
-     * Keeps the Ship from exiting the world border
-     */
-    public void updatePosRelativeToWorldBorder() {
-        WorldBorder border = parent.worldObj.getWorldBorder();
-        AxisAlignedBB shipBB = parent.collisionBB;
+	/**
+	 * Keeps the Ship from exiting the world border
+	 */
+	public void updatePosRelativeToWorldBorder() {
+		WorldBorder border = parent.worldObj.getWorldBorder();
+		AxisAlignedBB shipBB = parent.collisionBB;
 
-        if (shipBB.maxX > border.maxX()) {
-            parent.wrapper.posX += border.maxX() - shipBB.maxX;
-        }
-        if (shipBB.minX < border.minX()) {
-            parent.wrapper.posX += border.minX() - shipBB.minX;
-        }
-        if (shipBB.maxZ > border.maxZ()) {
-            parent.wrapper.posZ += border.maxZ() - shipBB.maxZ;
-        }
-        if (shipBB.minZ < border.minZ()) {
-            parent.wrapper.posZ += border.minZ() - shipBB.minZ;
-        }
-    }
+		if (shipBB.maxX > border.maxX()) {
+			parent.wrapper.posX += border.maxX() - shipBB.maxX;
+		}
+		if (shipBB.minX < border.minX()) {
+			parent.wrapper.posX += border.minX() - shipBB.minX;
+		}
+		if (shipBB.maxZ > border.maxZ()) {
+			parent.wrapper.posZ += border.maxZ() - shipBB.maxZ;
+		}
+		if (shipBB.minZ < border.minZ()) {
+			parent.wrapper.posZ += border.minZ() - shipBB.minZ;
+		}
+	}
 
-    public void updatePassengerPositions() {
-        for (Entity entity : parent.wrapper.riddenByEntities) {
-            parent.wrapper.updatePassenger(entity);
-        }
-    }
+	public void updatePassengerPositions() {
+		for (Entity entity : parent.wrapper.riddenByEntities) {
+			parent.wrapper.updatePassenger(entity);
+		}
+	}
 
-    public void sendPositionToPlayers() {
-        PhysWrapperPositionMessage posMessage = new PhysWrapperPositionMessage(parent.wrapper);
+	public void sendPositionToPlayers() {
+		PhysWrapperPositionMessage posMessage = new PhysWrapperPositionMessage(parent.wrapper);
 
-        ArrayList<Entity> entityList = new ArrayList<Entity>();
+		ArrayList<Entity> entityList = new ArrayList<Entity>();
 
-        for (Entity entity : parent.worldObj.loadedEntityList) {
-            if (entity instanceof IDraggable) {
-                IDraggable draggable = (IDraggable) entity;
-                if (draggable.getWorldBelowFeet() == parent.wrapper) {
-                    entityList.add(entity);
-                }
-            }
-        }
+		for (Entity entity : parent.worldObj.loadedEntityList) {
+			if (entity instanceof IDraggable) {
+				IDraggable draggable = (IDraggable) entity;
+				if (draggable.getWorldBelowFeet() == parent.wrapper) {
+					entityList.add(entity);
+				}
+			}
+		}
 
-        EntityRelativePositionMessage otherPositionMessage = new EntityRelativePositionMessage(parent.wrapper, entityList);
+		EntityRelativePositionMessage otherPositionMessage = new EntityRelativePositionMessage(parent.wrapper,
+				entityList);
 
-        for (EntityPlayerMP player : parent.watchingPlayers) {
-            ValkyrienWarfareMod.physWrapperNetwork.sendTo(posMessage, player);
-            ValkyrienWarfareMod.physWrapperNetwork.sendTo(otherPositionMessage, player);
-        }
-    }
+		for (EntityPlayerMP player : parent.watchingPlayers) {
+			ValkyrienWarfareMod.physWrapperNetwork.sendTo(posMessage, player);
+			ValkyrienWarfareMod.physWrapperNetwork.sendTo(otherPositionMessage, player);
+		}
+	}
 
-    public void updateParentNormals() {
-        normals = new VectorVW[15];
-        // Used to generate Normals for the Axis Aligned World
-        VectorVW[] alignedNorms = VectorVW.generateAxisAlignedNorms();
-        VectorVW[] rotatedNorms = generateRotationNormals();
-        for (int i = 0; i < 6; i++) {
-            VectorVW currentNorm = null;
-            if (i < 3) {
-                currentNorm = alignedNorms[i];
-            } else {
-                currentNorm = rotatedNorms[i - 3];
-            }
-            normals[i] = currentNorm;
-        }
-        int cont = 6;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                VectorVW norm = normals[i].crossAndUnit(normals[j + 3]);
-                normals[cont] = norm;
-                cont++;
-            }
-        }
-        for (int i = 0; i < normals.length; i++) {
-            if (normals[i].isZero()) {
-                normals[i] = new VectorVW(0.0D, 1.0D, 0.0D);
-            }
-        }
-        normals[0] = new VectorVW(1.0D, 0.0D, 0.0D);
-        normals[1] = new VectorVW(0.0D, 1.0D, 0.0D);
-        normals[2] = new VectorVW(0.0D, 0.0D, 1.0D);
-    }
+	public void updateParentNormals() {
+		normals = new VectorVW[15];
+		// Used to generate Normals for the Axis Aligned World
+		VectorVW[] alignedNorms = VectorVW.generateAxisAlignedNorms();
+		VectorVW[] rotatedNorms = generateRotationNormals();
+		for (int i = 0; i < 6; i++) {
+			VectorVW currentNorm = null;
+			if (i < 3) {
+				currentNorm = alignedNorms[i];
+			} else {
+				currentNorm = rotatedNorms[i - 3];
+			}
+			normals[i] = currentNorm;
+		}
+		int cont = 6;
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				VectorVW norm = normals[i].crossAndUnit(normals[j + 3]);
+				normals[cont] = norm;
+				cont++;
+			}
+		}
+		for (int i = 0; i < normals.length; i++) {
+			if (normals[i].isZero()) {
+				normals[i] = new VectorVW(0.0D, 1.0D, 0.0D);
+			}
+		}
+		normals[0] = new VectorVW(1.0D, 0.0D, 0.0D);
+		normals[1] = new VectorVW(0.0D, 1.0D, 0.0D);
+		normals[2] = new VectorVW(0.0D, 0.0D, 1.0D);
+	}
 
-    public VectorVW[] generateRotationNormals() {
-        VectorVW[] norms = VectorVW.generateAxisAlignedNorms();
-        for (int i = 0; i < 3; i++) {
-            VWRotationMath.applyTransform(lToWRotation, norms[i]);
-        }
-        return norms;
-    }
+	public VectorVW[] generateRotationNormals() {
+		VectorVW[] norms = VectorVW.generateAxisAlignedNorms();
+		for (int i = 0; i < 3; i++) {
+			VWRotationMath.applyTransform(lToWRotation, norms[i]);
+		}
+		return norms;
+	}
 
-    public VectorVW[] getSeperatingAxisWithShip(PhysicsObject other) {
-        // Note: This Vector array still contains potential 0 vectors, those are removed later
-        VectorVW[] normals = new VectorVW[15];
-        VectorVW[] otherNorms = other.coordTransform.normals;
-        VectorVW[] rotatedNorms = normals;
-        for (int i = 0; i < 6; i++) {
-            if (i < 3) {
-                normals[i] = otherNorms[i];
-            } else {
-                normals[i] = rotatedNorms[i - 3];
-            }
-        }
-        int cont = 6;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                VectorVW norm = normals[i].crossAndUnit(normals[j + 3]);
-                if (!norm.isZero()) {
-                    normals[cont] = norm;
-                } else {
-                    normals[cont] = normals[1];
-                }
-                cont++;
-            }
-        }
-        return normals;
-    }
+	public VectorVW[] getSeperatingAxisWithShip(PhysicsObject other) {
+		// Note: This Vector array still contains potential 0 vectors, those are removed
+		// later
+		VectorVW[] normals = new VectorVW[15];
+		VectorVW[] otherNorms = other.coordTransform.normals;
+		VectorVW[] rotatedNorms = normals;
+		for (int i = 0; i < 6; i++) {
+			if (i < 3) {
+				normals[i] = otherNorms[i];
+			} else {
+				normals[i] = rotatedNorms[i - 3];
+			}
+		}
+		int cont = 6;
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				VectorVW norm = normals[i].crossAndUnit(normals[j + 3]);
+				if (!norm.isZero()) {
+					normals[cont] = norm;
+				} else {
+					normals[cont] = normals[1];
+				}
+				cont++;
+			}
+		}
+		return normals;
+	}
 
-    // TODO: FinishME
-    public void updateParentAABB() {
-        double mnX = 0, mnY = 0, mnZ = 0, mxX = 0, mxY = 0, mxZ = 0;
+	// TODO: FinishME
+	public void updateParentAABB() {
+		double mnX = 0, mnY = 0, mnZ = 0, mxX = 0, mxY = 0, mxZ = 0;
 
-        VectorVW currentLocation = new VectorVW();
+		VectorVW currentLocation = new VectorVW();
 
-        mnX = mxX = parent.wrapper.posX;
-        mnY = mxY = parent.wrapper.posY;
-        mnZ = mxZ = parent.wrapper.posZ;
+		mnX = mxX = (float) parent.wrapper.posX;
+		mnY = mxY = (float) parent.wrapper.posY;
+		mnZ = mxZ = (float) parent.wrapper.posZ;
 
-        for (BlockPos pos : parent.blockPositions) {
+		for (BlockPos pos : parent.blockPositions) {
+			currentLocation.X = pos.getX() + .5F;
+			currentLocation.Y = pos.getY() + .5F;
+			currentLocation.Z = pos.getZ() + .5F;
 
-            currentLocation.X = (float) (pos.getX() + .5D);
-            currentLocation.Y = (float) (pos.getY() + .5D);
-            currentLocation.Z = (float) (pos.getZ() + .5D);
+			fromLocalToGlobal(currentLocation);
 
-            fromLocalToGlobal(currentLocation);
+			if (currentLocation.X < mnX) {
+				mnX = currentLocation.X;
+			}
+			if (currentLocation.X > mxX) {
+				mxX = currentLocation.X;
+			}
 
-            if (currentLocation.X < mnX) {
-                mnX = currentLocation.X;
-            }
-            if (currentLocation.X > mxX) {
-                mxX = currentLocation.X;
-            }
+			if (currentLocation.Y < mnY) {
+				mnY = currentLocation.Y;
+			}
+			if (currentLocation.Y > mxY) {
+				mxY = currentLocation.Y;
+			}
 
-            if (currentLocation.Y < mnY) {
-                mnY = currentLocation.Y;
-            }
-            if (currentLocation.Y > mxY) {
-                mxY = currentLocation.Y;
-            }
+			if (currentLocation.Z < mnZ) {
+				mnZ = currentLocation.Z;
+			}
+			if (currentLocation.Z > mxZ) {
+				mxZ = currentLocation.Z;
+			}
 
-            if (currentLocation.Z < mnZ) {
-                mnZ = currentLocation.Z;
-            }
-            if (currentLocation.Z > mxZ) {
-                mxZ = currentLocation.Z;
-            }
+		}
+		AxisAlignedBB enclosingBB = new AxisAlignedBB(mnX, mnY, mnZ, mxX, mxY, mxZ).grow(1D);// .expand(.6D, .6D, .6D);
+		parent.collisionBB = enclosingBB;
+		parent.wrapper.boundingBox = (enclosingBB);
 
-        }
-        AxisAlignedBB enclosingBB = new AxisAlignedBB(mnX, mnY, mnZ, mxX, mxY, mxZ).expand(.6D, .6D, .6D);
-        parent.collisionBB = enclosingBB;
-    }
+		// System.out.println(parent.collisionBB);
+	}
 
-    public void fromGlobalToLocal(VectorVW inGlobal) {
-        VWRotationMath.applyTransform(wToLTransform, inGlobal);
-    }
+	public void fromGlobalToLocal(VectorVW inGlobal) {
+		VWRotationMath.applyTransform(wToLTransform, inGlobal);
+	}
 
-    public void fromLocalToGlobal(VectorVW inLocal) {
-        VWRotationMath.applyTransform(lToWTransform, inLocal);
-    }
+	public void fromLocalToGlobal(VectorVW inLocal) {
+		VWRotationMath.applyTransform(lToWTransform, inLocal);
+	}
 
 }

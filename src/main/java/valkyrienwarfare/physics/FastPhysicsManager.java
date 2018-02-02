@@ -57,6 +57,18 @@ public class FastPhysicsManager implements IPhysicsManager {
 	}
 
 	@Override
+	public void physicsPreTick() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void physicsPostTick() {
+		parent.coordTransform.updateAllTransforms();
+		
+	}
+	
+	@Override
 	public void processInitialPhysicsData() {
 		IBlockState Air = Blocks.AIR.getDefaultState();
 		for (BlockPos pos : parent.blockPositions) {
@@ -120,7 +132,7 @@ public class FastPhysicsManager implements IPhysicsManager {
 	@Override
 	public void updateParentCenterOfMass() {
 		VectorVW parentCM = parent.centerCoord;
-		if (!parent.centerCoord.equals(centerOfMass)) {
+		if (!parent.centerCoord.equals(centerOfMass) && false) {
 			VectorVW CMDif = centerOfMass.getSubtraction(parentCM);
 			VWRotationMath.applyTransform(parent.coordTransform.lToWRotation, CMDif);
 			parent.wrapper.posX -= CMDif.X;

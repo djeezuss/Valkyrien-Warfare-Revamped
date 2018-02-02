@@ -15,6 +15,10 @@ import valkyrienwarfare.physicsmanagement.PhysicsObject;
  */
 public interface IPhysicsManager {
 
+	public void physicsPreTick();
+	
+	public void physicsPostTick();
+	
 	public float[] getInvFramedMOI();
 
 	public float[] getFramedMOI();
