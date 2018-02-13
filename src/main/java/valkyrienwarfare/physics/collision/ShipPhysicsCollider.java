@@ -60,9 +60,8 @@ public class ShipPhysicsCollider {
 			}
 		}
 
-		AxisAlignedBB firstBB = parent.collisionBB;
-		AxisAlignedBB secondBB = toCollideWith.collisionBB;
-
+		AxisAlignedBB firstBB = parent.getCollisionBoundingBox();
+		AxisAlignedBB secondBB = toCollideWith.getCollisionBoundingBox();
 		AxisAlignedBB betweenBB = BigBastardMath.getBetweenAABB(firstBB, secondBB);
 
 		Polygon betweenBBPoly = new Polygon(betweenBB, toCollideWith.coordTransform.wToLTransform);
@@ -170,7 +169,7 @@ public class ShipPhysicsCollider {
 	}
 
 	private void processCollisionAtPoint(PhysicsObject toCollideWith, PhysCollisionObject object) {
-		double e = .3D;
+		double e;
 		Vector inFirstShip = new Vector(object.firstContactPoint);
 		Vector inSecondShip = new Vector(object.firstContactPoint);
 		// inFirstShip.subtract(firstController.centerOfMass);
@@ -203,7 +202,7 @@ public class ShipPhysicsCollider {
 
 		double topJ = -(e + 1D) * netVelocity.dot(object.axis);
 
-		double bottomJ = parent.physicsProcessor.invMass + toCollideWith.physicsProcessor.invMass;
+		double bottomJ = parent.physicsProcessor.getInvMass() + toCollideWith.physicsProcessor.getInvMass();
 
 		bottomJ += RotationMatrices
 				.get3by3TransformedVec(toCollideWith.physicsProcessor.invFramedMOI, inFirstShip.cross(object.axis))
